@@ -1,0 +1,2603 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      Africa Market Place | Helping Small Businesses Get Seen, Get Customers,
+      and Grow
+    </title>
+    <meta
+      name="description"
+      content="Africa Market Place is a digital marketplace and advertising platform that helps small businesses, entrepreneurs, and independent sellers across Africa reach more customers. Advertise, sell, and discover."
+    />
+    <meta name="theme-color" content="#dc2626" />
+    <link rel="canonical" href="https://www.africamarketplace.example/" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Africa Market Place — Get Seen, Get Customers, and Grow"
+    />
+    <meta
+      property="og:description"
+      content="Advertise your business on Facebook, Instagram and TikTok, or open a shop and sell online. One marketplace connecting buyers and sellers across Africa."
+    />
+    <meta property="og:site_name" content="Africa Market Place" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Africa Market Place" />
+    <meta
+      name="twitter:description"
+      content="Helping small businesses get seen, get customers, and grow."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23dc2626'/%3E%3Cpath d='M8 22V10l8 7 8-7v12' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Africa Market Place",
+        "url": "https://www.africamarketplace.example/",
+        "description": "A digital marketplace and advertising platform for small businesses across Africa.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.africamarketplace.example/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+
+    <!-- Tailwind CSS (Play CDN) with project configuration -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: "#fef2f2",
+                100: "#fee2e2",
+                500: "#ef4444",
+                600: "#dc2626",
+                700: "#b91c1c",
+                800: "#991b1b",
+              },
+              ink: {
+                900: "#111827",
+                800: "#1f2937",
+                600: "#4b5563",
+                500: "#6b7280",
+              },
+            },
+            fontFamily: {
+              display: [
+                '"Plus Jakarta Sans"',
+                "Inter",
+                "system-ui",
+                "sans-serif",
+              ],
+              sans: ["Inter", "system-ui", "sans-serif"],
+            },
+            boxShadow: {
+              card: "0 1px 2px rgba(17,24,39,.04), 0 8px 24px -12px rgba(17,24,39,.12)",
+              lift: "0 18px 40px -16px rgba(17,24,39,.28)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      :root {
+        --brand: #dc2626;
+        --brand-dark: #b91c1c;
+        --ink: #111827;
+      }
+      html {
+        scroll-padding-top: 5rem;
+      }
+      body {
+        font-family: Inter, system-ui, sans-serif;
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* Skip link */
+      .skip-link {
+        position: absolute;
+        left: 1rem;
+        top: -4rem;
+        z-index: 100;
+        background: #fff;
+        color: var(--ink);
+        padding: 0.6rem 1rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        transition: top 0.2s;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+      .skip-link:focus {
+        top: 1rem;
+      }
+
+      /* Focus ring */
+      :where(a, button, input, select, textarea, summary):focus-visible {
+        outline: 3px solid #f87171;
+        outline-offset: 2px;
+        border-radius: 0.5rem;
+      }
+
+      /* Loader */
+      #loader {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        display: grid;
+        place-items: center;
+        background: #fff;
+        transition:
+          opacity 0.5s ease,
+          visibility 0.5s ease;
+      }
+      #loader.done {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .loader-ring {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 4px solid #fee2e2;
+        border-top-color: var(--brand);
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Hero */
+      .hero-bg {
+        background:
+          radial-gradient(
+            900px 400px at 85% 10%,
+            rgba(220, 38, 38, 0.45),
+            transparent 60%
+          ),
+          radial-gradient(
+            700px 400px at 5% 100%,
+            rgba(234, 179, 8, 0.18),
+            transparent 60%
+          ),
+          linear-gradient(135deg, #111827 0%, #1f1a1a 55%, #3b1111 100%);
+      }
+      .pattern {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='white' stroke-opacity='.08' stroke-width='2'%3E%3Cpath d='M0 36 L36 0 L72 36 L36 72 Z'/%3E%3Cpath d='M18 36 L36 18 L54 36 L36 54 Z'/%3E%3Ccircle cx='36' cy='36' r='4'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 72px 72px;
+      }
+      .cta-pattern {
+        background-color: #dc2626;
+        background-image:
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cg fill='none' stroke='white' stroke-opacity='.12' stroke-width='3'%3E%3Cpath d='M0 48 Q24 24 48 48 T96 48'/%3E%3Cpath d='M0 80 Q24 56 48 80 T96 80'/%3E%3Cpath d='M0 16 Q24 -8 48 16 T96 16'/%3E%3C/g%3E%3C/svg%3E"),
+          linear-gradient(135deg, #dc2626, #b91c1c);
+      }
+
+      /* Reveal on scroll */
+      .reveal {
+        opacity: 0;
+        transform: translateY(22px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+        transition-delay: var(--d, 0ms);
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: none;
+      }
+
+      .float-slow {
+        animation: float 6s ease-in-out infinite;
+      }
+      @keyframes float {
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .step-line::before {
+        content: "";
+        position: absolute;
+        left: 15px;
+        top: 36px;
+        bottom: -14px;
+        width: 2px;
+        background: linear-gradient(#fecaca, transparent);
+      }
+      .step:last-child .step-line::before {
+        display: none;
+      }
+
+      /* Listing card image art */
+      .listing-art {
+        aspect-ratio: 4 / 3;
+      }
+
+      dialog::backdrop {
+        background: rgba(17, 24, 39, 0.6);
+        backdrop-filter: blur(4px);
+      }
+      dialog[open] {
+        animation: pop 0.25s ease;
+      }
+      @keyframes pop {
+        from {
+          opacity: 0;
+          transform: translateY(12px) scale(0.98);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto !important;
+        }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          transition-delay: 0ms !important;
+        }
+        .reveal {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="bg-white antialiased">
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Loader -->
+    <div id="loader" role="status" aria-live="polite">
+      <div class="flex flex-col items-center gap-4">
+        <div class="loader-ring" aria-hidden="true"></div>
+        <p class="font-display font-extrabold text-xl">
+          Africa<span class="text-brand-600">Market</span>Place
+        </p>
+        <span class="sr-only">Loading</span>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header
+      id="header"
+      class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-transparent transition-shadow"
+    >
+      <nav
+        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
+        aria-label="Primary"
+      >
+        <a
+          href="#top"
+          class="font-display font-extrabold text-xl tracking-tight"
+          aria-label="Africa Market Place home"
+        >
+          Africa<span class="text-brand-600">Market</span>Place
+        </a>
+
+        <ul
+          class="hidden lg:flex items-center gap-8 text-sm font-medium text-ink-800"
+        >
+          <li>
+            <a
+              class="nav-link hover:text-brand-600 transition-colors"
+              href="#about"
+              >About Us</a
+            >
+          </li>
+          <li>
+            <a
+              class="nav-link hover:text-brand-600 transition-colors"
+              href="#listings"
+              >Marketplace</a
+            >
+          </li>
+          <li>
+            <a
+              class="nav-link hover:text-brand-600 transition-colors"
+              href="#countries"
+              >Countries</a
+            >
+          </li>
+          <li>
+            <a
+              class="nav-link hover:text-brand-600 transition-colors"
+              href="#events"
+              >Events</a
+            >
+          </li>
+          <li>
+            <a
+              class="nav-link hover:text-brand-600 transition-colors"
+              href="#contact"
+              >Contact</a
+            >
+          </li>
+        </ul>
+
+        <div class="hidden lg:flex items-center gap-3">
+          <button
+            type="button"
+            data-open-modal="seller"
+            class="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700 active:scale-95 transition"
+          >
+            <svg
+              class="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            Post
+          </button>
+          <button
+            type="button"
+            data-open-modal="member"
+            class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold hover:border-brand-600 hover:text-brand-600 active:scale-95 transition"
+          >
+            Become a Member
+          </button>
+        </div>
+
+        <button
+          id="menuBtn"
+          type="button"
+          class="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200"
+          aria-expanded="false"
+          aria-controls="mobileMenu"
+          aria-label="Open menu"
+        >
+          <svg
+            id="iconOpen"
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+          <svg
+            id="iconClose"
+            class="h-5 w-5 hidden"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+      </nav>
+
+      <div
+        id="mobileMenu"
+        class="lg:hidden hidden border-t border-gray-100 bg-white"
+      >
+        <ul class="px-4 py-3 space-y-1 text-base font-medium">
+          <li>
+            <a
+              class="block rounded-lg px-3 py-2.5 hover:bg-gray-50"
+              href="#about"
+              >About Us</a
+            >
+          </li>
+          <li>
+            <a
+              class="block rounded-lg px-3 py-2.5 hover:bg-gray-50"
+              href="#listings"
+              >Marketplace</a
+            >
+          </li>
+          <li>
+            <a
+              class="block rounded-lg px-3 py-2.5 hover:bg-gray-50"
+              href="#countries"
+              >Countries</a
+            >
+          </li>
+          <li>
+            <a
+              class="block rounded-lg px-3 py-2.5 hover:bg-gray-50"
+              href="#events"
+              >Events</a
+            >
+          </li>
+          <li>
+            <a
+              class="block rounded-lg px-3 py-2.5 hover:bg-gray-50"
+              href="#contact"
+              >Contact</a
+            >
+          </li>
+          <li class="grid grid-cols-2 gap-3 pt-2">
+            <button
+              type="button"
+              data-open-modal="seller"
+              class="rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white"
+            >
+              + Post
+            </button>
+            <button
+              type="button"
+              data-open-modal="member"
+              class="rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold"
+            >
+              Become a Member
+            </button>
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- Hero -->
+      <section id="top" class="relative hero-bg text-white">
+        <div class="absolute inset-0 pattern" aria-hidden="true"></div>
+        <div
+          class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 pb-28 sm:pt-20 sm:pb-32 lg:pt-24 lg:pb-36"
+        >
+          <p
+            class="reveal inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide uppercase ring-1 ring-white/20"
+          >
+            <span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Your
+            Business. Your Products. Your Marketplace.
+          </p>
+          <h1
+            class="reveal mt-5 max-w-3xl font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.08] tracking-tight"
+            style="--d: 80ms"
+          >
+            Helping Small Businesses Get Seen, Get Customers, and Grow
+          </h1>
+          <p
+            class="reveal mt-5 max-w-2xl text-base sm:text-lg text-gray-300"
+            style="--d: 140ms"
+          >
+            A digital marketplace and advertising platform designed to help
+            small businesses, entrepreneurs, and independent sellers reach more
+            customers.
+          </p>
+          <div class="reveal mt-8 flex flex-wrap gap-3" style="--d: 200ms">
+            <button
+              type="button"
+              data-open-modal="member"
+              class="rounded-lg bg-brand-600 px-5 py-3 text-sm font-semibold hover:bg-brand-700 active:scale-95 transition shadow-lg shadow-brand-600/30"
+            >
+              Join Africa Market Place
+            </button>
+            <button
+              type="button"
+              data-open-modal="seller"
+              class="rounded-lg border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold hover:bg-white/20 active:scale-95 transition"
+            >
+              Start Selling
+            </button>
+            <a
+              href="#advertise"
+              class="rounded-lg border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold hover:bg-white/20 active:scale-95 transition"
+              >Advertise With Us</a
+            >
+            <a
+              href="#listings"
+              class="rounded-lg border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold hover:bg-white/20 active:scale-95 transition"
+              >Explore Marketplace</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- Search -->
+      <div class="relative z-10 -mt-10 px-4 sm:px-6 lg:px-8">
+        <form
+          id="searchForm"
+          class="mx-auto max-w-3xl rounded-2xl bg-white p-2 shadow-lift ring-1 ring-gray-100 flex flex-col sm:flex-row sm:items-center gap-2"
+          role="search"
+          aria-label="Search the marketplace"
+        >
+          <label
+            class="flex items-center gap-2 px-3 py-2 sm:w-2/5 sm:border-r border-gray-200"
+          >
+            <svg
+              class="h-4 w-4 shrink-0 text-brand-600"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 21s-7-6.2-7-11a7 7 0 1114 0c0 4.8-7 11-7 11z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+            <span class="sr-only">Location</span>
+            <input
+              id="locInput"
+              type="text"
+              list="locList"
+              placeholder="Location"
+              autocomplete="off"
+              class="w-full bg-transparent text-sm placeholder-gray-400 outline-none"
+            />
+            <datalist id="locList">
+              <option value="Lagos"></option>
+              <option value="Accra"></option>
+              <option value="Nairobi"></option>
+              <option value="Cape Town"></option>
+            </datalist>
+          </label>
+          <label class="flex flex-1 items-center gap-2 px-3 py-2">
+            <svg
+              class="h-4 w-4 shrink-0 text-brand-600"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-3.5-3.5" />
+            </svg>
+            <span class="sr-only">What are you looking for?</span>
+            <input
+              id="qInput"
+              type="search"
+              placeholder="What are you looking for?"
+              autocomplete="off"
+              class="w-full bg-transparent text-sm placeholder-gray-400 outline-none"
+            />
+          </label>
+          <button
+            type="submit"
+            class="rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-700 active:scale-95 transition"
+          >
+            Search
+          </button>
+        </form>
+      </div>
+
+      <!-- Categories -->
+      <section
+        id="categories"
+        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20"
+        aria-labelledby="cat-h"
+      >
+        <div class="text-center reveal">
+          <h2
+            id="cat-h"
+            class="font-display text-2xl sm:text-3xl font-bold tracking-tight"
+          >
+            Browse by Category
+          </h2>
+          <p class="mt-2 text-sm text-ink-500">
+            Find exactly what you need across our growing marketplace
+          </p>
+        </div>
+        <ul
+          id="catGrid"
+          class="mt-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4"
+        ></ul>
+      </section>
+
+      <!-- Stats band -->
+      <section
+        class="bg-ink-900 text-white"
+        aria-label="Africa Market Place at a glance"
+      >
+        <dl
+          class="mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-4 py-10 sm:px-6 lg:grid-cols-4 lg:px-8"
+        >
+          <div class="reveal text-center">
+            <dd
+              class="font-display text-3xl sm:text-4xl font-extrabold text-white"
+            >
+              <span data-count="5000" data-suffix="+">0</span>
+            </dd>
+            <dt class="mt-1 text-xs sm:text-sm text-gray-400">
+              Small businesses growing with us
+            </dt>
+          </div>
+          <div class="reveal text-center" style="--d: 80ms">
+            <dd class="font-display text-3xl sm:text-4xl font-extrabold">
+              <span data-count="12" data-suffix="">0</span>
+            </dd>
+            <dt class="mt-1 text-xs sm:text-sm text-gray-400">
+              African countries and counting
+            </dt>
+          </div>
+          <div class="reveal text-center" style="--d: 160ms">
+            <dd class="font-display text-3xl sm:text-4xl font-extrabold">
+              <span data-count="250" data-suffix="K+">0</span>
+            </dd>
+            <dt class="mt-1 text-xs sm:text-sm text-gray-400">
+              Monthly social media reach
+            </dt>
+          </div>
+          <div class="reveal text-center" style="--d: 240ms">
+            <dd class="font-display text-3xl sm:text-4xl font-extrabold">
+              <span data-count="20000" data-suffix="+">0</span>
+            </dd>
+            <dt class="mt-1 text-xs sm:text-sm text-gray-400">
+              Products and services listed
+            </dt>
+          </div>
+        </dl>
+      </section>
+
+      <!-- Pillars -->
+      <section
+        id="about"
+        class="bg-gray-50 py-16 sm:py-20"
+        aria-labelledby="pillars-h"
+      >
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="text-center reveal">
+            <h2
+              id="pillars-h"
+              class="font-display text-2xl sm:text-3xl font-bold tracking-tight"
+            >
+              Everything You Need to Grow
+            </h2>
+            <p class="mt-2 text-sm text-ink-500">
+              Three pillars built around your success
+            </p>
+          </div>
+
+          <div class="mt-10 grid gap-5 md:grid-cols-3">
+            <article
+              id="advertise"
+              class="reveal group rounded-2xl bg-white p-6 shadow-card ring-1 ring-gray-100 hover:-translate-y-1 hover:shadow-lift transition duration-300"
+            >
+              <span
+                class="inline-grid h-10 w-10 place-items-center rounded-lg bg-brand-50 text-brand-600"
+              >
+                <svg
+                  class="h-5 w-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M3 11v2a1 1 0 001 1h2l5 4V6L6 10H4a1 1 0 00-1 1z" />
+                  <path d="M15.5 8.5a5 5 0 010 7M18 6a8.5 8.5 0 010 12" />
+                </svg>
+              </span>
+              <h3 class="mt-5 font-display text-lg font-bold">
+                Advertise With Us
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-600">
+                We promote your business on Facebook, Instagram, and TikTok
+                through engaging reels, stories, and posts that reach thousands
+                of potential customers daily.
+              </p>
+              <ul class="mt-4 space-y-1.5 text-sm text-ink-600">
+                <li class="flex gap-2">
+                  <span class="text-brand-600">✓</span> Affordable, visible,
+                  targeted
+                </li>
+                <li class="flex gap-2">
+                  <span class="text-brand-600">✓</span> A professional online
+                  presence
+                </li>
+              </ul>
+              <button
+                type="button"
+                data-open-modal="advertise"
+                class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-800"
+              >
+                Learn More
+                <span
+                  class="transition-transform group-hover:translate-x-1"
+                  aria-hidden="true"
+                  >→</span
+                >
+              </button>
+            </article>
+
+            <article
+              id="sell"
+              class="reveal group rounded-2xl bg-white p-6 shadow-card ring-1 ring-gray-100 hover:-translate-y-1 hover:shadow-lift transition duration-300"
+              style="--d: 90ms"
+            >
+              <span
+                class="inline-grid h-10 w-10 place-items-center rounded-lg bg-brand-50 text-brand-600"
+              >
+                <svg
+                  class="h-5 w-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M4 9l1.5-5h13L20 9" />
+                  <path d="M4 9v11h16V9" />
+                  <path
+                    d="M4 9a2.7 2.7 0 005.3 0 2.7 2.7 0 005.4 0A2.7 2.7 0 0020 9"
+                  />
+                </svg>
+              </span>
+              <h3 class="mt-5 font-display text-lg font-bold">Sell With Us</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-600">
+                List your products online with detailed descriptions, photos,
+                and pricing. Our platform helps you showcase your offerings to a
+                wide audience ready to buy.
+              </p>
+              <ul class="mt-4 space-y-1.5 text-sm text-ink-600">
+                <li class="flex gap-2">
+                  <span class="text-brand-600">✓</span> Your own shop or seller
+                  presence
+                </li>
+                <li class="flex gap-2">
+                  <span class="text-brand-600">✓</span> Set your prices, connect
+                  with buyers
+                </li>
+              </ul>
+              <button
+                type="button"
+                data-open-modal="seller"
+                class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-800"
+              >
+                Start Selling
+                <span
+                  class="transition-transform group-hover:translate-x-1"
+                  aria-hidden="true"
+                  >→</span
+                >
+              </button>
+            </article>
+
+            <article
+              id="buyers"
+              class="reveal group rounded-2xl bg-white p-6 shadow-card ring-1 ring-gray-100 hover:-translate-y-1 hover:shadow-lift transition duration-300"
+              style="--d: 180ms"
+            >
+              <span
+                class="inline-grid h-10 w-10 place-items-center rounded-lg bg-brand-50 text-brand-600"
+              >
+                <svg
+                  class="h-5 w-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="9" cy="20" r="1.5" />
+                  <circle cx="18" cy="20" r="1.5" />
+                  <path d="M3 4h2l2.4 11h11l2-8H6.2" />
+                </svg>
+              </span>
+              <h3 class="mt-5 font-display text-lg font-bold">For Buyers</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-600">
+                Discover quality products and services from trusted sellers.
+                Compare options, read reviews, and make confident purchases with
+                ease.
+              </p>
+              <ul class="mt-4 space-y-1.5 text-sm text-ink-600">
+                <li class="flex gap-2">
+                  <span class="text-brand-600">✓</span> Shop. Discover. Connect.
+                </li>
+                <li class="flex gap-2">
+                  <span class="text-brand-600">✓</span> Browse by category and
+                  location
+                </li>
+              </ul>
+              <a
+                href="#listings"
+                class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-800"
+                >Explore Marketplace
+                <span
+                  class="transition-transform group-hover:translate-x-1"
+                  aria-hidden="true"
+                  >→</span
+                ></a
+              >
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Why advertise -->
+      <section id="why" class="py-16 sm:py-24" aria-labelledby="why-h">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="mx-auto max-w-2xl text-center reveal">
+            <p
+              class="text-xs font-bold uppercase tracking-widest text-brand-600"
+            >
+              Why Advertise With Us?
+            </p>
+            <h2
+              id="why-h"
+              class="mt-2 font-display text-2xl sm:text-3xl font-bold tracking-tight"
+            >
+              Give Your Business More Visibility
+            </h2>
+            <p class="mt-3 text-sm sm:text-base text-ink-600">
+              Advertising can be challenging for small businesses. Africa Market
+              Place provides an affordable way to increase your online
+              visibility and reach potential customers.
+            </p>
+          </div>
+          <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <li
+              class="reveal rounded-2xl border border-gray-100 bg-white p-6 shadow-card transition hover:-translate-y-1 hover:shadow-lift"
+            >
+              <span
+                class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-xl"
+                aria-hidden="true"
+                >📣</span
+              >
+              <h3 class="mt-4 font-display font-bold">Reach More People</h3>
+              <p class="mt-1.5 text-sm text-ink-600">
+                Promote your business across popular social platforms, including
+                Facebook, Instagram, and TikTok.
+              </p>
+            </li>
+            <li
+              class="reveal rounded-2xl border border-gray-100 bg-white p-6 shadow-card transition hover:-translate-y-1 hover:shadow-lift"
+              style="--d: 70ms"
+            >
+              <span
+                class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-xl"
+                aria-hidden="true"
+                >🎯</span
+              >
+              <h3 class="mt-4 font-display font-bold">
+                Reach Your Target Audience
+              </h3>
+              <p class="mt-1.5 text-sm text-ink-600">
+                Get your products and services in front of people who may be
+                interested in what your business offers.
+              </p>
+            </li>
+            <li
+              class="reveal rounded-2xl border border-gray-100 bg-white p-6 shadow-card transition hover:-translate-y-1 hover:shadow-lift"
+              style="--d: 140ms"
+            >
+              <span
+                class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-xl"
+                aria-hidden="true"
+                >🏪</span
+              >
+              <h3 class="mt-4 font-display font-bold">
+                Build Your Online Presence
+              </h3>
+              <p class="mt-1.5 text-sm text-ink-600">
+                Give your business a professional online home where customers
+                can discover and learn more about you.
+              </p>
+            </li>
+            <li
+              class="reveal rounded-2xl border border-gray-100 bg-white p-6 shadow-card transition hover:-translate-y-1 hover:shadow-lift"
+            >
+              <span
+                class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-xl"
+                aria-hidden="true"
+                >🛍️</span
+              >
+              <h3 class="mt-4 font-display font-bold">
+                Promote Products and Services
+              </h3>
+              <p class="mt-1.5 text-sm text-ink-600">
+                Whether you sell products or provide services, our platform
+                gives you another way to showcase what you offer.
+              </p>
+            </li>
+            <li
+              class="reveal rounded-2xl border border-gray-100 bg-white p-6 shadow-card transition hover:-translate-y-1 hover:shadow-lift"
+              style="--d: 70ms"
+            >
+              <span
+                class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-xl"
+                aria-hidden="true"
+                >📈</span
+              >
+              <h3 class="mt-4 font-display font-bold">
+                Grow Your Customer Base
+              </h3>
+              <p class="mt-1.5 text-sm text-ink-600">
+                More visibility means more opportunities to connect with
+                potential customers and grow your business.
+              </p>
+            </li>
+            <li
+              class="reveal rounded-2xl bg-gradient-to-br from-brand-600 to-brand-800 p-6 text-white shadow-lift"
+              style="--d: 140ms"
+            >
+              <h3 class="font-display text-lg font-bold">
+                Ready to get your business noticed?
+              </h3>
+              <p class="mt-1.5 text-sm text-red-50">
+                Join small businesses already getting seen across Africa.
+              </p>
+              <button
+                type="button"
+                data-open-modal="advertise"
+                class="mt-5 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-ink-900 hover:bg-gray-100 active:scale-95 transition"
+              >
+                Advertise with Africa Market Place
+              </button>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- How it works -->
+      <section id="how" class="py-16 sm:py-24" aria-labelledby="how-h">
+        <div
+          class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid items-center gap-12 lg:grid-cols-2"
+        >
+          <div>
+            <h2
+              id="how-h"
+              class="reveal font-display text-2xl sm:text-3xl font-bold tracking-tight"
+            >
+              How It Works
+            </h2>
+            <p class="reveal mt-2 text-sm text-ink-600" style="--d: 60ms">
+              Simple. Convenient. Built for small businesses. Get started in
+              minutes — here is your path to reaching more customers.
+            </p>
+            <ol class="mt-8 space-y-5">
+              <li class="step reveal relative flex gap-4" style="--d: 60ms">
+                <span
+                  class="step-line relative grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-100 text-sm font-bold text-brand-600"
+                  >1</span
+                >
+                <div>
+                  <h3 class="font-semibold">Create Your Profile</h3>
+                  <p class="text-sm text-ink-600">
+                    Sign up and set up your business profile with your details
+                    and brand story.
+                  </p>
+                </div>
+              </li>
+              <li class="step reveal relative flex gap-4" style="--d: 120ms">
+                <span
+                  class="step-line relative grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-100 text-sm font-bold text-brand-600"
+                  >2</span
+                >
+                <div>
+                  <h3 class="font-semibold">Get Promoted</h3>
+                  <p class="text-sm text-ink-600">
+                    We feature your business across our social media channels to
+                    build awareness.
+                  </p>
+                </div>
+              </li>
+              <li class="step reveal relative flex gap-4" style="--d: 180ms">
+                <span
+                  class="step-line relative grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-100 text-sm font-bold text-brand-600"
+                  >3</span
+                >
+                <div>
+                  <h3 class="font-semibold">List Your Products</h3>
+                  <p class="text-sm text-ink-600">
+                    Add your products or services to the marketplace with photos
+                    and pricing.
+                  </p>
+                </div>
+              </li>
+              <li class="step reveal relative flex gap-4" style="--d: 240ms">
+                <span
+                  class="step-line relative grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-100 text-sm font-bold text-brand-600"
+                  >4</span
+                >
+                <div>
+                  <h3 class="font-semibold">Connect With Customers</h3>
+                  <p class="text-sm text-ink-600">
+                    Receive inquiries and orders directly through the platform.
+                  </p>
+                </div>
+              </li>
+              <li class="step reveal relative flex gap-4" style="--d: 300ms">
+                <span
+                  class="step-line relative grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-100 text-sm font-bold text-brand-600"
+                  >5</span
+                >
+                <div>
+                  <h3 class="font-semibold">Grow Your Reach</h3>
+                  <p class="text-sm text-ink-600">
+                    Scale your visibility as we continue to promote you to new
+                    audiences.
+                  </p>
+                </div>
+              </li>
+            </ol>
+            <p class="reveal mt-6 text-sm font-semibold">
+              Start today and put your business in front of more customers.
+            </p>
+          </div>
+
+          <!-- Illustrated visual (no external images required) -->
+          <div
+            class="reveal relative mx-auto w-full max-w-md"
+            aria-hidden="true"
+          >
+            <div
+              class="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-brand-100 via-amber-50 to-white"
+            ></div>
+            <div
+              class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ink-900 via-[#2a1515] to-brand-800 p-6 shadow-lift aspect-[4/5] pattern"
+            >
+              <div
+                class="float-slow mx-auto mt-6 w-56 rounded-[2rem] bg-white p-3 shadow-2xl ring-8 ring-ink-900/80"
+              >
+                <div class="rounded-2xl bg-gray-50 p-3 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-[10px] font-bold"
+                      >Africa<span class="text-brand-600">Market</span
+                      >Place</span
+                    ><span class="h-4 w-4 rounded-full bg-brand-600"></span>
+                  </div>
+                  <div
+                    class="h-20 rounded-xl bg-gradient-to-br from-amber-300 via-brand-500 to-brand-700"
+                  ></div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div
+                      class="h-14 rounded-lg bg-white ring-1 ring-gray-100 p-2"
+                    >
+                      <div class="h-2 w-8 rounded bg-brand-100"></div>
+                      <div class="mt-2 h-2 w-12 rounded bg-gray-200"></div>
+                    </div>
+                    <div
+                      class="h-14 rounded-lg bg-white ring-1 ring-gray-100 p-2"
+                    >
+                      <div class="h-2 w-8 rounded bg-brand-100"></div>
+                      <div class="mt-2 h-2 w-12 rounded bg-gray-200"></div>
+                    </div>
+                  </div>
+                  <div
+                    class="rounded-lg bg-brand-600 py-1.5 text-center text-[10px] font-semibold text-white"
+                  >
+                    New inquiry received
+                  </div>
+                </div>
+              </div>
+              <div
+                class="absolute left-5 bottom-6 rounded-2xl bg-white px-4 py-3 shadow-card"
+              >
+                <p class="text-[11px] text-ink-500">Reach this week</p>
+                <p class="font-display text-xl font-extrabold">+12,480</p>
+              </div>
+              <div
+                class="absolute right-5 top-10 rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold shadow-card"
+              >
+                📣 Reels · Stories · Posts
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- What you can sell -->
+      <section
+        id="sellmore"
+        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20"
+        aria-labelledby="sellmore-h"
+      >
+        <div class="grid items-center gap-10 lg:grid-cols-5">
+          <div class="lg:col-span-2 reveal">
+            <p
+              class="text-xs font-bold uppercase tracking-widest text-brand-600"
+            >
+              Sell With Us
+            </p>
+            <h2
+              id="sellmore-h"
+              class="mt-2 font-display text-2xl sm:text-3xl font-bold tracking-tight"
+            >
+              Turn Your Products Into Opportunities
+            </h2>
+            <p class="mt-3 text-sm sm:text-base text-ink-600">
+              Create listings with photos, descriptions, prices, and product
+              information so potential buyers can discover what you have to
+              offer.
+            </p>
+            <ul class="mt-6 grid gap-2.5 text-sm text-ink-800 sm:grid-cols-2">
+              <li class="flex gap-2">
+                <span class="text-brand-600">✓</span> Your own online shop
+              </li>
+              <li class="flex gap-2">
+                <span class="text-brand-600">✓</span> Photos and descriptions
+              </li>
+              <li class="flex gap-2">
+                <span class="text-brand-600">✓</span> Set your own prices
+              </li>
+              <li class="flex gap-2">
+                <span class="text-brand-600">✓</span> Connect with buyers
+              </li>
+              <li class="flex gap-2">
+                <span class="text-brand-600">✓</span> Reach potential customers
+              </li>
+              <li class="flex gap-2">
+                <span class="text-brand-600">✓</span> Social media promotion
+              </li>
+            </ul>
+            <button
+              type="button"
+              data-open-modal="seller"
+              class="mt-7 rounded-lg bg-brand-600 px-5 py-3 text-sm font-semibold text-white hover:bg-brand-700 active:scale-95 transition"
+            >
+              Start Selling Today
+            </button>
+            <p class="mt-3 text-sm font-semibold">
+              List your products. Find customers. Grow your business.
+            </p>
+          </div>
+          <ul class="lg:col-span-3 grid grid-cols-2 gap-4 sm:grid-cols-3">
+            <li
+              class="reveal aspect-square rounded-2xl bg-gradient-to-br from-amber-200 to-amber-500 p-4 flex flex-col justify-end shadow-card transition hover:-translate-y-1"
+            >
+              <span class="text-3xl" aria-hidden="true">👗</span
+              ><span class="mt-1 font-semibold text-amber-950">Clothing</span>
+            </li>
+            <li
+              class="reveal aspect-square rounded-2xl bg-gradient-to-br from-sky-200 to-sky-500 p-4 flex flex-col justify-end shadow-card transition hover:-translate-y-1"
+              style="--d: 60ms"
+            >
+              <span class="text-3xl" aria-hidden="true">📱</span
+              ><span class="mt-1 font-semibold text-sky-950">Electronics</span>
+            </li>
+            <li
+              class="reveal aspect-square rounded-2xl bg-gradient-to-br from-rose-200 to-rose-500 p-4 flex flex-col justify-end shadow-card transition hover:-translate-y-1"
+              style="--d: 120ms"
+            >
+              <span class="text-3xl" aria-hidden="true">🎨</span
+              ><span class="mt-1 font-semibold text-rose-950">Artwork</span>
+            </li>
+            <li
+              class="reveal aspect-square rounded-2xl bg-gradient-to-br from-emerald-200 to-emerald-500 p-4 flex flex-col justify-end shadow-card transition hover:-translate-y-1"
+              style="--d: 180ms"
+            >
+              <span class="text-3xl" aria-hidden="true">🏠</span
+              ><span class="mt-1 font-semibold text-emerald-950"
+                >Household Items</span
+              >
+            </li>
+            <li
+              class="reveal aspect-square rounded-2xl bg-gradient-to-br from-orange-200 to-orange-500 p-4 flex flex-col justify-end shadow-card transition hover:-translate-y-1"
+              style="--d: 240ms"
+            >
+              <span class="text-3xl" aria-hidden="true">🍲</span
+              ><span class="mt-1 font-semibold text-orange-950"
+                >Food Products</span
+              >
+            </li>
+            <li
+              class="reveal aspect-square rounded-2xl bg-gradient-to-br from-violet-200 to-violet-500 p-4 flex flex-col justify-end shadow-card transition hover:-translate-y-1"
+              style="--d: 300ms"
+            >
+              <span class="text-3xl" aria-hidden="true">👜</span
+              ><span class="mt-1 font-semibold text-violet-950"
+                >Accessories</span
+              >
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Featured Listings -->
+      <section
+        id="listings"
+        class="bg-gray-50 py-16 sm:py-20"
+        aria-labelledby="list-h"
+      >
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-wrap items-end justify-between gap-3 reveal">
+            <div>
+              <h2
+                id="list-h"
+                class="font-display text-2xl sm:text-3xl font-bold tracking-tight"
+              >
+                Featured Listings
+              </h2>
+              <p class="mt-1 text-sm text-ink-600">
+                Trending products and services right now
+              </p>
+            </div>
+            <button
+              id="viewAll"
+              type="button"
+              class="text-sm font-semibold text-brand-600 hover:text-brand-800"
+            >
+              View All →
+            </button>
+          </div>
+          <p
+            id="filterStatus"
+            class="mt-3 min-h-[1.25rem] text-sm text-ink-600"
+            role="status"
+            aria-live="polite"
+          ></p>
+          <div
+            id="listingGrid"
+            class="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+          ></div>
+          <div
+            id="emptyState"
+            class="hidden mt-6 rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center"
+          >
+            <p class="font-semibold">No listings match your search yet.</p>
+            <p class="mt-1 text-sm text-ink-600">
+              Try a different keyword or location, or be the first to list
+              something here.
+            </p>
+            <button
+              type="button"
+              id="resetFilters"
+              class="mt-4 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700"
+            >
+              Clear filters
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Countries -->
+      <section
+        id="countries"
+        class="py-16 sm:py-20"
+        aria-labelledby="countries-h"
+      >
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="text-center reveal">
+            <h2
+              id="countries-h"
+              class="font-display text-2xl sm:text-3xl font-bold tracking-tight"
+            >
+              Shop and Sell Across Africa
+            </h2>
+            <p class="mt-2 text-sm text-ink-500">
+              Pick a city to see what local businesses are offering
+            </p>
+          </div>
+          <ul
+            class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6"
+          >
+            <li>
+              <button
+                type="button"
+                data-loc="Lagos"
+                class="loc-btn reveal w-full rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:-translate-y-1 hover:border-brand-600 hover:shadow-card"
+              >
+                <span class="text-3xl" aria-hidden="true">🇳🇬</span
+                ><span class="mt-2 block font-semibold">Nigeria</span
+                ><span class="text-xs text-ink-500">Lagos</span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                data-loc="Accra"
+                class="loc-btn reveal w-full rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:-translate-y-1 hover:border-brand-600 hover:shadow-card"
+                style="--d: 60ms"
+              >
+                <span class="text-3xl" aria-hidden="true">🇬🇭</span
+                ><span class="mt-2 block font-semibold">Ghana</span
+                ><span class="text-xs text-ink-500">Accra</span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                data-loc="Nairobi"
+                class="loc-btn reveal w-full rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:-translate-y-1 hover:border-brand-600 hover:shadow-card"
+                style="--d: 120ms"
+              >
+                <span class="text-3xl" aria-hidden="true">🇰🇪</span
+                ><span class="mt-2 block font-semibold">Kenya</span
+                ><span class="text-xs text-ink-500">Nairobi</span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                data-loc="Cape Town"
+                class="loc-btn reveal w-full rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:-translate-y-1 hover:border-brand-600 hover:shadow-card"
+                style="--d: 180ms"
+              >
+                <span class="text-3xl" aria-hidden="true">🇿🇦</span
+                ><span class="mt-2 block font-semibold">South Africa</span
+                ><span class="text-xs text-ink-500">Cape Town</span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                data-soon="Tanzania"
+                class="loc-btn reveal w-full rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:-translate-y-1 hover:border-brand-600 hover:shadow-card"
+                style="--d: 240ms"
+              >
+                <span class="text-3xl" aria-hidden="true">🇹🇿</span
+                ><span class="mt-2 block font-semibold">Tanzania</span
+                ><span class="text-xs text-ink-500">Dar es Salaam</span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                data-soon="Rwanda"
+                class="loc-btn reveal w-full rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:-translate-y-1 hover:border-brand-600 hover:shadow-card"
+                style="--d: 300ms"
+              >
+                <span class="text-3xl" aria-hidden="true">🇷🇼</span
+                ><span class="mt-2 block font-semibold">Rwanda</span
+                ><span class="text-xs text-ink-500">Kigali</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Events -->
+      <section
+        id="events"
+        class="bg-gray-50 py-16 sm:py-20"
+        aria-labelledby="events-h"
+      >
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-wrap items-end justify-between gap-3 reveal">
+            <div>
+              <h2
+                id="events-h"
+                class="font-display text-2xl sm:text-3xl font-bold tracking-tight"
+              >
+                Upcoming Events
+              </h2>
+              <p class="mt-1 text-sm text-ink-600">
+                Meet sellers, learn new skills, and grow your network
+              </p>
+            </div>
+            <button
+              type="button"
+              data-open-modal="member"
+              class="text-sm font-semibold text-brand-600 hover:text-brand-800"
+            >
+              Join to get invites →
+            </button>
+          </div>
+          <!-- Sample events: replace with real dates/details before launch -->
+          <ul class="mt-8 grid gap-5 md:grid-cols-3">
+            <li
+              class="reveal flex gap-4 rounded-2xl bg-white p-5 shadow-card ring-1 ring-gray-100 transition hover:-translate-y-1 hover:shadow-lift"
+            >
+              <div
+                class="grid h-16 w-16 shrink-0 place-items-center rounded-xl bg-brand-600 text-center text-white"
+              >
+                <div>
+                  <p class="text-[10px] font-bold uppercase">Nov</p>
+                  <p class="font-display text-2xl font-extrabold leading-none">
+                    14
+                  </p>
+                </div>
+              </div>
+              <div>
+                <h3 class="font-semibold leading-snug">
+                  Small Business Showcase
+                </h3>
+                <p class="mt-1 text-xs text-ink-500">
+                  Lagos, Nigeria · In person
+                </p>
+                <button
+                  type="button"
+                  data-remind="Small Business Showcase"
+                  class="mt-3 text-xs font-semibold text-brand-600 hover:text-brand-800"
+                >
+                  Remind me
+                </button>
+              </div>
+            </li>
+            <li
+              class="reveal flex gap-4 rounded-2xl bg-white p-5 shadow-card ring-1 ring-gray-100 transition hover:-translate-y-1 hover:shadow-lift"
+              style="--d: 80ms"
+            >
+              <div
+                class="grid h-16 w-16 shrink-0 place-items-center rounded-xl bg-ink-900 text-center text-white"
+              >
+                <div>
+                  <p class="text-[10px] font-bold uppercase">Nov</p>
+                  <p class="font-display text-2xl font-extrabold leading-none">
+                    28
+                  </p>
+                </div>
+              </div>
+              <div>
+                <h3 class="font-semibold leading-snug">
+                  Social Media Selling Masterclass
+                </h3>
+                <p class="mt-1 text-xs text-ink-500">
+                  Online · Free for members
+                </p>
+                <button
+                  type="button"
+                  data-remind="Social Media Selling Masterclass"
+                  class="mt-3 text-xs font-semibold text-brand-600 hover:text-brand-800"
+                >
+                  Remind me
+                </button>
+              </div>
+            </li>
+            <li
+              class="reveal flex gap-4 rounded-2xl bg-white p-5 shadow-card ring-1 ring-gray-100 transition hover:-translate-y-1 hover:shadow-lift"
+              style="--d: 160ms"
+            >
+              <div
+                class="grid h-16 w-16 shrink-0 place-items-center rounded-xl bg-brand-600 text-center text-white"
+              >
+                <div>
+                  <p class="text-[10px] font-bold uppercase">Dec</p>
+                  <p class="font-display text-2xl font-extrabold leading-none">
+                    06
+                  </p>
+                </div>
+              </div>
+              <div>
+                <h3 class="font-semibold leading-snug">
+                  Holiday Makers Market
+                </h3>
+                <p class="mt-1 text-xs text-ink-500">
+                  Nairobi, Kenya · In person
+                </p>
+                <button
+                  type="button"
+                  data-remind="Holiday Makers Market"
+                  class="mt-3 text-xs font-semibold text-brand-600 hover:text-brand-800"
+                >
+                  Remind me
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Testimonials (sample stories: replace with real member quotes) -->
+      <section id="stories" class="py-16 sm:py-24" aria-labelledby="stories-h">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="text-center reveal">
+            <h2
+              id="stories-h"
+              class="font-display text-2xl sm:text-3xl font-bold tracking-tight"
+            >
+              Businesses Like Yours, Growing
+            </h2>
+            <p class="mt-2 text-sm text-ink-500">
+              Stories from sellers and entrepreneurs on the platform
+            </p>
+          </div>
+          <div class="mt-10 grid gap-5 md:grid-cols-3">
+            <figure
+              class="reveal rounded-2xl bg-white p-6 shadow-card ring-1 ring-gray-100"
+            >
+              <div class="text-amber-400" aria-label="5 out of 5 stars">
+                ★★★★★
+              </div>
+              <blockquote class="mt-3 text-sm leading-relaxed text-ink-800">
+                “I started posting my baskets and within weeks I had customers
+                messaging me from other cities. Setting up my shop took one
+                evening.”
+              </blockquote>
+              <figcaption class="mt-5 flex items-center gap-3">
+                <span
+                  class="grid h-10 w-10 place-items-center rounded-full bg-brand-100 font-bold text-brand-700"
+                  aria-hidden="true"
+                  >AO</span
+                ><span class="text-sm"
+                  ><strong class="block">Amaka O.</strong
+                  ><span class="text-ink-500">Craft seller, Lagos</span></span
+                >
+              </figcaption>
+            </figure>
+            <figure
+              class="reveal rounded-2xl bg-white p-6 shadow-card ring-1 ring-gray-100"
+              style="--d: 90ms"
+            >
+              <div class="text-amber-400" aria-label="5 out of 5 stars">
+                ★★★★★
+              </div>
+              <blockquote class="mt-3 text-sm leading-relaxed text-ink-800">
+                “The social media promotion put my cleaning service in front of
+                people who actually needed it. Bookings have never been
+                steadier.”
+              </blockquote>
+              <figcaption class="mt-5 flex items-center gap-3">
+                <span
+                  class="grid h-10 w-10 place-items-center rounded-full bg-brand-100 font-bold text-brand-700"
+                  aria-hidden="true"
+                  >KM</span
+                ><span class="text-sm"
+                  ><strong class="block">Kwame M.</strong
+                  ><span class="text-ink-500"
+                    >Service provider, Accra</span
+                  ></span
+                >
+              </figcaption>
+            </figure>
+            <figure
+              class="reveal rounded-2xl bg-white p-6 shadow-card ring-1 ring-gray-100"
+              style="--d: 180ms"
+            >
+              <div class="text-amber-400" aria-label="5 out of 5 stars">
+                ★★★★★
+              </div>
+              <blockquote class="mt-3 text-sm leading-relaxed text-ink-800">
+                “As a buyer, I love discovering small local businesses in one
+                place and contacting sellers directly. It feels personal and
+                safe.”
+              </blockquote>
+              <figcaption class="mt-5 flex items-center gap-3">
+                <span
+                  class="grid h-10 w-10 place-items-center rounded-full bg-brand-100 font-bold text-brand-700"
+                  aria-hidden="true"
+                  >ZN</span
+                ><span class="text-sm"
+                  ><strong class="block">Zanele N.</strong
+                  ><span class="text-ink-500">Buyer, Cape Town</span></span
+                >
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section
+        id="faq"
+        class="bg-gray-50 py-16 sm:py-20"
+        aria-labelledby="faq-h"
+      >
+        <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div class="text-center reveal">
+            <h2
+              id="faq-h"
+              class="font-display text-2xl sm:text-3xl font-bold tracking-tight"
+            >
+              Frequently Asked Questions
+            </h2>
+            <p class="mt-2 text-sm text-ink-500">
+              Quick answers before you get started
+            </p>
+          </div>
+          <div class="mt-10 space-y-3 reveal">
+            <details
+              class="group rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-100 open:shadow-card"
+            >
+              <summary
+                class="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold"
+              >
+                Who can use Africa Market Place?<span
+                  class="text-brand-600 transition-transform group-open:rotate-45"
+                  aria-hidden="true"
+                  >+</span
+                >
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">
+                Small businesses, entrepreneurs, independent sellers, and
+                buyers. Whether you sell products, offer services, or look for
+                great deals, there is a place for you.
+              </p>
+            </details>
+            <details
+              class="group rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-100 open:shadow-card"
+            >
+              <summary
+                class="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold"
+              >
+                How does the social media promotion work?<span
+                  class="text-brand-600 transition-transform group-open:rotate-45"
+                  aria-hidden="true"
+                  >+</span
+                >
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">
+                We feature your business across Facebook, Instagram, and TikTok
+                through reels, stories, and posts, so more potential customers
+                discover what you offer.
+              </p>
+            </details>
+            <details
+              class="group rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-100 open:shadow-card"
+            >
+              <summary
+                class="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold"
+              >
+                What can I list in the marketplace?<span
+                  class="text-brand-600 transition-transform group-open:rotate-45"
+                  aria-hidden="true"
+                  >+</span
+                >
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">
+                Clothing, electronics, artwork, household items, food products,
+                accessories, and other goods, plus services, jobs, housing,
+                autos, and events. Each listing can include photos,
+                descriptions, and prices.
+              </p>
+            </details>
+            <details
+              class="group rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-100 open:shadow-card"
+            >
+              <summary
+                class="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold"
+              >
+                How do buyers contact me?<span
+                  class="text-brand-600 transition-transform group-open:rotate-45"
+                  aria-hidden="true"
+                  >+</span
+                >
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">
+                Interested buyers discover your listings and connect with you
+                directly through the platform, so inquiries and orders come
+                straight to you.
+              </p>
+            </details>
+            <details
+              class="group rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-100 open:shadow-card"
+            >
+              <summary
+                class="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold"
+              >
+                How quickly can I get started?<span
+                  class="text-brand-600 transition-transform group-open:rotate-45"
+                  aria-hidden="true"
+                  >+</span
+                >
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">
+                In minutes. Create your profile, add your first listing with a
+                photo and price, and you are ready to be discovered.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- Join CTA -->
+      <section
+        id="join"
+        class="cta-pattern text-white"
+        aria-labelledby="join-h"
+      >
+        <div
+          class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center"
+        >
+          <h2
+            id="join-h"
+            class="reveal font-display text-3xl sm:text-4xl font-extrabold tracking-tight"
+          >
+            Join Africa Market Place
+          </h2>
+          <p
+            class="reveal mt-4 text-base sm:text-lg text-red-50"
+            style="--d: 80ms"
+          >
+            Whether you want to advertise, sell, or buy — get started today and
+            be part of Africa's fastest-growing business community.
+          </p>
+          <ul
+            class="reveal mt-8 grid gap-3 text-left sm:grid-cols-3 text-sm"
+            style="--d: 120ms"
+          >
+            <li class="rounded-xl bg-white/10 p-4 ring-1 ring-white/20">
+              <strong class="block">Businesses</strong>Get more visibility and
+              reach new customers.
+            </li>
+            <li class="rounded-xl bg-white/10 p-4 ring-1 ring-white/20">
+              <strong class="block">Sellers</strong>Showcase and sell your
+              products online.
+            </li>
+            <li class="rounded-xl bg-white/10 p-4 ring-1 ring-white/20">
+              <strong class="block">Buyers</strong>Discover products, services,
+              and local businesses.
+            </li>
+          </ul>
+          <div
+            class="reveal mt-8 flex flex-wrap justify-center gap-3"
+            style="--d: 160ms"
+          >
+            <button
+              type="button"
+              data-open-modal="member"
+              class="rounded-lg bg-white px-6 py-3 text-sm font-semibold text-ink-900 hover:bg-gray-100 active:scale-95 transition"
+            >
+              Become a Member
+            </button>
+            <button
+              type="button"
+              data-open-modal="seller"
+              class="rounded-lg bg-brand-800 px-6 py-3 text-sm font-semibold text-white hover:bg-ink-900 active:scale-95 transition"
+            >
+              Start Selling Now
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Newsletter -->
+      <section class="bg-white py-14 sm:py-16" aria-labelledby="news-h">
+        <div
+          class="mx-auto flex max-w-5xl flex-col items-center gap-6 px-4 sm:px-6 lg:flex-row lg:justify-between lg:px-8"
+        >
+          <div class="text-center lg:text-left reveal">
+            <h2 id="news-h" class="font-display text-xl sm:text-2xl font-bold">
+              Get deals and growth tips in your inbox
+            </h2>
+            <p class="mt-1 text-sm text-ink-600">
+              New listings, selling advice, and local events. No spam.
+            </p>
+          </div>
+          <form
+            id="newsForm"
+            class="reveal flex w-full max-w-md flex-col gap-2 sm:flex-row"
+            novalidate
+          >
+            <label for="newsEmail" class="sr-only">Email address</label>
+            <input
+              id="newsEmail"
+              type="email"
+              required
+              placeholder="you@example.com"
+              autocomplete="email"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
+            />
+            <button
+              type="submit"
+              class="rounded-lg bg-brand-600 px-5 py-3 text-sm font-semibold text-white hover:bg-brand-700 active:scale-95 transition"
+            >
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-ink-900 text-gray-300">
+      <div
+        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        <div>
+          <p class="font-display font-extrabold text-xl text-white">
+            Africa<span class="text-brand-500">Market</span>Place
+          </p>
+          <p class="mt-3 max-w-xs text-sm leading-relaxed">
+            Connecting small businesses across Africa to customers,
+            opportunities, and growth.
+          </p>
+        </div>
+        <nav aria-label="Platform">
+          <h2 class="text-sm font-semibold text-white">Platform</h2>
+          <ul class="mt-4 space-y-2.5 text-sm">
+            <li>
+              <a class="hover:text-white" href="#listings">Marketplace</a>
+            </li>
+            <li>
+              <a class="hover:text-white" href="#categories">Categories</a>
+            </li>
+            <li><a class="hover:text-white" href="#countries">Countries</a></li>
+            <li><a class="hover:text-white" href="#events">Events</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Company">
+          <h2 class="text-sm font-semibold text-white">Company</h2>
+          <ul class="mt-4 space-y-2.5 text-sm">
+            <li><a class="hover:text-white" href="#about">About Us</a></li>
+            <li>
+              <a
+                class="hover:text-white"
+                href="mailto:hello@africamarketplace.example"
+                >Contact</a
+              >
+            </li>
+            <li>
+              <button
+                type="button"
+                data-open-modal="member"
+                class="hover:text-white"
+              >
+                Become a Member
+              </button>
+            </li>
+            <li>
+              <a class="hover:text-white" href="#privacy" data-info="privacy"
+                >Privacy Policy</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <div>
+          <h2 class="text-sm font-semibold text-white">Follow Us</h2>
+          <ul class="mt-4 flex gap-3">
+            <li>
+              <a
+                href="https://www.facebook.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                class="grid h-9 w-9 place-items-center rounded-lg bg-white/10 hover:bg-brand-600 transition"
+                ><svg
+                  class="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M13.5 21v-8h2.7l.4-3.2h-3.1V7.8c0-.9.3-1.5 1.6-1.5h1.7V3.4c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.5-4 4.1v2.4H7.7V13h2.7v8h3.1z"
+                  /></svg
+              ></a>
+            </li>
+            <li>
+              <a
+                href="https://www.instagram.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                class="grid h-9 w-9 place-items-center rounded-lg bg-white/10 hover:bg-brand-600 transition"
+                ><svg
+                  class="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor" /></svg
+              ></a>
+            </li>
+            <li>
+              <a
+                href="https://www.tiktok.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+                class="grid h-9 w-9 place-items-center rounded-lg bg-white/10 hover:bg-brand-600 transition"
+                ><svg
+                  class="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M16.6 3c.3 2.3 1.7 3.8 4 4v3.1c-1.5 0-2.9-.4-4-1.2v6.2a5.6 5.6 0 11-5.6-5.6c.3 0 .6 0 .9.1v3.2a2.5 2.5 0 101.6 2.3V3h3.1z"
+                  /></svg
+              ></a>
+            </li>
+            <li>
+              <a
+                href="https://x.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="X (Twitter)"
+                class="grid h-9 w-9 place-items-center rounded-lg bg-white/10 hover:bg-brand-600 transition"
+                ><svg
+                  class="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M17.8 3h3L14.2 10.5 22 21h-6.1l-4.8-6.3L5.6 21h-3l7.1-8.1L2.2 3h6.2l4.3 5.8L17.8 3zm-1.1 16.2h1.7L7.5 4.7H5.7l11 14.5z"
+                  /></svg
+              ></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-white/10">
+        <p
+          class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 text-center text-xs text-gray-400"
+        >
+          © <span id="year">2026</span> Africa Market Place. All rights
+          reserved.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Back to top -->
+    <button
+      id="toTop"
+      type="button"
+      aria-label="Back to top"
+      class="fixed bottom-5 right-5 z-40 grid h-11 w-11 place-items-center rounded-full bg-brand-600 text-white shadow-lift opacity-0 pointer-events-none translate-y-3 transition hover:bg-brand-700"
+    >
+      <svg
+        class="h-5 w-5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>
+
+    <!-- Toast -->
+    <div
+      id="toast"
+      role="status"
+      aria-live="polite"
+      class="fixed left-1/2 bottom-6 z-[60] -translate-x-1/2 translate-y-6 opacity-0 pointer-events-none rounded-xl bg-ink-900 px-5 py-3 text-sm font-medium text-white shadow-lift transition duration-300"
+    ></div>
+
+    <!-- Modal -->
+    <dialog
+      id="modal"
+      class="w-[calc(100%-2rem)] max-w-md rounded-2xl p-0 shadow-lift"
+      aria-labelledby="modalTitle"
+    >
+      <form id="modalForm" method="dialog" novalidate class="p-6 sm:p-7">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 id="modalTitle" class="font-display text-xl font-bold">
+              Join Africa Market Place
+            </h2>
+            <p id="modalSub" class="mt-1 text-sm text-ink-600">
+              Create your free profile in a minute.
+            </p>
+          </div>
+          <button
+            type="button"
+            id="modalClose"
+            aria-label="Close dialog"
+            class="grid h-8 w-8 shrink-0 place-items-center rounded-lg hover:bg-gray-100"
+          >
+            <svg
+              class="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
+
+        <div id="formBody" class="mt-5 space-y-4">
+          <div>
+            <label for="mName" class="text-sm font-medium"
+              >Full name or business name</label
+            >
+            <input
+              id="mName"
+              name="name"
+              type="text"
+              required
+              autocomplete="name"
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
+            />
+            <p class="err mt-1 hidden text-xs text-brand-700" data-for="mName">
+              Please enter your name.
+            </p>
+          </div>
+          <div>
+            <label for="mEmail" class="text-sm font-medium"
+              >Email address</label
+            >
+            <input
+              id="mEmail"
+              name="email"
+              type="email"
+              required
+              autocomplete="email"
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
+            />
+            <p class="err mt-1 hidden text-xs text-brand-700" data-for="mEmail">
+              Please enter a valid email address.
+            </p>
+          </div>
+          <div>
+            <label for="mRole" class="text-sm font-medium">I want to</label>
+            <select
+              id="mRole"
+              name="role"
+              class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
+            >
+              <option value="advertise">Advertise my business</option>
+              <option value="sell">Sell products or services</option>
+              <option value="buy">Buy and discover</option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            class="w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white hover:bg-brand-700 active:scale-[.98] transition"
+          >
+            Create my profile
+          </button>
+          <p class="text-center text-xs text-ink-500">
+            By joining you agree to our terms and privacy policy.
+          </p>
+        </div>
+
+        <div id="formDone" class="hidden mt-6 text-center">
+          <span
+            class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-green-100 text-green-600"
+          >
+            <svg
+              class="h-7 w-7"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12l5 5L20 7" />
+            </svg>
+          </span>
+          <p class="mt-4 font-display text-lg font-bold">You're on the list!</p>
+          <p id="doneMsg" class="mt-1 text-sm text-ink-600"></p>
+          <button
+            type="button"
+            id="doneClose"
+            class="mt-5 rounded-lg bg-ink-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink-800"
+          >
+            Done
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <script>
+      (function () {
+        "use strict";
+
+        /* ---------- Data ---------- */
+        var CATEGORIES = [
+          {
+            id: "sale",
+            label: "For Sale",
+            icon: '<path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor"/>',
+          },
+          {
+            id: "autos",
+            label: "Autos",
+            icon: '<path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v3H3z"/><circle cx="7.5" cy="13.5" r=".8" fill="currentColor"/><circle cx="16.5" cy="13.5" r=".8" fill="currentColor"/>',
+          },
+          {
+            id: "services",
+            label: "Services",
+            icon: '<path d="M12 21s-7-4.4-7-10V6l7-3 7 3v5c0 5.6-7 10-7 10z"/><path d="M9 12l2 2 4-4"/>',
+          },
+          {
+            id: "jobs",
+            label: "Jobs",
+            icon: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/>',
+          },
+          {
+            id: "housing",
+            label: "Housing",
+            icon: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+          },
+          {
+            id: "events",
+            label: "Events",
+            icon: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 114 2c-.9.6-1.5 1.1-1.5 2.2M12 17h.01"/>',
+          },
+        ];
+
+        var LISTINGS = [
+          {
+            cat: "sale",
+            tag: "For Sale",
+            title: "Handwoven Basket",
+            loc: "Lagos, Nigeria",
+            price: "₦12,000",
+            from: "#fcd34d",
+            to: "#b45309",
+            art: "basket",
+          },
+          {
+            cat: "services",
+            tag: "Services",
+            title: "Home Cleaning Pro",
+            loc: "Accra, Ghana",
+            price: "From ₦8,000",
+            from: "#5eead4",
+            to: "#0f766e",
+            art: "clean",
+          },
+          {
+            cat: "autos",
+            tag: "Autos",
+            title: "2019 Sedan — Low Miles",
+            loc: "Nairobi, Kenya",
+            price: "KSh 1.2M",
+            from: "#cbd5e1",
+            to: "#334155",
+            art: "car",
+          },
+          {
+            cat: "housing",
+            tag: "Housing",
+            title: "Furnished 2-Bed Flat",
+            loc: "Cape Town, SA",
+            price: "R14,500/mo",
+            from: "#fda4af",
+            to: "#9f1239",
+            art: "home",
+          },
+        ];
+
+        var ART = {
+          basket:
+            '<path d="M30 62h60l-6 34H36z" fill="rgba(255,255,255,.85)"/><path d="M26 62h68" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M40 72h40M42 82h36" stroke="rgba(0,0,0,.25)" stroke-width="3"/><path d="M42 62c0-22 36-22 36 0" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>',
+          clean:
+            '<rect x="40" y="52" width="40" height="46" rx="8" fill="rgba(255,255,255,.88)"/><rect x="52" y="34" width="16" height="20" rx="3" fill="#fff"/><path d="M68 38h14l6 8" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><circle cx="92" cy="30" r="4" fill="#fff"/><circle cx="102" cy="42" r="3" fill="#fff"/><circle cx="26" cy="46" r="3.5" fill="#fff"/>',
+          car: '<path d="M14 76l10-22a10 10 0 019-6h54a10 10 0 019 6l10 22v14H14z" fill="rgba(255,255,255,.88)"/><path d="M32 54h56l7 18H25z" fill="rgba(51,65,85,.55)"/><circle cx="36" cy="92" r="10" fill="#1e293b"/><circle cx="84" cy="92" r="10" fill="#1e293b"/><circle cx="36" cy="92" r="4" fill="#cbd5e1"/><circle cx="84" cy="92" r="4" fill="#cbd5e1"/>',
+          home: '<path d="M16 62L60 26l44 36" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 58v38h68V58L60 32z" fill="rgba(255,255,255,.88)"/><rect x="50" y="68" width="20" height="28" rx="3" fill="#9f1239"/><rect x="32" y="64" width="12" height="12" rx="2" fill="rgba(159,18,57,.35)"/><rect x="76" y="64" width="12" height="12" rx="2" fill="rgba(159,18,57,.35)"/>',
+        };
+
+        /* ---------- Helpers ---------- */
+        var $ = function (s, c) {
+          return (c || document).querySelector(s);
+        };
+        var $$ = function (s, c) {
+          return Array.prototype.slice.call(
+            (c || document).querySelectorAll(s),
+          );
+        };
+        var state = { cat: null, q: "", loc: "" };
+
+        /* ---------- Loader ---------- */
+        function hideLoader() {
+          var l = $("#loader");
+          if (l) {
+            l.classList.add("done");
+            setTimeout(function () {
+              l.remove();
+            }, 600);
+          }
+        }
+        window.addEventListener("load", function () {
+          setTimeout(hideLoader, 450);
+        });
+        setTimeout(hideLoader, 3500); // safety net if fonts/CDN are slow
+
+        /* ---------- Render categories ---------- */
+        var catGrid = $("#catGrid");
+        CATEGORIES.forEach(function (c, i) {
+          var li = document.createElement("li");
+          li.className = "reveal";
+          li.style.setProperty("--d", i * 60 + "ms");
+          li.innerHTML =
+            '<button type="button" data-cat="' +
+            c.id +
+            '" aria-pressed="false" class="cat-btn group flex w-full flex-col items-center gap-3 rounded-2xl border border-gray-200 bg-white px-3 py-6 text-sm font-semibold shadow-sm transition hover:-translate-y-1 hover:border-brand-100 hover:shadow-card">' +
+            '<span class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-600 transition group-hover:bg-brand-600 group-hover:text-white">' +
+            '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            c.icon +
+            "</svg></span>" +
+            c.label +
+            "</button>";
+          catGrid.appendChild(li);
+        });
+
+        /* ---------- Render + filter listings ---------- */
+        var grid = $("#listingGrid"),
+          empty = $("#emptyState"),
+          status = $("#filterStatus");
+
+        function card(l, i) {
+          return (
+            '<article class="reveal group overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-gray-100 transition duration-300 hover:-translate-y-1 hover:shadow-lift" style="--d:' +
+            i * 70 +
+            'ms">' +
+            '<div class="listing-art relative overflow-hidden" style="background:linear-gradient(135deg,' +
+            l.from +
+            "," +
+            l.to +
+            ')">' +
+            '<svg viewBox="0 0 120 120" class="absolute inset-0 h-full w-full transition duration-500 group-hover:scale-105" preserveAspectRatio="xMidYMid slice" role="img" aria-label="' +
+            l.title +
+            ' illustration">' +
+            ART[l.art] +
+            "</svg></div>" +
+            '<div class="p-4"><p class="text-[10px] font-bold uppercase tracking-wider text-brand-600">' +
+            l.tag +
+            "</p>" +
+            '<h3 class="mt-1 font-semibold leading-snug">' +
+            l.title +
+            "</h3>" +
+            '<p class="mt-0.5 text-xs text-ink-500">' +
+            l.loc +
+            "</p>" +
+            '<div class="mt-4 flex items-center justify-between"><span class="font-display font-bold">' +
+            l.price +
+            "</span>" +
+            '<button type="button" data-view="' +
+            l.title.replace(/"/g, "&quot;") +
+            '" class="text-xs font-semibold text-brand-600 hover:text-brand-800">View</button></div></div></article>'
+          );
+        }
+
+        function renderListings() {
+          var q = state.q.trim().toLowerCase(),
+            loc = state.loc.trim().toLowerCase();
+          var out = LISTINGS.filter(function (l) {
+            return (
+              (!state.cat || l.cat === state.cat) &&
+              (!q || (l.title + " " + l.tag).toLowerCase().indexOf(q) > -1) &&
+              (!loc || l.loc.toLowerCase().indexOf(loc) > -1)
+            );
+          });
+          grid.innerHTML = out.map(card).join("");
+          empty.classList.toggle("hidden", out.length > 0);
+          var parts = [];
+          if (state.cat)
+            parts.push(
+              CATEGORIES.filter(function (c) {
+                return c.id === state.cat;
+              })[0].label,
+            );
+          if (q) parts.push("“" + state.q.trim() + "”");
+          if (loc) parts.push("in " + state.loc.trim());
+          status.textContent = parts.length
+            ? "Showing " +
+              out.length +
+              " result" +
+              (out.length === 1 ? "" : "s") +
+              " for " +
+              parts.join(" ")
+            : "";
+          $$(".cat-btn").forEach(function (b) {
+            var on = b.dataset.cat === state.cat;
+            b.setAttribute("aria-pressed", on);
+            b.classList.toggle("border-brand-600", on);
+            b.classList.toggle("bg-brand-50", on);
+          });
+          observe();
+        }
+
+        function goListings() {
+          $("#listings").scrollIntoView({
+            behavior: prefersReduced() ? "auto" : "smooth",
+          });
+        }
+        function prefersReduced() {
+          return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        }
+
+        catGrid.addEventListener("click", function (e) {
+          var b = e.target.closest(".cat-btn");
+          if (!b) return;
+          state.cat = state.cat === b.dataset.cat ? null : b.dataset.cat;
+          renderListings();
+          if (state.cat) goListings();
+        });
+
+        $("#searchForm").addEventListener("submit", function (e) {
+          e.preventDefault();
+          state.q = $("#qInput").value;
+          state.loc = $("#locInput").value;
+          renderListings();
+          goListings();
+        });
+
+        function resetAll() {
+          state = { cat: null, q: "", loc: "" };
+          $("#qInput").value = "";
+          $("#locInput").value = "";
+          renderListings();
+        }
+        $("#resetFilters").addEventListener("click", resetAll);
+        $("#viewAll").addEventListener("click", function () {
+          resetAll();
+          toast("Showing all featured listings");
+        });
+
+        grid.addEventListener("click", function (e) {
+          var v = e.target.closest("[data-view]");
+          if (!v) return;
+          toast("“" + v.dataset.view + "” — sign in to contact the seller.");
+        });
+
+        /* ---------- Reveal on scroll ---------- */
+        var io =
+          "IntersectionObserver" in window
+            ? new IntersectionObserver(
+                function (entries) {
+                  entries.forEach(function (en) {
+                    if (en.isIntersecting) {
+                      en.target.classList.add("in");
+                      io.unobserve(en.target);
+                    }
+                  });
+                },
+                { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+              )
+            : null;
+        function observe() {
+          $$(".reveal:not(.in)").forEach(function (el) {
+            io ? io.observe(el) : el.classList.add("in");
+          });
+        }
+
+        /* ---------- Mobile menu ---------- */
+        var menuBtn = $("#menuBtn"),
+          menu = $("#mobileMenu");
+        function setMenu(open) {
+          menu.classList.toggle("hidden", !open);
+          menuBtn.setAttribute("aria-expanded", open);
+          menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+          $("#iconOpen").classList.toggle("hidden", open);
+          $("#iconClose").classList.toggle("hidden", !open);
+        }
+        menuBtn.addEventListener("click", function () {
+          setMenu(menuBtn.getAttribute("aria-expanded") !== "true");
+        });
+        menu.addEventListener("click", function (e) {
+          if (e.target.closest("a,button")) setMenu(false);
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") setMenu(false);
+        });
+        window
+          .matchMedia("(min-width:1024px)")
+          .addEventListener("change", function (m) {
+            if (m.matches) setMenu(false);
+          });
+
+        /* ---------- Header shadow, back-to-top, active nav ---------- */
+        var header = $("#header"),
+          toTop = $("#toTop");
+        function onScroll() {
+          var y = window.scrollY;
+          header.classList.toggle("shadow-md", y > 8);
+          header.classList.toggle("border-gray-100", y > 8);
+          var show = y > 600;
+          toTop.classList.toggle("opacity-0", !show);
+          toTop.classList.toggle("pointer-events-none", !show);
+          toTop.classList.toggle("translate-y-3", !show);
+        }
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+        toTop.addEventListener("click", function () {
+          window.scrollTo({
+            top: 0,
+            behavior: prefersReduced() ? "auto" : "smooth",
+          });
+        });
+
+        /* ---------- Toast ---------- */
+        var toastEl = $("#toast"),
+          toastT;
+        function toast(msg) {
+          toastEl.textContent = msg;
+          toastEl.classList.remove("opacity-0", "translate-y-6");
+          clearTimeout(toastT);
+          toastT = setTimeout(function () {
+            toastEl.classList.add("opacity-0", "translate-y-6");
+          }, 3200);
+        }
+
+        /* ---------- Placeholder nav targets (Countries / Events / Privacy) ---------- */
+        document.addEventListener("click", function (e) {
+          var a = e.target.closest("a[data-info]");
+          if (!a) return;
+          e.preventDefault();
+          toast("The privacy policy will be available soon.");
+        });
+
+        /* ---------- Countries, event reminders, newsletter ---------- */
+        document.addEventListener("click", function (e) {
+          var l = e.target.closest("[data-loc]");
+          if (l) {
+            state = { cat: null, q: "", loc: l.dataset.loc };
+            $("#locInput").value = l.dataset.loc;
+            $("#qInput").value = "";
+            renderListings();
+            goListings();
+            return;
+          }
+          var s = e.target.closest("[data-soon]");
+          if (s) {
+            toast(
+              s.dataset.soon + " is launching soon. Join to be first to know.",
+            );
+            return;
+          }
+          var r = e.target.closest("[data-remind]");
+          if (r) {
+            r.textContent = "Reminder set ✓";
+            r.disabled = true;
+            toast("We’ll remind you about “" + r.dataset.remind + "”.");
+          }
+        });
+
+        $("#newsForm").addEventListener("submit", function (e) {
+          e.preventDefault();
+          var inp = $("#newsEmail");
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value.trim())) {
+            inp.setAttribute("aria-invalid", "true");
+            inp.focus();
+            return toast("Please enter a valid email address.");
+          }
+          inp.removeAttribute("aria-invalid");
+          inp.value = "";
+          toast("Thanks for subscribing!");
+        });
+
+        /* ---------- Animated counters ---------- */
+        (function () {
+          var els = $$("[data-count]");
+          function fmt(el, v) {
+            el.textContent =
+              (v >= 1000 && !el.dataset.suffix.match(/K/)
+                ? v.toLocaleString("en-US")
+                : v) + el.dataset.suffix;
+          }
+          function run(el) {
+            var end = +el.dataset.count;
+            if (prefersReduced()) return fmt(el, end);
+            var t0 = null,
+              dur = 1600;
+            function step(t) {
+              if (!t0) t0 = t;
+              var p = Math.min((t - t0) / dur, 1);
+              fmt(el, Math.round(end * (1 - Math.pow(1 - p, 3))));
+              if (p < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+          }
+          if (!("IntersectionObserver" in window))
+            return els.forEach(function (el) {
+              fmt(el, +el.dataset.count);
+            });
+          var o = new IntersectionObserver(
+            function (en) {
+              en.forEach(function (x) {
+                if (x.isIntersecting) {
+                  run(x.target);
+                  o.unobserve(x.target);
+                }
+              });
+            },
+            { threshold: 0.5 },
+          );
+          els.forEach(function (el) {
+            o.observe(el);
+          });
+        })();
+
+        /* ---------- Modal ---------- */
+        var modal = $("#modal"),
+          form = $("#modalForm"),
+          lastFocus = null;
+        var COPY = {
+          member: [
+            "Join Africa Market Place",
+            "Create your free profile in a minute.",
+            "buy",
+          ],
+          seller: [
+            "Start Selling",
+            "Set up your seller profile and list your first product.",
+            "sell",
+          ],
+          advertise: [
+            "Advertise With Us",
+            "Tell us about your business and we’ll promote it on Facebook, Instagram, and TikTok.",
+            "advertise",
+          ],
+        };
+        function openModal(kind) {
+          var c = COPY[kind] || COPY.member;
+          lastFocus = document.activeElement;
+          $("#modalTitle").textContent = c[0];
+          $("#modalSub").textContent = c[1];
+          $("#mRole").value = c[2];
+          form.reset();
+          $("#mRole").value = c[2];
+          $("#formBody").classList.remove("hidden");
+          $("#formDone").classList.add("hidden");
+          $$(".err", form).forEach(function (p) {
+            p.classList.add("hidden");
+          });
+          if (typeof modal.showModal === "function") modal.showModal();
+          else modal.setAttribute("open", "");
+          setTimeout(function () {
+            $("#mName").focus();
+          }, 30);
+        }
+        function closeModal() {
+          if (typeof modal.close === "function") modal.close();
+          else modal.removeAttribute("open");
+          if (lastFocus && lastFocus.focus) lastFocus.focus();
+        }
+        document.addEventListener("click", function (e) {
+          var t = e.target.closest("[data-open-modal]");
+          if (t) {
+            setMenu(false);
+            openModal(t.dataset.openModal);
+          }
+        });
+        $("#modalClose").addEventListener("click", closeModal);
+        $("#doneClose").addEventListener("click", closeModal);
+        modal.addEventListener("click", function (e) {
+          if (e.target === modal) closeModal();
+        });
+
+        function showErr(id, bad) {
+          $('.err[data-for="' + id + '"]').classList.toggle("hidden", !bad);
+          $("#" + id).setAttribute("aria-invalid", bad);
+        }
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var name = $("#mName").value.trim(),
+            email = $("#mEmail").value.trim();
+          var okName = name.length > 1,
+            okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+          showErr("mName", !okName);
+          showErr("mEmail", !okEmail);
+          if (!okName) return $("#mName").focus();
+          if (!okEmail) return $("#mEmail").focus();
+          $("#doneMsg").textContent =
+            "Thanks, " +
+            name.split(" ")[0] +
+            ". We’ll email " +
+            email +
+            " with your next steps.";
+          $("#formBody").classList.add("hidden");
+          $("#formDone").classList.remove("hidden");
+          $("#doneClose").focus();
+        });
+
+        /* ---------- Init ---------- */
+        $("#year").textContent = new Date().getFullYear();
+        renderListings();
+        observe();
+      })();
+    </script>
+  </body>
+</html>

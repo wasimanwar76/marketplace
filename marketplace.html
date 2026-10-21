@@ -1,0 +1,2694 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Marketplace | Africa Market Place</title>
+    <meta
+      name="description"
+      content="Browse, buy and sell across Africa. Africa Market Place connects small businesses, entrepreneurs and independent sellers with customers."
+    />
+    <meta name="theme-color" content="#dc2626" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23dc2626'/%3E%3Cpath d='M8 22V10l8 7 8-7v12' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: "#fef2f2",
+                100: "#fee2e2",
+                500: "#ef4444",
+                600: "#dc2626",
+                700: "#b91c1c",
+                800: "#991b1b",
+              },
+              ink: {
+                900: "#111827",
+                800: "#1f2937",
+                600: "#4b5563",
+                500: "#6b7280",
+              },
+            },
+            fontFamily: {
+              display: [
+                '"Plus Jakarta Sans"',
+                "Inter",
+                "system-ui",
+                "sans-serif",
+              ],
+              sans: ["Inter", "system-ui", "sans-serif"],
+            },
+            boxShadow: {
+              card: "0 1px 2px rgba(17,24,39,.04), 0 8px 24px -12px rgba(17,24,39,.12)",
+              lift: "0 18px 40px -16px rgba(17,24,39,.28)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      :root {
+        --brand: #dc2626;
+        --brand-dark: #b91c1c;
+        --ink: #111827;
+      }
+      html {
+        scroll-padding-top: 6rem;
+      }
+      body {
+        font-family: Inter, system-ui, sans-serif;
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: 1rem;
+        top: -4rem;
+        z-index: 100;
+        background: #fff;
+        color: var(--ink);
+        padding: 0.6rem 1rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        transition: top 0.2s;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+      .skip-link:focus {
+        top: 1rem;
+      }
+      :where(a, button, input, select, textarea, summary):focus-visible {
+        outline: 3px solid #f87171;
+        outline-offset: 2px;
+        border-radius: 0.5rem;
+      }
+
+      .pattern {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='white' stroke-opacity='.08' stroke-width='2'%3E%3Cpath d='M0 36 L36 0 L72 36 L36 72 Z'/%3E%3Cpath d='M18 36 L36 18 L54 36 L36 54 Z'/%3E%3Ccircle cx='36' cy='36' r='4'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 72px 72px;
+      }
+      .cta-pattern {
+        background-color: #dc2626;
+        background-image:
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cg fill='none' stroke='white' stroke-opacity='.12' stroke-width='3'%3E%3Cpath d='M0 48 Q24 24 48 48 T96 48'/%3E%3Cpath d='M0 80 Q24 56 48 80 T96 80'/%3E%3Cpath d='M0 16 Q24 -8 48 16 T96 16'/%3E%3C/g%3E%3C/svg%3E"),
+          linear-gradient(135deg, #dc2626, #b91c1c);
+      }
+
+      .side-item {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        gap: 0.75rem;
+        border-radius: 0.6rem;
+        padding: 0.45rem 0.5rem;
+        text-align: left;
+        font-size: 15px;
+        font-weight: 600;
+        transition: background 0.15s;
+      }
+      .side-item:hover {
+        background: #f3f4f6;
+      }
+      .side-item .ico {
+        display: grid;
+        place-items: center;
+        height: 2.25rem;
+        width: 2.25rem;
+        flex: none;
+        border-radius: 9999px;
+        background: #e5e7eb;
+        color: #1f2937;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .side-item[aria-current="true"] {
+        background: #fef2f2;
+        color: #b91c1c;
+      }
+      .side-item[aria-current="true"] .ico {
+        background: #dc2626;
+        color: #fff;
+      }
+      .side-item .chev {
+        transition: transform 0.2s;
+      }
+      .side-item[aria-expanded="true"] .chev {
+        transform: rotate(180deg);
+      }
+      .sub-btn[aria-current="true"] {
+        background: #fef2f2;
+        color: #b91c1c;
+        font-weight: 600;
+      }
+
+      .chip[aria-pressed="true"] {
+        background: #dc2626;
+        color: #fff;
+        border-color: #dc2626;
+      }
+
+      .card-img {
+        aspect-ratio: 1 / 1;
+      }
+      .fade-in {
+        animation: fadeUp 0.45s ease both;
+        animation-delay: var(--d, 0ms);
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+      }
+
+      .save-btn[aria-pressed="true"] svg {
+        fill: #dc2626;
+        stroke: #dc2626;
+      }
+
+      dialog::backdrop {
+        background: rgba(17, 24, 39, 0.6);
+        backdrop-filter: blur(4px);
+      }
+      dialog[open] {
+        animation: pop 0.25s ease;
+      }
+      @keyframes pop {
+        from {
+          opacity: 0;
+          transform: translateY(12px) scale(0.98);
+        }
+      }
+
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        scrollbar-width: none;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto !important;
+        }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          transition-delay: 0ms !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-50 antialiased">
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Top bar + header -->
+    <div class="sticky top-0 z-50">
+      <div class="hidden lg:block bg-ink-900 text-gray-300">
+        <nav
+          class="mx-auto flex h-8 max-w-[1600px] items-center justify-between px-6 text-xs font-medium"
+          aria-label="Site links"
+        >
+          <ul class="flex items-center gap-5">
+            <li>
+              <a class="hover:text-white" href="index.html#about">About Us</a>
+            </li>
+            <li>
+              <a class="hover:text-white" href="index.html"
+                >Africa Market Place</a
+              >
+            </li>
+            <li>
+              <button type="button" data-open="loc" class="hover:text-white">
+                Countries
+              </button>
+            </li>
+            <li>
+              <a class="hover:text-white" href="index.html#contact"
+                >Contact Us</a
+              >
+            </li>
+          </ul>
+          <ul class="flex items-center gap-5">
+            <li>
+              <button type="button" data-open="create" class="hover:text-white">
+                Post
+              </button>
+            </li>
+            <li>
+              <button type="button" data-open="member" class="hover:text-white">
+                Become a Member
+              </button>
+            </li>
+            <li>
+              <a class="hover:text-white" href="index.html#events"
+                >Event Calendar</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <header class="border-b border-gray-200 bg-white/95 backdrop-blur">
+        <div
+          class="mx-auto grid h-14 max-w-[1600px] grid-cols-[auto_1fr_auto] items-center gap-3 px-3 sm:px-6 lg:grid-cols-[360px_1fr_auto] lg:gap-0 lg:px-0"
+        >
+          <div class="flex items-center gap-2 lg:px-6">
+            <button
+              id="menuBtn"
+              type="button"
+              class="grid h-10 w-10 place-items-center rounded-full bg-gray-100 hover:bg-gray-200 lg:hidden"
+              aria-label="Open marketplace menu"
+              aria-controls="sidebar"
+              aria-expanded="false"
+            >
+              <svg
+                class="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path d="M4 7h16M4 12h16M4 17h16" />
+              </svg>
+            </button>
+            <a
+              href="index.html"
+              class="font-display text-lg font-extrabold tracking-tight sm:text-xl"
+              aria-label="Africa Market Place home"
+              >Africa<span class="text-brand-600">Market</span>Place</a
+            >
+          </div>
+
+          <div class="flex items-center gap-3 lg:px-6">
+            <form id="topSearch" role="search" class="relative w-full max-w-md">
+              <label for="topQ" class="sr-only">Search Marketplace</label>
+              <svg
+                class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-500"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path d="M20 20l-3.5-3.5" />
+              </svg>
+              <input
+                id="topQ"
+                type="search"
+                placeholder="Search Marketplace"
+                autocomplete="off"
+                class="w-full rounded-full bg-gray-100 py-2.5 pl-9 pr-4 text-sm placeholder-ink-500 outline-none focus:bg-white focus:ring-2 focus:ring-brand-100"
+              />
+            </form>
+            <nav
+              class="mx-auto hidden items-center gap-1 xl:flex"
+              aria-label="Sections"
+            >
+              <a
+                href="index.html"
+                class="grid h-12 w-20 place-items-center rounded-lg text-ink-500 hover:bg-gray-100"
+                aria-label="Home"
+                ><svg
+                  class="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M3 11l9-8 9 8" />
+                  <path d="M5 10v10h14V10" /></svg
+              ></a>
+              <a
+                href="marketplace.html"
+                aria-current="page"
+                class="relative grid h-12 w-20 place-items-center rounded-lg text-brand-600 after:absolute after:inset-x-2 after:-bottom-1 after:h-[3px] after:rounded-full after:bg-brand-600"
+                aria-label="Marketplace"
+                ><svg
+                  class="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M4 9l1.5-5h13L20 9" />
+                  <path d="M4 9v11h16V9" />
+                  <path
+                    d="M4 9a2.7 2.7 0 005.3 0 2.7 2.7 0 005.4 0A2.7 2.7 0 0020 9"
+                  /></svg
+              ></a>
+              <a
+                href="index.html#events"
+                class="grid h-12 w-20 place-items-center rounded-lg text-ink-500 hover:bg-gray-100"
+                aria-label="Events"
+                ><svg
+                  class="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25A2.25 2.25 0 0118.75 21H5.25A2.25 2.25 0 013 18.75zM3 11h18"
+                  /></svg
+              ></a>
+              <button
+                type="button"
+                data-open="loc"
+                class="grid h-12 w-20 place-items-center rounded-lg text-ink-500 hover:bg-gray-100"
+                aria-label="Choose country or city"
+              >
+                <svg
+                  class="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18" />
+                </svg>
+              </button>
+            </nav>
+          </div>
+
+          <div class="flex items-center gap-2 sm:gap-3 lg:px-6">
+            <button
+              type="button"
+              data-open="create"
+              class="hidden items-center gap-1.5 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700 active:scale-95 sm:inline-flex"
+            >
+              <svg
+                class="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path d="M12 5v14M5 12h14" /></svg
+              >Post
+            </button>
+            <button
+              type="button"
+              data-open="member"
+              class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold transition hover:border-brand-600 hover:text-brand-600 active:scale-95 sm:px-4"
+            >
+              <span class="hidden sm:inline">Become a Member</span
+              ><span class="sm:hidden">Join</span>
+            </button>
+          </div>
+        </div>
+      </header>
+    </div>
+
+    <div
+      id="backdrop"
+      class="fixed inset-0 z-40 hidden bg-ink-900/50 lg:hidden"
+    ></div>
+
+    <!-- Sidebar -->
+    <aside
+      id="sidebar"
+      aria-label="Marketplace menu"
+      class="fixed bottom-0 left-0 top-14 z-40 w-[88%] max-w-sm -translate-x-full overflow-y-auto border-r border-gray-200 bg-white px-3 pb-10 pt-4 transition-transform duration-300 lg:top-[88px] lg:w-[360px] lg:max-w-none lg:translate-x-0"
+    >
+      <div class="flex items-center justify-between px-2">
+        <h1 class="font-display text-2xl font-extrabold tracking-tight">
+          Marketplace
+        </h1>
+        <button
+          type="button"
+          data-open="loc"
+          class="grid h-10 w-10 place-items-center rounded-full bg-gray-100 hover:bg-gray-200"
+          aria-label="Marketplace settings and location"
+        >
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <form id="sideSearch" role="search" class="relative mt-3 px-2">
+        <label for="sideQ" class="sr-only">Search Marketplace</label>
+        <svg
+          class="pointer-events-none absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-500"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7" />
+          <path d="M20 20l-3.5-3.5" />
+        </svg>
+        <input
+          id="sideQ"
+          type="search"
+          placeholder="Search Marketplace"
+          autocomplete="off"
+          class="w-full rounded-full bg-gray-100 py-2.5 pl-9 pr-4 text-sm placeholder-ink-500 outline-none focus:bg-white focus:ring-2 focus:ring-brand-100"
+        />
+      </form>
+
+      <ul class="mt-4 space-y-1" id="navList">
+        <li>
+          <button
+            type="button"
+            class="side-item"
+            data-view="all"
+            aria-current="true"
+          >
+            <span class="ico"
+              ><svg
+                class="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M4 9l1.5-5h13L20 9" />
+                <path d="M4 9v11h16V9" />
+                <path
+                  d="M4 9a2.7 2.7 0 005.3 0 2.7 2.7 0 005.4 0A2.7 2.7 0 0020 9"
+                /></svg></span
+            >Browse all
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="side-item"
+            data-toast="Sign in to see your notifications."
+          >
+            <span class="ico"
+              ><svg
+                class="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"
+                /></svg></span
+            >Notifications
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="side-item"
+            data-toast="Sign in to read your messages."
+          >
+            <span class="ico"
+              ><svg
+                class="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
+                /></svg></span
+            >Inbox
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="side-item"
+            data-toast="Your seller status will appear here once you post."
+          >
+            <span class="ico"
+              ><svg
+                class="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M12 21s-7-4.4-7-10V6l7-3 7 3v5c0 5.6-7 10-7 10z" />
+                <path d="M9 12l2 2 4-4" /></svg></span
+            >Marketplace status
+          </button>
+        </li>
+        <li>
+          <button type="button" class="side-item" data-view="saved">
+            <span class="ico"
+              ><svg
+                class="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="9" cy="20" r="1.5" />
+                <circle cx="18" cy="20" r="1.5" />
+                <path d="M3 4h2l2.4 11h11l2-8H6.2" /></svg></span
+            ><span class="flex-1">Buying · Saved items</span
+            ><span
+              id="savedCount"
+              class="rounded-full bg-gray-200 px-2 py-0.5 text-xs font-bold text-ink-800"
+              >0</span
+            >
+          </button>
+        </li>
+        <li>
+          <button type="button" class="side-item" data-view="mine">
+            <span class="ico"
+              ><svg
+                class="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"
+                />
+                <circle
+                  cx="7.5"
+                  cy="7.5"
+                  r="1.2"
+                  fill="currentColor"
+                /></svg></span
+            ><span class="flex-1">Selling · My listings</span
+            ><span
+              id="mineCount"
+              class="rounded-full bg-gray-200 px-2 py-0.5 text-xs font-bold text-ink-800"
+              >0</span
+            >
+          </button>
+        </li>
+      </ul>
+
+      <div class="mt-3 px-2">
+        <button
+          type="button"
+          data-open="create"
+          class="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-card transition hover:bg-brand-700 active:scale-[.98]"
+        >
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M12 5v14M5 12h14" /></svg
+          >Create new listing
+        </button>
+      </div>
+
+      <hr class="my-4 border-gray-200" />
+
+      <div class="px-2">
+        <h2 class="font-display text-lg font-bold">Location</h2>
+        <button
+          type="button"
+          data-open="loc"
+          class="mt-1 text-sm font-semibold text-brand-600 hover:text-brand-800"
+        >
+          <span id="locLabelSide">All Africa</span> · Within 60 km
+        </button>
+      </div>
+
+      <hr class="my-4 border-gray-200" />
+
+      <div class="px-2">
+        <h2 class="font-display text-lg font-bold">Categories</h2>
+      </div>
+      <ul id="sideCats" class="mt-2 space-y-1"></ul>
+
+      <hr class="my-4 border-gray-200 lg:hidden" />
+      <ul class="space-y-1 px-2 text-sm font-medium text-ink-600 lg:hidden">
+        <li>
+          <a
+            class="block rounded-lg px-2 py-2 hover:bg-gray-100"
+            href="index.html#about"
+            >About Us</a
+          >
+        </li>
+        <li>
+          <a
+            class="block rounded-lg px-2 py-2 hover:bg-gray-100"
+            href="index.html#contact"
+            >Contact Us</a
+          >
+        </li>
+        <li>
+          <a
+            class="block rounded-lg px-2 py-2 hover:bg-gray-100"
+            href="index.html#events"
+            >Event Calendar</a
+          >
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main -->
+    <main id="main" class="lg:ml-[360px]">
+      <!-- Mobile category chips -->
+      <div
+        class="no-scrollbar flex gap-2 overflow-x-auto border-b border-gray-200 bg-white px-3 py-3 lg:hidden"
+        id="mobChips"
+        aria-label="Categories"
+      ></div>
+
+      <div class="mx-auto max-w-[1200px] px-3 py-5 sm:px-6 sm:py-6 lg:px-8">
+        <!-- Heading row -->
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2
+              id="mainTitle"
+              class="font-display text-2xl font-bold tracking-tight sm:text-3xl"
+            >
+              Today's picks
+            </h2>
+            <p
+              id="filterStatus"
+              class="mt-1 min-h-[1.25rem] text-sm text-ink-600"
+              role="status"
+              aria-live="polite"
+            ></p>
+          </div>
+          <button
+            type="button"
+            data-open="loc"
+            class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-800"
+          >
+            <svg
+              class="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 21s-7-6.2-7-11a7 7 0 1114 0c0 4.8-7 11-7 11zm0-8.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
+              />
+            </svg>
+            <span id="locLabelMain">All Africa</span> · 60 km
+          </button>
+        </div>
+
+        <!-- Sub chips -->
+        <div
+          id="subChips"
+          class="no-scrollbar mt-4 flex gap-2 overflow-x-auto pb-1"
+          aria-label="Subcategories"
+        ></div>
+
+        <!-- Grid -->
+        <div
+          id="grid"
+          class="mt-5 grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-4 md:grid-cols-3 xl:grid-cols-4"
+        ></div>
+
+        <div
+          id="empty"
+          class="mt-6 hidden rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center"
+        >
+          <p class="font-semibold" id="emptyTitle">
+            No listings match your search yet.
+          </p>
+          <p class="mt-1 text-sm text-ink-600" id="emptyMsg">
+            Try a different keyword or location, or be the first to list
+            something here.
+          </p>
+          <div class="mt-4 flex flex-wrap justify-center gap-2">
+            <button
+              type="button"
+              id="resetBtn"
+              class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold hover:border-brand-600 hover:text-brand-600"
+            >
+              Clear filters
+            </button>
+            <button
+              type="button"
+              data-open="create"
+              class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700"
+            >
+              Create a listing
+            </button>
+          </div>
+        </div>
+
+        <!-- Directory -->
+        <section id="directory" class="mt-16" aria-labelledby="dir-h">
+          <h2 id="dir-h" class="font-display text-2xl font-bold tracking-tight">
+            Browse all categories
+          </h2>
+          <p class="mt-1 text-sm text-ink-600">
+            Choose the category that best matches what you offer or need.
+          </p>
+          <div id="dirGrid" class="mt-6 grid gap-5 md:grid-cols-2"></div>
+        </section>
+
+        <!-- Advertise CTA -->
+        <section
+          class="cta-pattern mt-16 overflow-hidden rounded-3xl text-white shadow-lift"
+          aria-labelledby="cta-h"
+        >
+          <div class="px-6 py-12 text-center sm:px-12 sm:py-14">
+            <h2
+              id="cta-h"
+              class="font-display text-2xl font-extrabold tracking-tight sm:text-3xl"
+            >
+              Want more eyes on your listing?
+            </h2>
+            <p class="mx-auto mt-3 max-w-xl text-sm text-red-50 sm:text-base">
+              We promote small businesses on Facebook, Instagram and TikTok
+              through reels, stories and posts. Affordable, visible, targeted.
+            </p>
+            <div class="mt-7 flex flex-wrap justify-center gap-3">
+              <button
+                type="button"
+                data-open="member"
+                class="rounded-lg bg-white px-6 py-3 text-sm font-semibold text-ink-900 transition hover:bg-gray-100 active:scale-95"
+              >
+                Become a Member
+              </button>
+              <button
+                type="button"
+                data-open="create"
+                class="rounded-lg bg-brand-800 px-6 py-3 text-sm font-semibold text-white transition hover:bg-ink-900 active:scale-95"
+              >
+                Start Selling Now
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <footer
+          class="mt-12 border-t border-gray-200 pt-6 pb-24 text-center text-xs text-ink-500 lg:pb-8"
+        >
+          <p>
+            <a class="hover:text-brand-600" href="index.html#about">About Us</a>
+            ·
+            <a class="hover:text-brand-600" href="index.html#contact"
+              >Contact Us</a
+            >
+            ·
+            <a class="hover:text-brand-600" href="index.html#events"
+              >Event Calendar</a
+            >
+            ·
+            <button
+              type="button"
+              data-toast="The privacy policy will be available soon."
+              class="hover:text-brand-600"
+            >
+              Privacy Policy
+            </button>
+          </p>
+          <p class="mt-2">
+            © <span id="year">2026</span> Africa Market Place. All rights
+            reserved.
+          </p>
+        </footer>
+      </div>
+    </main>
+
+    <!-- Mobile FAB -->
+    <button
+      type="button"
+      data-open="create"
+      class="fixed bottom-5 right-4 z-30 inline-flex items-center gap-2 rounded-full bg-brand-600 px-5 py-3.5 text-sm font-semibold text-white shadow-lift transition hover:bg-brand-700 active:scale-95 lg:hidden"
+      aria-label="Create new listing"
+    >
+      <svg
+        class="h-5 w-5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M12 5v14M5 12h14" /></svg
+      >Sell
+    </button>
+
+    <!-- Toast -->
+    <div
+      id="toast"
+      role="status"
+      aria-live="polite"
+      class="pointer-events-none fixed bottom-6 left-1/2 z-[70] max-w-[90%] -translate-x-1/2 translate-y-6 rounded-xl bg-ink-900 px-5 py-3 text-sm font-medium text-white opacity-0 shadow-lift transition duration-300"
+    ></div>
+
+    <!-- Detail dialog -->
+    <dialog
+      id="dlg-detail"
+      class="w-[calc(100%-1.5rem)] max-w-3xl overflow-hidden rounded-2xl p-0 shadow-lift"
+      aria-labelledby="dTitle"
+    >
+      <div class="grid md:grid-cols-[1.1fr_1fr]">
+        <div
+          id="dArt"
+          class="relative aspect-square md:aspect-auto md:min-h-[460px]"
+        ></div>
+        <div class="flex flex-col p-6">
+          <div class="flex items-start justify-between gap-3">
+            <p
+              id="dTag"
+              class="text-[10px] font-bold uppercase tracking-wider text-brand-600"
+            ></p>
+            <button
+              type="button"
+              data-close
+              class="grid h-8 w-8 shrink-0 place-items-center rounded-lg hover:bg-gray-100"
+              aria-label="Close dialog"
+            >
+              <svg
+                class="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+          </div>
+          <h2
+            id="dTitle"
+            class="mt-1 font-display text-xl font-bold leading-snug"
+          ></h2>
+          <p id="dPrice" class="mt-1 font-display text-2xl font-extrabold"></p>
+          <p id="dLoc" class="mt-1 text-sm text-ink-500"></p>
+          <div class="mt-4 flex gap-2">
+            <button
+              type="button"
+              id="dMsg"
+              class="flex-1 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700 active:scale-95"
+            >
+              Message seller
+            </button>
+            <button
+              type="button"
+              id="dSave"
+              class="save-btn grid h-10 w-10 place-items-center rounded-lg border border-gray-300 hover:border-brand-600"
+              aria-pressed="false"
+              aria-label="Save listing"
+            >
+              <svg
+                class="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 10-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 000-7.8z"
+                />
+              </svg>
+            </button>
+            <button
+              type="button"
+              id="dShare"
+              class="grid h-10 w-10 place-items-center rounded-lg border border-gray-300 hover:border-brand-600"
+              aria-label="Share listing"
+            >
+              <svg
+                class="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="18" cy="5" r="3" />
+                <circle cx="6" cy="12" r="3" />
+                <circle cx="18" cy="19" r="3" />
+                <path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" />
+              </svg>
+            </button>
+          </div>
+          <h3 class="mt-5 text-sm font-semibold">Description</h3>
+          <p id="dDesc" class="mt-1 text-sm leading-relaxed text-ink-600"></p>
+          <div
+            class="mt-auto flex items-center gap-3 border-t border-gray-100 pt-4"
+          >
+            <span
+              id="dAvatar"
+              class="grid h-10 w-10 place-items-center rounded-full bg-brand-100 text-sm font-bold text-brand-700"
+              aria-hidden="true"
+            ></span>
+            <div class="text-sm">
+              <strong id="dSeller" class="block"></strong
+              ><span class="text-ink-500">Seller on Africa Market Place</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Create dialog -->
+    <dialog
+      id="dlg-create"
+      class="w-[calc(100%-1.5rem)] max-w-lg rounded-2xl p-0 shadow-lift"
+      aria-labelledby="cTitle"
+    >
+      <form
+        id="createForm"
+        method="dialog"
+        novalidate
+        class="max-h-[90vh] overflow-y-auto p-6 sm:p-7"
+      >
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 id="cTitle" class="font-display text-xl font-bold">
+              Create new listing
+            </h2>
+            <p class="mt-1 text-sm text-ink-600">
+              List your product or service and reach buyers across Africa.
+            </p>
+          </div>
+          <button
+            type="button"
+            data-close
+            class="grid h-8 w-8 shrink-0 place-items-center rounded-lg hover:bg-gray-100"
+            aria-label="Close dialog"
+          >
+            <svg
+              class="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
+        <div class="mt-5 space-y-4">
+          <div>
+            <label class="text-sm font-medium" for="cPhoto"
+              >Photo (optional)</label
+            >
+            <label
+              for="cPhoto"
+              id="cPhotoBox"
+              class="mt-1 flex h-36 cursor-pointer flex-col items-center justify-center gap-1 overflow-hidden rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 text-sm text-ink-600 transition hover:border-brand-600"
+            >
+              <svg
+                class="h-7 w-7 text-brand-600"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <circle cx="9" cy="11" r="2" />
+                <path d="M21 16l-5-5-8 8" />
+              </svg>
+              <span>Add photo</span>
+            </label>
+            <input id="cPhoto" type="file" accept="image/*" class="sr-only" />
+          </div>
+          <div>
+            <label for="cTitleIn" class="text-sm font-medium">Title</label>
+            <input
+              id="cTitleIn"
+              type="text"
+              maxlength="80"
+              required
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
+            />
+          </div>
+          <div>
+            <label for="cPrice" class="text-sm font-medium">Price</label>
+            <input
+              id="cPrice"
+              type="text"
+              maxlength="30"
+              placeholder="e.g. ₦12,000 or KSh 1,500"
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
+            />
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="cCat" class="text-sm font-medium">Category</label>
+              <select
+                id="cCat"
+                required
+                class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
+              ></select>
+            </div>
+            <div>
+              <label for="cSub" class="text-sm font-medium">Subcategory</label>
+              <select
+                id="cSub"
+                class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
+              ></select>
+            </div>
+          </div>
+          <div>
+            <label for="cLoc" class="text-sm font-medium">Location</label>
+            <select
+              id="cLoc"
+              required
+              class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
+            ></select>
+          </div>
+          <div>
+            <label for="cDesc" class="text-sm font-medium">Description</label>
+            <textarea
+              id="cDesc"
+              rows="3"
+              maxlength="500"
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
+            ></textarea>
+          </div>
+          <p
+            id="cErr"
+            class="hidden text-sm font-medium text-brand-700"
+            role="alert"
+          ></p>
+          <button
+            type="submit"
+            class="w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 active:scale-[.98]"
+          >
+            Publish listing
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Location dialog -->
+    <dialog
+      id="dlg-loc"
+      class="w-[calc(100%-2rem)] max-w-md rounded-2xl p-0 shadow-lift"
+      aria-labelledby="lTitle"
+    >
+      <div class="p-6 sm:p-7">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 id="lTitle" class="font-display text-xl font-bold">
+              Choose a location
+            </h2>
+            <p class="mt-1 text-sm text-ink-600">
+              Pick a city to see what local businesses are offering.
+            </p>
+          </div>
+          <button
+            type="button"
+            data-close
+            class="grid h-8 w-8 shrink-0 place-items-center rounded-lg hover:bg-gray-100"
+            aria-label="Close dialog"
+          >
+            <svg
+              class="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
+        <ul id="locList" class="mt-5 grid grid-cols-2 gap-3"></ul>
+      </div>
+    </dialog>
+
+    <!-- Member dialog -->
+    <dialog
+      id="dlg-member"
+      class="w-[calc(100%-2rem)] max-w-md rounded-2xl p-0 shadow-lift"
+      aria-labelledby="mTitle"
+    >
+      <form id="memberForm" method="dialog" novalidate class="p-6 sm:p-7">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 id="mTitle" class="font-display text-xl font-bold">
+              Join Africa Market Place
+            </h2>
+            <p class="mt-1 text-sm text-ink-600">
+              Create your free profile in a minute.
+            </p>
+          </div>
+          <button
+            type="button"
+            data-close
+            class="grid h-8 w-8 shrink-0 place-items-center rounded-lg hover:bg-gray-100"
+            aria-label="Close dialog"
+          >
+            <svg
+              class="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
+        <div id="mBody" class="mt-5 space-y-4">
+          <div>
+            <label for="mName" class="text-sm font-medium"
+              >Full name or business name</label
+            >
+            <input
+              id="mName"
+              type="text"
+              required
+              autocomplete="name"
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
+            />
+            <p class="mt-1 hidden text-xs text-brand-700" id="mNameErr">
+              Please enter your name.
+            </p>
+          </div>
+          <div>
+            <label for="mEmail" class="text-sm font-medium"
+              >Email address</label
+            >
+            <input
+              id="mEmail"
+              type="email"
+              required
+              autocomplete="email"
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
+            />
+            <p class="mt-1 hidden text-xs text-brand-700" id="mEmailErr">
+              Please enter a valid email address.
+            </p>
+          </div>
+          <div>
+            <label for="mRole" class="text-sm font-medium">I want to</label>
+            <select
+              id="mRole"
+              class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
+            >
+              <option value="advertise">Advertise my business</option>
+              <option value="sell">Sell products or services</option>
+              <option value="buy" selected>Buy and discover</option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            class="w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 active:scale-[.98]"
+          >
+            Create my profile
+          </button>
+          <p class="text-center text-xs text-ink-500">
+            By joining you agree to our terms and privacy policy.
+          </p>
+        </div>
+        <div id="mDone" class="mt-6 hidden text-center">
+          <span
+            class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-green-100 text-green-600"
+            ><svg
+              class="h-7 w-7"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12l5 5L20 7" /></svg
+          ></span>
+          <p class="mt-4 font-display text-lg font-bold">You're on the list!</p>
+          <p id="mDoneMsg" class="mt-1 text-sm text-ink-600"></p>
+          <button
+            type="button"
+            data-close
+            class="mt-5 rounded-lg bg-ink-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink-800"
+          >
+            Done
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <script>
+      (function () {
+        "use strict";
+
+        /* ---------- Helpers ---------- */
+        var $ = function (s, c) {
+          return (c || document).querySelector(s);
+        };
+        var $$ = function (s, c) {
+          return Array.prototype.slice.call(
+            (c || document).querySelectorAll(s),
+          );
+        };
+        function esc(s) {
+          return String(s).replace(/[&<>"']/g, function (c) {
+            return {
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[c];
+          });
+        }
+        function reduced() {
+          return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        }
+
+        /* ---------- Data ---------- */
+        var CATS = [
+          {
+            id: "sale",
+            label: "For Sale",
+            icon: '<path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor"/>',
+            blurb: "Everyday goods, new and pre-owned",
+            art: "basket",
+            subs: [
+              "Antiques",
+              "Appliances",
+              "Arts and Crafts",
+              "Baby and Kids",
+              "Barter",
+              "Beauty and Health",
+              "Bike Parts",
+              "Bikes",
+              "Books",
+              "Business",
+              "CDs, DVDs and Videos",
+              "Cell Phones",
+              "Clothes and Accessories",
+              "Collectibles",
+              "Computer Parts",
+              "Computers",
+              "Electronics",
+              "Farm and Garden",
+              "Free Items",
+              "Furniture",
+              "Garage Sales",
+              "General",
+              "Household",
+              "Jewelry",
+              "Materials",
+              "Musical Instruments",
+              "Photo and Video",
+              "Sporting Goods",
+              "Tickets",
+              "Tools",
+              "Toys and Games",
+              "Video Gaming",
+              "Wanted",
+            ],
+          },
+          {
+            id: "autos",
+            label: "Autos",
+            icon: '<path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v3H3z"/><circle cx="7.5" cy="13.5" r=".8" fill="currentColor"/><circle cx="16.5" cy="13.5" r=".8" fill="currentColor"/>',
+            blurb: "Vehicles, parts and equipment",
+            art: "car",
+            subs: [
+              "ATVs, UTVs and Snowmobiles",
+              "Auto Parts",
+              "Aviation",
+              "Boat Parts",
+              "Boats",
+              "Cars and Trucks",
+              "Heavy Equipment",
+              "Motorcycle Parts",
+              "Motorcycles",
+              "RVs and Camping",
+              "Trailers",
+              "Wheels and Tires",
+            ],
+          },
+          {
+            id: "services",
+            label: "Services",
+            icon: '<path d="M12 21s-7-4.4-7-10V6l7-3 7 3v5c0 5.6-7 10-7 10z"/><path d="M9 12l2 2 4-4"/>',
+            blurb: "Skilled professionals and providers",
+            art: "tool",
+            subs: [
+              "Automotive",
+              "Beauty",
+              "Cell and Mobile",
+              "Computer",
+              "Creative",
+              "Cycle",
+              "Event",
+              "Farm and Garden",
+              "Financial",
+              "Health and Wellness",
+              "Household",
+              "Labor and Moving",
+              "Legal",
+              "Lessons",
+              "Marine",
+              "Pet",
+              "Real Estate",
+              "Skilled Trade",
+              "Small Business Ads",
+              "Travel and Vacation",
+              "Writing and Editing",
+            ],
+          },
+          {
+            id: "jobs",
+            label: "Jobs",
+            icon: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/>',
+            blurb: "Hire talent or find your next role",
+            art: "job",
+            subs: [
+              "Accounting and Finance",
+              "Admin and Office",
+              "Architecture and Engineering",
+              "Art, Media and Design",
+              "Biotech and Science",
+              "Business and Management",
+              "Customer Service",
+              "Education",
+              "Food, Beverage and Hospitality",
+              "General Labor",
+              "Government",
+              "Human Resources",
+              "Legal and Paralegal",
+              "Manufacturing",
+              "Marketing, PR and Advertising",
+              "Medical and Health",
+              "Nonprofit Sector",
+              "Real Estate",
+              "Retail and Wholesale",
+              "Sales and Business Development",
+              "Salon, Spa and Fitness",
+              "Security",
+              "Skilled Trade and Craft",
+              "Software, QA and DBA",
+              "Systems and Network",
+              "Technical Support",
+              "Transport",
+              "TV, Film and Video",
+              "Web and Information Design",
+              "Writing and Editing",
+              "Other",
+            ],
+          },
+          {
+            id: "housing",
+            label: "Housing",
+            icon: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+            blurb: "Rentals, sales and shared spaces",
+            art: "home",
+            subs: [
+              "Apartments and Housing",
+              "Housing Swap",
+              "Office and Commercial",
+              "Parking and Storage",
+              "Real Estate for Sale",
+              "Rooms and Shared",
+              "Rooms Wanted",
+              "Sublets and Temporary",
+              "Vacation Rentals",
+              "Wanted: Apartments",
+              "Wanted: Real Estate",
+              "Wanted: Sublet or Temporary",
+            ],
+          },
+          {
+            id: "events",
+            label: "Events and Community",
+            icon: '<path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25A2.25 2.25 0 0118.75 21H5.25A2.25 2.25 0 013 18.75zM3 11h18"/>',
+            blurb: "Gatherings, groups and local life",
+            art: "ticket",
+            subs: [
+              "Activities",
+              "Artists",
+              "Childcare",
+              "Classes",
+              "Events",
+              "General",
+              "Groups",
+              "Local News",
+              "Lost and Found",
+              "Missed Connections",
+              "Musicians",
+              "Pets",
+              "Politics",
+              "Rants and Raves",
+              "Rideshare",
+              "Volunteers",
+            ],
+          },
+        ];
+        function catById(id) {
+          return CATS.filter(function (c) {
+            return c.id === id;
+          })[0];
+        }
+
+        var LOCS = [
+          "All Africa",
+          "Lagos",
+          "Accra",
+          "Nairobi",
+          "Cape Town",
+          "Lomé",
+          "Kigali",
+          "Dar es Salaam",
+        ];
+        var FLAGS = {
+          "All Africa": "🌍",
+          Lagos: "🇳🇬",
+          Accra: "🇬🇭",
+          Nairobi: "🇰🇪",
+          "Cape Town": "🇿🇦",
+          Lomé: "🇹🇬",
+          Kigali: "🇷🇼",
+          "Dar es Salaam": "🇹🇿",
+        };
+        var COUNTRY = {
+          Lagos: "Nigeria",
+          Accra: "Ghana",
+          Nairobi: "Kenya",
+          "Cape Town": "South Africa",
+          Lomé: "Togo",
+          Kigali: "Rwanda",
+          "Dar es Salaam": "Tanzania",
+        };
+        var SOON = { Kigali: 1, "Dar es Salaam": 1 };
+
+        var PAL = [
+          ["#fcd34d", "#b45309"],
+          ["#5eead4", "#0f766e"],
+          ["#cbd5e1", "#334155"],
+          ["#fda4af", "#9f1239"],
+          ["#c4b5fd", "#5b21b6"],
+          ["#93c5fd", "#1d4ed8"],
+          ["#fdba74", "#c2410c"],
+          ["#86efac", "#15803d"],
+        ];
+        var F = 'fill="rgba(255,255,255,.88)"',
+          D = 'fill="rgba(0,0,0,.28)"';
+        var ART = {
+          basket:
+            '<path d="M30 62h60l-6 34H36z" ' +
+            F +
+            '/><path d="M26 62h68" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M40 72h40M42 82h36" stroke="rgba(0,0,0,.25)" stroke-width="3"/><path d="M42 62c0-22 36-22 36 0" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>',
+          clean:
+            '<rect x="40" y="52" width="40" height="46" rx="8" ' +
+            F +
+            '/><rect x="52" y="34" width="16" height="20" rx="3" fill="#fff"/><path d="M68 38h14l6 8" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><circle cx="92" cy="30" r="4" fill="#fff"/><circle cx="102" cy="42" r="3" fill="#fff"/><circle cx="26" cy="46" r="3.5" fill="#fff"/>',
+          car:
+            '<path d="M14 76l10-22a10 10 0 019-6h54a10 10 0 019 6l10 22v14H14z" ' +
+            F +
+            '/><path d="M32 54h56l7 18H25z" fill="rgba(51,65,85,.55)"/><circle cx="36" cy="92" r="10" fill="#1e293b"/><circle cx="84" cy="92" r="10" fill="#1e293b"/><circle cx="36" cy="92" r="4" fill="#cbd5e1"/><circle cx="84" cy="92" r="4" fill="#cbd5e1"/>',
+          home:
+            '<path d="M16 62L60 26l44 36" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 58v38h68V58L60 32z" ' +
+            F +
+            '/><rect x="50" y="68" width="20" height="28" rx="3" fill="#9f1239"/><rect x="32" y="64" width="12" height="12" rx="2" fill="rgba(159,18,57,.35)"/><rect x="76" y="64" width="12" height="12" rx="2" fill="rgba(159,18,57,.35)"/>',
+          phone:
+            '<rect x="38" y="16" width="44" height="88" rx="9" ' +
+            F +
+            '/><rect x="44" y="28" width="32" height="56" rx="3" ' +
+            D +
+            '/><circle cx="60" cy="94" r="3.5" ' +
+            D +
+            "/>",
+          laptop:
+            '<rect x="26" y="32" width="68" height="46" rx="5" ' +
+            F +
+            '/><rect x="32" y="38" width="56" height="34" rx="2" ' +
+            D +
+            '/><path d="M14 84h92l-8 9H22z" fill="#fff"/>',
+          guitar:
+            '<circle cx="46" cy="80" r="22" ' +
+            F +
+            '/><circle cx="46" cy="80" r="7" ' +
+            D +
+            '/><path d="M62 64L98 24" stroke="#fff" stroke-width="7" stroke-linecap="round"/><path d="M92 20l10 10" stroke="rgba(0,0,0,.3)" stroke-width="8" stroke-linecap="round"/>',
+          shirt:
+            '<path d="M40 24l-22 15 11 15 10-7v47h46V47l10 7 11-15-22-15c-4 8-10 12-23 12s-19-4-23-12z" ' +
+            F +
+            "/>",
+          job:
+            '<rect x="22" y="46" width="76" height="48" rx="8" ' +
+            F +
+            '/><path d="M46 46v-8a6 6 0 016-6h16a6 6 0 016 6v8" fill="none" stroke="#fff" stroke-width="5"/><path d="M22 68h76" stroke="rgba(0,0,0,.25)" stroke-width="4"/><rect x="54" y="63" width="12" height="10" rx="2" fill="#fff"/>',
+          ticket:
+            '<path d="M16 42h88v14a8 8 0 000 16v14H16V72a8 8 0 000-16z" ' +
+            F +
+            '/><path d="M78 42v44" stroke="rgba(0,0,0,.28)" stroke-width="3" stroke-dasharray="4 4"/><path d="M36 58h30M36 70h22" stroke="rgba(0,0,0,.28)" stroke-width="4" stroke-linecap="round"/>',
+          sofa:
+            '<rect x="26" y="40" width="68" height="34" rx="9" ' +
+            F +
+            '/><rect x="14" y="56" width="22" height="34" rx="9" fill="#fff"/><rect x="84" y="56" width="22" height="34" rx="9" fill="#fff"/><rect x="30" y="64" width="60" height="22" rx="6" ' +
+            F +
+            '/><path d="M28 90v8M92 90v8" stroke="#fff" stroke-width="5" stroke-linecap="round"/>',
+          bike: '<circle cx="32" cy="78" r="19" fill="none" stroke="#fff" stroke-width="5"/><circle cx="90" cy="78" r="19" fill="none" stroke="#fff" stroke-width="5"/><path d="M32 78l20-34h24l14 34M52 44l16 34H34M46 36h14" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>',
+          tool:
+            '<rect x="55" y="42" width="10" height="58" rx="4" ' +
+            F +
+            '/><rect x="32" y="26" width="52" height="20" rx="5" ' +
+            F +
+            '/><path d="M84 32l10-6v22l-10-6" fill="#fff"/>',
+          book:
+            '<path d="M18 32h36a8 8 0 018 8v52a8 8 0 00-8-8H18z" ' +
+            F +
+            '/><path d="M102 32H66a8 8 0 00-8 8v52a8 8 0 018-8h36z" fill="#fff"/><path d="M26 46h24M26 58h24M70 46h24M70 58h24" stroke="rgba(0,0,0,.22)" stroke-width="3" stroke-linecap="round"/>',
+          heart:
+            '<path d="M60 96S24 73 24 47a19 19 0 0136-8 19 19 0 0136 8c0 26-36 49-36 49z" ' +
+            F +
+            "/>",
+          camera:
+            '<rect x="20" y="40" width="80" height="48" rx="9" ' +
+            F +
+            '/><circle cx="60" cy="64" r="15" ' +
+            D +
+            '/><circle cx="60" cy="64" r="7" fill="#fff"/><rect x="42" y="30" width="22" height="12" rx="3" fill="#fff"/>',
+        };
+        var CAT_ART = {
+          sale: "basket",
+          autos: "car",
+          services: "tool",
+          jobs: "job",
+          housing: "home",
+          events: "ticket",
+        };
+
+        var SELLERS = [
+          "Amaka O.",
+          "Kwame M.",
+          "Zanele N.",
+          "Tunde A.",
+          "Wanjiru K.",
+          "Kofi B.",
+          "Abena T.",
+          "Sipho D.",
+          "Ama P.",
+          "Chidi E.",
+          "Efua S.",
+          "Thabo L.",
+        ];
+
+        // [cat, sub, title, price, loc, art, description]
+        var RAW = [
+          [
+            "sale",
+            "Arts and Crafts",
+            "Handwoven Basket",
+            "₦12,000",
+            "Lagos, Nigeria",
+            "basket",
+            "Beautiful handwoven storage basket made by local artisans. Sturdy, lightweight and perfect for the home or as a gift.",
+          ],
+          [
+            "sale",
+            "Cell Phones",
+            "Samsung Galaxy A54 128GB",
+            "₦285,000",
+            "Lagos, Nigeria",
+            "phone",
+            "Lightly used, no scratches, with box and charger. Battery health excellent. Inspect before you buy.",
+          ],
+          [
+            "sale",
+            "Computers",
+            "MacBook Air 128GB — all OK",
+            "GH₵ 9,500",
+            "Accra, Ghana",
+            "laptop",
+            "Works perfectly, minor wear on the lid. Comes with charger. Available for pickup in Accra.",
+          ],
+          [
+            "sale",
+            "Musical Instruments",
+            "Acoustic Guitar with bag",
+            "KSh 8,500",
+            "Nairobi, Kenya",
+            "guitar",
+            "Full-size acoustic guitar with a padded gig bag. Great tone, ideal for beginners and church bands.",
+          ],
+          [
+            "sale",
+            "Clothes and Accessories",
+            "Ankara Print Dress",
+            "R450",
+            "Cape Town, South Africa",
+            "shirt",
+            "Tailor-made Ankara dress, sizes S to XL. Bright, breathable cotton. Custom orders welcome.",
+          ],
+          [
+            "sale",
+            "Furniture",
+            "3-Seater Sofa, like new",
+            "CFA 120,000",
+            "Lomé, Togo",
+            "sofa",
+            "Comfortable 3-seater in excellent condition. Moving sale, buyer collects.",
+          ],
+          [
+            "sale",
+            "Books",
+            "WAEC and JAMB Study Set",
+            "₦6,500",
+            "Lagos, Nigeria",
+            "book",
+            "Complete past-question set with answers. Clean pages, no markings.",
+          ],
+          [
+            "sale",
+            "Beauty and Health",
+            "Raw Shea Butter 500g",
+            "GH₵ 60",
+            "Accra, Ghana",
+            "heart",
+            "Unrefined shea butter from northern Ghana. Great for skin and hair. Bulk prices available.",
+          ],
+          [
+            "autos",
+            "Cars and Trucks",
+            "2019 Toyota Corolla — Low Miles",
+            "KSh 1.2M",
+            "Nairobi, Kenya",
+            "car",
+            "Single owner, full service history, new tyres. Clean logbook and ready for transfer.",
+          ],
+          [
+            "autos",
+            "Motorcycles",
+            "Bajaj Boxer 150",
+            "₦850,000",
+            "Lagos, Nigeria",
+            "bike",
+            "Reliable and fuel efficient, perfect for deliveries or commuting. Papers complete.",
+          ],
+          [
+            "autos",
+            "Auto Parts",
+            "Brake Pads Set (Toyota)",
+            "CFA 25,000",
+            "Lomé, Togo",
+            "tool",
+            "Brand new front brake pads. Fits most Corolla and Camry models. Fitting available.",
+          ],
+          [
+            "autos",
+            "Wheels and Tires",
+            "4 Used Tyres, 70% tread",
+            "R3,200",
+            "Cape Town, South Africa",
+            "car",
+            "Set of four used tyres, 195/65 R15. Plenty of life left.",
+          ],
+          [
+            "services",
+            "Household",
+            "Home Cleaning Pro",
+            "From GH₵ 200",
+            "Accra, Ghana",
+            "clean",
+            "Reliable, insured cleaners for homes and offices. Weekly and one-off bookings.",
+          ],
+          [
+            "services",
+            "Event",
+            "Wedding and Event Photography",
+            "KSh 35,000",
+            "Nairobi, Kenya",
+            "camera",
+            "Full-day coverage, edited gallery in 7 days. Packages for weddings, birthdays and corporate events.",
+          ],
+          [
+            "services",
+            "Skilled Trade",
+            "Certified Electrician",
+            "₦15,000 / visit",
+            "Lagos, Nigeria",
+            "tool",
+            "Wiring, repairs and installations. Fast response and safety-first workmanship.",
+          ],
+          [
+            "services",
+            "Lessons",
+            "Maths and Science Tutoring",
+            "KSh 1,500 / hr",
+            "Nairobi, Kenya",
+            "book",
+            "Experienced teacher offering one-on-one and small group lessons, online or in person.",
+          ],
+          [
+            "jobs",
+            "Sales and Business Development",
+            "Sales Associate, Retail",
+            "CFA 90,000 / mo",
+            "Lomé, Togo",
+            "job",
+            "Growing retail shop is hiring a friendly, reliable sales associate. Full-time, training provided.",
+          ],
+          [
+            "jobs",
+            "Software, QA and DBA",
+            "Junior Web Developer (Hybrid)",
+            "R22,000 / mo",
+            "Cape Town, South Africa",
+            "job",
+            "Join a small product team. HTML, CSS and JavaScript required. Mentorship included.",
+          ],
+          [
+            "jobs",
+            "Customer Service",
+            "Customer Support Agent",
+            "GH₵ 3,200 / mo",
+            "Accra, Ghana",
+            "job",
+            "Handle customer chats and calls for an e-commerce brand. Good English and a positive attitude.",
+          ],
+          [
+            "housing",
+            "Apartments and Housing",
+            "Furnished 2-Bed Flat",
+            "R14,500 / mo",
+            "Cape Town, South Africa",
+            "home",
+            "Bright, secure apartment close to transport. Wi-Fi ready, parking included.",
+          ],
+          [
+            "housing",
+            "Rooms and Shared",
+            "Room in Shared House",
+            "₦180,000 / yr",
+            "Lagos, Nigeria",
+            "home",
+            "Clean room in a friendly shared house. Water and power backup included.",
+          ],
+          [
+            "housing",
+            "Office and Commercial",
+            "Shop / Office Space",
+            "CFA 150,000 / mo",
+            "Lomé, Togo",
+            "home",
+            "Street-facing space, ideal for a small shop or studio. Flexible lease terms.",
+          ],
+          [
+            "events",
+            "Events",
+            "Small Business Showcase (Nov 14)",
+            "Free",
+            "Lagos, Nigeria",
+            "ticket",
+            "Meet sellers, swap tips and grow your network at our in-person showcase.",
+          ],
+          [
+            "events",
+            "Classes",
+            "Social Media Selling Masterclass",
+            "Free for members",
+            "Nairobi, Kenya",
+            "ticket",
+            "Learn to sell on Facebook, Instagram and TikTok. Online session, Nov 28.",
+          ],
+          [
+            "events",
+            "Volunteers",
+            "Community Clean-up Day",
+            "Free",
+            "Accra, Ghana",
+            "ticket",
+            "Join neighbours to clean up the local market area. Gloves and bags provided.",
+          ],
+          [
+            "sale",
+            "Free Items",
+            "Kids' Story Books, free",
+            "Free",
+            "Accra, Ghana",
+            "book",
+            "Box of children's story books to a good home. Pickup only.",
+          ],
+        ];
+
+        var listings = RAW.map(function (r, i) {
+          return {
+            id: i + 1,
+            cat: r[0],
+            sub: r[1],
+            title: r[2],
+            price: r[3],
+            loc: r[4],
+            art: r[5],
+            desc: r[6],
+            seller: SELLERS[i % SELLERS.length],
+            pal: PAL[i % PAL.length],
+            fresh: i < 8,
+            mine: false,
+            img: "",
+          };
+        });
+        var nextId = listings.length + 1;
+
+        var state = {
+          view: "all",
+          cat: null,
+          sub: null,
+          q: "",
+          loc: "",
+          saved: {},
+        };
+
+        /* ---------- Toast ---------- */
+        var toastEl = $("#toast"),
+          toastT;
+        function toast(msg) {
+          toastEl.textContent = msg;
+          toastEl.classList.remove("opacity-0", "translate-y-6");
+          clearTimeout(toastT);
+          toastT = setTimeout(function () {
+            toastEl.classList.add("opacity-0", "translate-y-6");
+          }, 3200);
+        }
+
+        /* ---------- Dialogs ---------- */
+        var lastFocus = null;
+        function openDlg(name) {
+          var d = $("#dlg-" + name);
+          lastFocus = document.activeElement;
+          closeSidebar();
+          if (typeof d.showModal === "function") d.showModal();
+          else d.setAttribute("open", "");
+          return d;
+        }
+        function closeDlg(d) {
+          if (typeof d.close === "function") d.close();
+          else d.removeAttribute("open");
+          if (lastFocus && lastFocus.focus) lastFocus.focus();
+        }
+        $$("dialog").forEach(function (d) {
+          d.addEventListener("click", function (e) {
+            if (e.target === d) closeDlg(d);
+          });
+        });
+        document.addEventListener("click", function (e) {
+          var c = e.target.closest("[data-close]");
+          if (c) return closeDlg(c.closest("dialog"));
+          var o = e.target.closest("[data-open]");
+          if (o) {
+            var n = o.dataset.open;
+            var d = openDlg(n);
+            if (n === "create") {
+              resetCreate();
+              setTimeout(function () {
+                $("#cTitleIn").focus();
+              }, 30);
+            }
+            if (n === "member") {
+              $("#mBody").classList.remove("hidden");
+              $("#mDone").classList.add("hidden");
+              $("#memberForm").reset();
+              setTimeout(function () {
+                $("#mName").focus();
+              }, 30);
+            }
+            return d;
+          }
+          var t = e.target.closest("[data-toast]");
+          if (t) toast(t.dataset.toast);
+        });
+
+        /* ---------- Sidebar (mobile drawer) ---------- */
+        var sidebar = $("#sidebar"),
+          backdrop = $("#backdrop"),
+          menuBtn = $("#menuBtn");
+        function openSidebar() {
+          sidebar.classList.remove("-translate-x-full");
+          backdrop.classList.remove("hidden");
+          menuBtn.setAttribute("aria-expanded", "true");
+        }
+        function closeSidebar() {
+          sidebar.classList.add("-translate-x-full");
+          backdrop.classList.add("hidden");
+          menuBtn.setAttribute("aria-expanded", "false");
+        }
+        menuBtn.addEventListener("click", function () {
+          menuBtn.getAttribute("aria-expanded") === "true"
+            ? closeSidebar()
+            : openSidebar();
+        });
+        backdrop.addEventListener("click", closeSidebar);
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") closeSidebar();
+        });
+        window
+          .matchMedia("(min-width:1024px)")
+          .addEventListener("change", function (m) {
+            if (m.matches) closeSidebar();
+          });
+
+        /* ---------- Sidebar categories ---------- */
+        var CHEV =
+          '<svg class="chev h-4 w-4 text-ink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>';
+        $("#sideCats").innerHTML = CATS.map(function (c) {
+          return (
+            '<li><button type="button" class="side-item" data-cat="' +
+            c.id +
+            '" aria-expanded="false"><span class="ico"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            c.icon +
+            '</svg></span><span class="flex-1">' +
+            c.label +
+            "</span>" +
+            CHEV +
+            "</button>" +
+            '<ul class="subs ml-[3.25rem] mt-1 hidden space-y-0.5 pb-2">' +
+            c.subs
+              .map(function (s) {
+                return (
+                  '<li><button type="button" class="sub-btn w-full rounded-md px-2 py-1.5 text-left text-sm text-ink-600 hover:bg-gray-100" data-cat="' +
+                  c.id +
+                  '" data-sub="' +
+                  esc(s) +
+                  '">' +
+                  esc(s) +
+                  "</button></li>"
+                );
+              })
+              .join("") +
+            "</ul></li>"
+          );
+        }).join("");
+
+        $("#mobChips").innerHTML =
+          '<button type="button" class="chip shrink-0 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-semibold" data-chipcat="" aria-pressed="true">All</button>' +
+          CATS.map(function (c) {
+            return (
+              '<button type="button" class="chip shrink-0 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-semibold" data-chipcat="' +
+              c.id +
+              '" aria-pressed="false">' +
+              c.label +
+              "</button>"
+            );
+          }).join("");
+
+        $("#sideCats").addEventListener("click", function (e) {
+          var sb = e.target.closest(".sub-btn");
+          if (sb) {
+            var same =
+              state.cat === sb.dataset.cat && state.sub === sb.dataset.sub;
+            state.view = "all";
+            state.cat = sb.dataset.cat;
+            state.sub = same ? null : sb.dataset.sub;
+            update(true);
+            closeSidebar();
+            return;
+          }
+          var b = e.target.closest(".side-item");
+          if (!b) return;
+          var id = b.dataset.cat;
+          if (state.cat === id && !state.sub) {
+            state.cat = null;
+          } else {
+            state.cat = id;
+            state.sub = null;
+          }
+          state.view = "all";
+          update(true);
+        });
+
+        $("#mobChips").addEventListener("click", function (e) {
+          var b = e.target.closest("[data-chipcat]");
+          if (!b) return;
+          state.view = "all";
+          state.cat = b.dataset.chipcat || null;
+          state.sub = null;
+          update(true);
+        });
+
+        $("#navList").addEventListener("click", function (e) {
+          var b = e.target.closest("[data-view]");
+          if (!b) return;
+          state.view = b.dataset.view;
+          state.cat = null;
+          state.sub = null;
+          state.q = "";
+          $("#topQ").value = "";
+          $("#sideQ").value = "";
+          if (state.view === "saved" && !Object.keys(state.saved).length)
+            toast("Tap the heart on any listing to save it here.");
+          update(true);
+          closeSidebar();
+        });
+
+        $("#subChips").addEventListener("click", function (e) {
+          var b = e.target.closest("[data-chipsub]");
+          if (!b) return;
+          state.sub = b.dataset.chipsub || null;
+          update(false);
+        });
+
+        /* ---------- Search ---------- */
+        function doSearch(val) {
+          state.q = val;
+          state.view = "all";
+          $("#topQ").value = val;
+          $("#sideQ").value = val;
+          update(true);
+          closeSidebar();
+        }
+        $("#topSearch").addEventListener("submit", function (e) {
+          e.preventDefault();
+          doSearch($("#topQ").value);
+        });
+        $("#sideSearch").addEventListener("submit", function (e) {
+          e.preventDefault();
+          doSearch($("#sideQ").value);
+        });
+
+        function resetAll() {
+          state.view = "all";
+          state.cat = null;
+          state.sub = null;
+          state.q = "";
+          state.loc = "";
+          $("#topQ").value = "";
+          $("#sideQ").value = "";
+          update(true);
+        }
+        $("#resetBtn").addEventListener("click", resetAll);
+
+        /* ---------- Location ---------- */
+        $("#locList").innerHTML = LOCS.map(function (l) {
+          var sub =
+            l === "All Africa"
+              ? "Every listing"
+              : COUNTRY[l] + (SOON[l] ? " · launching soon" : "");
+          return (
+            '<li><button type="button" data-locpick="' +
+            esc(l) +
+            '" class="w-full rounded-2xl border border-gray-200 bg-white p-4 text-center shadow-sm transition hover:-translate-y-0.5 hover:border-brand-600 hover:shadow-card"><span class="text-2xl" aria-hidden="true">' +
+            FLAGS[l] +
+            '</span><span class="mt-1 block text-sm font-semibold">' +
+            l +
+            '</span><span class="text-xs text-ink-500">' +
+            sub +
+            "</span></button></li>"
+          );
+        }).join("");
+        $("#locList").addEventListener("click", function (e) {
+          var b = e.target.closest("[data-locpick]");
+          if (!b) return;
+          var l = b.dataset.locpick;
+          state.loc = l === "All Africa" ? "" : l;
+          state.view = "all";
+          closeDlg($("#dlg-loc"));
+          update(true);
+          if (SOON[l])
+            toast(l + " is launching soon. Join to be first to know.");
+        });
+
+        /* ---------- Rendering ---------- */
+        function artSvg(l, cls) {
+          return (
+            '<svg viewBox="0 0 120 120" class="' +
+            cls +
+            '" preserveAspectRatio="xMidYMid slice" role="img" aria-label="' +
+            esc(l.title) +
+            ' illustration">' +
+            ART[l.art] +
+            "</svg>"
+          );
+        }
+        function imgBlock(l, big) {
+          if (l.img)
+            return (
+              '<img src="' +
+              l.img +
+              '" alt="' +
+              esc(l.title) +
+              '" class="absolute inset-0 h-full w-full object-cover" />'
+            );
+          return (
+            '<div class="absolute inset-0" style="background:linear-gradient(135deg,' +
+            l.pal[0] +
+            "," +
+            l.pal[1] +
+            ')">' +
+            artSvg(
+              l,
+              "absolute inset-0 h-full w-full" +
+                (big ? "" : " transition duration-500 group-hover:scale-105"),
+            ) +
+            "</div>"
+          );
+        }
+        var HEART =
+          '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 10-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 000-7.8z" /></svg>';
+
+        function cardHtml(l, i) {
+          var saved = !!state.saved[l.id];
+          return (
+            '<div class="fade-in relative" style="--d:' +
+            Math.min(i, 12) * 40 +
+            'ms">' +
+            '<button type="button" data-id="' +
+            l.id +
+            '" class="group block w-full text-left">' +
+            '<div class="card-img relative overflow-hidden rounded-xl bg-gray-200 ring-1 ring-gray-200 transition duration-300 group-hover:shadow-lift">' +
+            imgBlock(l, false) +
+            (l.fresh || l.mine
+              ? '<span class="absolute left-2 top-2 rounded-md bg-white px-2 py-1 text-xs font-semibold shadow-card">Just listed</span>'
+              : "") +
+            "</div>" +
+            '<p class="mt-2 font-display text-[17px] font-bold leading-tight">' +
+            esc(l.price) +
+            "</p>" +
+            '<p class="mt-0.5 line-clamp-2 text-sm leading-snug text-ink-800">' +
+            esc(l.title) +
+            "</p>" +
+            '<p class="mt-0.5 text-xs text-ink-500">' +
+            esc(l.loc) +
+            "</p></button>" +
+            '<button type="button" data-save="' +
+            l.id +
+            '" aria-pressed="' +
+            saved +
+            '" aria-label="' +
+            (saved ? "Remove from saved" : "Save listing") +
+            '" class="save-btn absolute right-2 top-2 grid h-9 w-9 place-items-center rounded-full bg-white/90 text-ink-800 shadow-card transition hover:bg-white hover:text-brand-600 active:scale-90">' +
+            HEART +
+            "</button></div>"
+          );
+        }
+
+        function filtered() {
+          var q = state.q.trim().toLowerCase(),
+            loc = state.loc.toLowerCase();
+          return listings.filter(function (l) {
+            if (state.view === "saved" && !state.saved[l.id]) return false;
+            if (state.view === "mine" && !l.mine) return false;
+            if (state.cat && l.cat !== state.cat) return false;
+            if (state.sub && l.sub !== state.sub) return false;
+            if (loc && l.loc.toLowerCase().indexOf(loc) < 0) return false;
+            if (
+              q &&
+              (
+                l.title +
+                " " +
+                l.sub +
+                " " +
+                catById(l.cat).label +
+                " " +
+                l.desc
+              )
+                .toLowerCase()
+                .indexOf(q) < 0
+            )
+              return false;
+            return true;
+          });
+        }
+
+        function update(scrollTop) {
+          var out = filtered(),
+            grid = $("#grid");
+          grid.innerHTML = out.map(cardHtml).join("");
+          $("#empty").classList.toggle("hidden", out.length > 0);
+          grid.classList.toggle("hidden", out.length === 0);
+
+          var title = "Today's picks";
+          if (state.view === "saved") title = "Saved items";
+          else if (state.view === "mine") title = "My listings";
+          else if (state.sub) title = state.sub;
+          else if (state.cat) title = catById(state.cat).label;
+          else if (state.q.trim())
+            title = "Results for “" + state.q.trim() + "”";
+          $("#mainTitle").textContent = title;
+
+          var parts = [out.length + " listing" + (out.length === 1 ? "" : "s")];
+          if (state.cat && state.sub) parts.push(catById(state.cat).label);
+          if (state.q.trim() && title.indexOf("Results") !== 0)
+            parts.push("matching “" + state.q.trim() + "”");
+          $("#filterStatus").textContent = parts.join(" · ");
+
+          var locName = state.loc || "All Africa";
+          $("#locLabelMain").textContent = locName;
+          $("#locLabelSide").textContent = locName;
+
+          var empt = {
+            t: "No listings match your search yet.",
+            m: "Try a different keyword or location, or be the first to list something here.",
+          };
+          if (state.view === "saved")
+            empt = {
+              t: "Nothing saved yet.",
+              m: "Tap the heart on any listing to keep it here for later.",
+            };
+          else if (state.view === "mine")
+            empt = {
+              t: "You haven't posted anything yet.",
+              m: "Create your first listing and start reaching buyers.",
+            };
+          else if (SOON[state.loc])
+            empt = {
+              t: state.loc + " is launching soon.",
+              m: "Be first to know when local sellers go live, or browse all of Africa meanwhile.",
+            };
+          $("#emptyTitle").textContent = empt.t;
+          $("#emptyMsg").textContent = empt.m;
+
+          // sidebar state
+          $$("#navList .side-item[data-view]").forEach(function (b) {
+            b.setAttribute(
+              "aria-current",
+              String(b.dataset.view === state.view && !state.cat),
+            );
+          });
+          $$("#sideCats > li").forEach(function (li) {
+            var b = $(".side-item", li),
+              id = b.dataset.cat,
+              open = state.cat === id;
+            b.setAttribute("aria-expanded", String(open));
+            b.setAttribute("aria-current", String(open && !state.sub));
+            $(".subs", li).classList.toggle("hidden", !open);
+            $$(".sub-btn", li).forEach(function (s) {
+              s.setAttribute(
+                "aria-current",
+                String(open && state.sub === s.dataset.sub),
+              );
+            });
+          });
+          $$("#mobChips .chip").forEach(function (c) {
+            c.setAttribute(
+              "aria-pressed",
+              String((c.dataset.chipcat || null) === state.cat),
+            );
+          });
+
+          // sub chips
+          var sc = $("#subChips");
+          if (state.cat && state.view === "all") {
+            var cat = catById(state.cat);
+            sc.innerHTML = [
+              '<button type="button" class="chip shrink-0 rounded-full border border-gray-300 bg-white px-3.5 py-1.5 text-xs font-semibold hover:border-brand-600" data-chipsub="" aria-pressed="' +
+                !state.sub +
+                '">All ' +
+                cat.label +
+                "</button>",
+            ]
+              .concat(
+                cat.subs.map(function (s) {
+                  return (
+                    '<button type="button" class="chip shrink-0 rounded-full border border-gray-300 bg-white px-3.5 py-1.5 text-xs font-semibold hover:border-brand-600" data-chipsub="' +
+                    esc(s) +
+                    '" aria-pressed="' +
+                    (state.sub === s) +
+                    '">' +
+                    esc(s) +
+                    "</button>"
+                  );
+                }),
+              )
+              .join("");
+            sc.classList.remove("hidden");
+          } else {
+            sc.innerHTML = "";
+            sc.classList.add("hidden");
+          }
+
+          $("#savedCount").textContent = Object.keys(state.saved).length;
+          $("#mineCount").textContent = listings.filter(function (l) {
+            return l.mine;
+          }).length;
+
+          if (scrollTop)
+            window.scrollTo({
+              top: 0,
+              behavior: reduced() ? "auto" : "smooth",
+            });
+        }
+
+        /* ---------- Directory ---------- */
+        $("#dirGrid").innerHTML = CATS.map(function (c, i) {
+          var wide = i === 0 || i === 3;
+          return (
+            '<article class="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-lift ' +
+            (wide ? "md:col-span-2" : "") +
+            '">' +
+            (wide
+              ? '<header class="relative overflow-hidden bg-gradient-to-br from-brand-600 to-brand-800 px-5 py-4 text-white"><div class="pointer-events-none absolute -right-8 -top-10 h-28 w-28 rounded-full bg-white/10" aria-hidden="true"></div><div class="relative flex items-center gap-3"><span class="grid h-11 w-11 flex-none place-items-center rounded-xl bg-white/15 ring-1 ring-white/25"><svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+                c.icon +
+                '</svg></span><div class="min-w-0 flex-1"><h3 class="font-display text-base font-bold">' +
+                c.label +
+                '</h3><p class="text-xs text-red-50">' +
+                c.blurb +
+                '</p></div><span class="rounded-full bg-white px-2.5 py-1 text-xs font-bold text-brand-700">' +
+                c.subs.length +
+                " categories</span></div></header>"
+              : '<header class="flex items-center gap-3 border-b border-gray-100 bg-gradient-to-r from-brand-50 to-white px-5 py-4"><span class="grid h-11 w-11 flex-none place-items-center rounded-xl bg-brand-600 text-white shadow-card"><svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+                c.icon +
+                '</svg></span><div class="min-w-0 flex-1"><h3 class="font-display text-base font-bold text-ink-900">' +
+                c.label +
+                '</h3><p class="text-xs text-ink-600">' +
+                c.blurb +
+                '</p></div><span class="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-700 ring-1 ring-brand-600/15">' +
+                c.subs.length +
+                "</span></header>") +
+            '<ul class="flex flex-wrap gap-2 p-5">' +
+            c.subs
+              .map(function (s) {
+                return (
+                  '<li><button type="button" data-dircat="' +
+                  c.id +
+                  '" data-dirsub="' +
+                  esc(s) +
+                  '" class="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-ink-800 transition hover:border-brand-600 hover:bg-brand-50 hover:text-brand-700">' +
+                  esc(s) +
+                  "</button></li>"
+                );
+              })
+              .join("") +
+            "</ul></article>"
+          );
+        }).join("");
+        $("#dirGrid").addEventListener("click", function (e) {
+          var b = e.target.closest("[data-dircat]");
+          if (!b) return;
+          state.view = "all";
+          state.cat = b.dataset.dircat;
+          state.sub = b.dataset.dirsub;
+          update(true);
+        });
+
+        /* ---------- Cards: open + save ---------- */
+        function syncSaveBtn(btn, on) {
+          btn.setAttribute("aria-pressed", String(on));
+          btn.setAttribute(
+            "aria-label",
+            on ? "Remove from saved" : "Save listing",
+          );
+        }
+        function toggleSave(id) {
+          if (state.saved[id]) {
+            delete state.saved[id];
+            toast("Removed from saved items.");
+          } else {
+            state.saved[id] = true;
+            toast("Saved. Find it under Buying · Saved items.");
+          }
+          $("#savedCount").textContent = Object.keys(state.saved).length;
+        }
+        $("#grid").addEventListener("click", function (e) {
+          var s = e.target.closest("[data-save]");
+          if (s) {
+            var id = +s.dataset.save;
+            toggleSave(id);
+            if (state.view === "saved") return update(false);
+            syncSaveBtn(s, !!state.saved[id]);
+            return;
+          }
+          var c = e.target.closest("[data-id]");
+          if (c) openDetail(+c.dataset.id);
+        });
+
+        var current = null;
+        function openDetail(id) {
+          var l = listings.filter(function (x) {
+            return x.id === id;
+          })[0];
+          if (!l) return;
+          current = l;
+          $("#dArt").innerHTML = imgBlock(l, true);
+          $("#dTag").textContent = catById(l.cat).label + " · " + l.sub;
+          $("#dTitle").textContent = l.title;
+          $("#dPrice").textContent = l.price;
+          $("#dLoc").textContent = l.loc;
+          $("#dDesc").textContent =
+            l.desc || "The seller hasn't added a description yet.";
+          $("#dSeller").textContent = l.seller;
+          $("#dAvatar").textContent = l.seller
+            .split(" ")
+            .map(function (w) {
+              return w[0];
+            })
+            .join("")
+            .slice(0, 2)
+            .toUpperCase();
+          syncSaveBtn($("#dSave"), !!state.saved[l.id]);
+          openDlg("detail");
+        }
+        $("#dMsg").addEventListener("click", function () {
+          toast(
+            "Sign in or become a member to message " + current.seller + ".",
+          );
+        });
+        $("#dSave").addEventListener("click", function () {
+          toggleSave(current.id);
+          syncSaveBtn($("#dSave"), !!state.saved[current.id]);
+          update(false);
+        });
+        $("#dShare").addEventListener("click", function () {
+          var text =
+            current.title +
+            " — " +
+            current.price +
+            " (" +
+            current.loc +
+            ") on Africa Market Place";
+          if (navigator.share)
+            navigator
+              .share({ title: current.title, text: text, url: location.href })
+              .catch(function () {});
+          else if (navigator.clipboard)
+            navigator.clipboard.writeText(text + " " + location.href).then(
+              function () {
+                toast("Link copied.");
+              },
+              function () {
+                toast("Couldn't copy the link.");
+              },
+            );
+          else toast("Copy the page address to share this listing.");
+        });
+
+        /* ---------- Create listing ---------- */
+        var photoData = "";
+        function fillSubs(catId) {
+          $("#cSub").innerHTML = catById(catId)
+            .subs.map(function (s) {
+              return "<option>" + esc(s) + "</option>";
+            })
+            .join("");
+        }
+        $("#cCat").innerHTML = CATS.map(function (c) {
+          return '<option value="' + c.id + '">' + c.label + "</option>";
+        }).join("");
+        $("#cLoc").innerHTML = LOCS.slice(1)
+          .map(function (l) {
+            return (
+              '<option value="' +
+              esc(l + ", " + COUNTRY[l]) +
+              '">' +
+              l +
+              ", " +
+              COUNTRY[l] +
+              "</option>"
+            );
+          })
+          .join("");
+        $("#cCat").addEventListener("change", function () {
+          fillSubs(this.value);
+        });
+
+        function resetPhoto() {
+          photoData = "";
+          $("#cPhotoBox").innerHTML =
+            '<svg class="h-7 w-7 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="9" cy="11" r="2" /><path d="M21 16l-5-5-8 8" /></svg><span>Add photo</span>';
+        }
+        function resetCreate() {
+          $("#createForm").reset();
+          resetPhoto();
+          $("#cErr").classList.add("hidden");
+          var pre = state.cat || "sale";
+          $("#cCat").value = pre;
+          fillSubs(pre);
+          if (state.sub) $("#cSub").value = state.sub;
+          if (state.loc) {
+            var o = $$("#cLoc option").filter(function (x) {
+              return x.textContent.indexOf(state.loc) === 0;
+            })[0];
+            if (o) $("#cLoc").value = o.value;
+          }
+        }
+        $("#cPhoto").addEventListener("change", function () {
+          var f = this.files && this.files[0];
+          if (!f) return;
+          if (f.size > 4 * 1024 * 1024) {
+            this.value = "";
+            return toast("Please choose a photo under 4 MB.");
+          }
+          var r = new FileReader();
+          r.onload = function () {
+            photoData = r.result;
+            $("#cPhotoBox").innerHTML =
+              '<img src="' +
+              photoData +
+              '" alt="Selected photo preview" class="h-full w-full object-cover" />';
+          };
+          r.readAsDataURL(f);
+        });
+        $("#createForm").addEventListener("submit", function (e) {
+          e.preventDefault();
+          var title = $("#cTitleIn").value.trim(),
+            err = $("#cErr");
+          if (title.length < 3) {
+            err.textContent =
+              "Please give your listing a title (at least 3 characters).";
+            err.classList.remove("hidden");
+            return $("#cTitleIn").focus();
+          }
+          err.classList.add("hidden");
+          var cat = $("#cCat").value;
+          listings.unshift({
+            id: nextId++,
+            cat: cat,
+            sub: $("#cSub").value,
+            title: title,
+            price: $("#cPrice").value.trim() || "Contact for price",
+            loc: $("#cLoc").value,
+            art: CAT_ART[cat],
+            desc: $("#cDesc").value.trim(),
+            seller: "You",
+            pal: PAL[nextId % PAL.length],
+            fresh: true,
+            mine: true,
+            img: photoData,
+          });
+          closeDlg($("#dlg-create"));
+          state.view = "mine";
+          state.cat = null;
+          state.sub = null;
+          state.q = "";
+          state.loc = "";
+          $("#topQ").value = "";
+          $("#sideQ").value = "";
+          update(true);
+          toast("Your listing is live!");
+        });
+
+        /* ---------- Member form ---------- */
+        $("#memberForm").addEventListener("submit", function (e) {
+          e.preventDefault();
+          var name = $("#mName").value.trim(),
+            email = $("#mEmail").value.trim();
+          var okN = name.length > 1,
+            okE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+          $("#mNameErr").classList.toggle("hidden", okN);
+          $("#mEmailErr").classList.toggle("hidden", okE);
+          $("#mName").setAttribute("aria-invalid", String(!okN));
+          $("#mEmail").setAttribute("aria-invalid", String(!okE));
+          if (!okN) return $("#mName").focus();
+          if (!okE) return $("#mEmail").focus();
+          $("#mDoneMsg").textContent =
+            "Thanks, " +
+            name.split(" ")[0] +
+            ". We’ll email " +
+            email +
+            " with your next steps.";
+          $("#mBody").classList.add("hidden");
+          $("#mDone").classList.remove("hidden");
+        });
+
+        /* ---------- Init ---------- */
+        $("#year").textContent = new Date().getFullYear();
+        var params = new URLSearchParams(location.search);
+        if (params.get("q")) {
+          state.q = params.get("q");
+          $("#topQ").value = state.q;
+          $("#sideQ").value = state.q;
+        }
+        if (params.get("loc")) state.loc = params.get("loc");
+        update(false);
+      })();
+    </script>
+  </body>
+</html>

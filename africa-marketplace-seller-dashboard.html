@@ -1,0 +1,1265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Seller Dashboard | Africa Market Place</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: "#fef2f2",
+                100: "#fee2e2",
+                500: "#ef4444",
+                600: "#dc2626",
+                700: "#b91c1c",
+              },
+              ink: {
+                900: "#111827",
+                800: "#1f2937",
+                600: "#4b5563",
+                500: "#6b7280",
+              },
+            },
+            fontFamily: {
+              display: ["Plus Jakarta Sans", "Inter", "sans-serif"],
+              sans: ["Inter", "sans-serif"],
+            },
+            boxShadow: {
+              card: "0 1px 2px rgba(17,24,39,.04),0 8px 24px -12px rgba(17,24,39,.12)",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --brand: #dc2626;
+        --ink: #111827;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Inter, system-ui, sans-serif;
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+      }
+      .display {
+        font-family: "Plus Jakarta Sans", Inter, sans-serif;
+      }
+      .side-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 12px;
+        border-radius: 10px;
+        color: #4b5563;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.18s;
+      }
+      .side-link:hover,
+      .side-link.active {
+        background: #fef2f2;
+        color: #b91c1c;
+      }
+      .side-link.active {
+        box-shadow: inset -3px 0 #dc2626;
+      }
+      .side-link .navicon {
+        width: 28px;
+        height: 28px;
+        border-radius: 9px;
+        background: #f3f4f6;
+        display: grid;
+        place-items: center;
+      }
+      .side-link.active .navicon {
+        background: #dc2626;
+        color: white;
+      }
+      .card {
+        background: white;
+        border: 1px solid #f0f1f3;
+        border-radius: 16px;
+        box-shadow:
+          0 1px 2px rgba(17, 24, 39, 0.03),
+          0 8px 24px -12px rgba(17, 24, 39, 0.12);
+      }
+      .fade {
+        animation: fadeUp 0.35s ease both;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .skeleton {
+        background: linear-gradient(
+          90deg,
+          #f3f4f6 25%,
+          #e5e7eb 37%,
+          #f3f4f6 63%
+        );
+        background-size: 400% 100%;
+        animation: shimmer 1.3s ease infinite;
+      }
+      @keyframes shimmer {
+        0% {
+          background-position: 100% 0;
+        }
+        100% {
+          background-position: 0 0;
+        }
+      }
+      :focus-visible {
+        outline: 3px solid #f87171;
+        outline-offset: 2px;
+      }
+      dialog {
+        border: 0;
+        border-radius: 18px;
+        padding: 0;
+        max-width: min(560px, calc(100vw - 24px));
+        width: 100%;
+        box-shadow: 0 24px 80px #11182735;
+      }
+      dialog::backdrop {
+        background: #11182788;
+        backdrop-filter: blur(3px);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+      @media (max-width: 1023px) {
+        #sidebar {
+          transform: translateX(-105%);
+        }
+        #sidebar.open {
+          transform: translateX(0);
+        }
+        #main {
+          margin-left: 0 !important;
+        }
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+      button {
+        transition:
+          background 0.15s,
+          transform 0.15s;
+      }
+    </style>
+  </head>
+  <body class="bg-[#f5f6f8]">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-white focus:p-3 focus:rounded-lg"
+      >Skip to main content</a
+    >
+    <div
+      id="overlay"
+      class="hidden fixed inset-0 z-40 bg-gray-900/50 lg:hidden"
+    ></div>
+    <aside
+      id="sidebar"
+      class="fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col border-r border-gray-200 bg-white px-4 py-5 transition-transform duration-300 lg:translate-x-0"
+    >
+      <div class="flex items-center justify-between px-2 mb-8">
+        <a href="#" class="display text-[17px] font-extrabold tracking-tight"
+          >Africa<span class="text-brand-600">Market</span>Place</a
+        ><button
+          id="closeNav"
+          class="lg:hidden rounded-lg p-2 hover:bg-gray-100"
+          aria-label="Close navigation"
+        >
+          ✕
+        </button>
+      </div>
+      <div
+        class="px-2 mb-3 text-[10px] font-bold uppercase tracking-[.16em] text-gray-400"
+      >
+        Workspace
+      </div>
+      <nav class="space-y-1" aria-label="Dashboard navigation">
+        <button class="side-link active w-full" data-page="overview">
+          <span class="navicon">⌂</span>Dashboard Overview
+        </button>
+        <button class="side-link w-full" data-page="listings">
+          <span class="navicon">▤</span>My Listings
+          <span id="navListings" class="ml-auto text-xs">4</span>
+        </button>
+        <button class="side-link w-full" data-page="customers">
+          <span class="navicon">▣</span>Customer Inquiries
+          <span
+            class="ml-auto rounded-full bg-brand-600 px-2 py-0.5 text-[10px] text-white"
+            >3</span
+          >
+        </button>
+        <button class="side-link w-full" data-page="analytics">
+          <span class="navicon">⌁</span>Analytics
+        </button>
+        <button class="side-link w-full" data-page="settings">
+          <span class="navicon">⚙</span>Account Settings
+        </button>
+      </nav>
+      <div
+        class="mt-8 px-2 mb-3 text-[10px] font-bold uppercase tracking-[.16em] text-gray-400"
+      >
+        Marketplace
+      </div>
+      <a class="side-link" href="#listings"
+        ><span class="navicon">↗</span>View Public Marketplace</a
+      >
+      <div class="mt-auto rounded-xl bg-red-50 p-3">
+        <div class="flex items-center gap-2 text-sm font-bold text-red-800">
+          <span>✦</span>Grow your business
+        </div>
+        <p class="mt-1 text-xs leading-5 text-red-700">
+          Promote your listings to reach more customers.
+        </p>
+        <button
+          class="mt-3 w-full rounded-lg bg-brand-600 py-2 text-xs font-semibold text-white hover:bg-brand-700"
+          onclick="notify('Promotion options will be available soon.')"
+        >
+          Explore promotion
+        </button>
+      </div>
+      <div
+        class="mt-5 flex items-center gap-3 border-t border-gray-100 pt-4 px-1"
+      >
+        <div
+          class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-orange-200 to-rose-300 font-bold text-gray-700"
+        >
+          JM
+        </div>
+        <div class="min-w-0 flex-1">
+          <p class="truncate text-xs font-bold">Jane Mwangi</p>
+          <p class="text-[10px] uppercase tracking-wide text-gray-400">
+            Premium member
+          </p>
+        </div>
+        <button
+          aria-label="Sign out"
+          onclick="notify('Demo dashboard: sign-out is not connected.')"
+          class="text-gray-400 hover:text-red-600"
+        >
+          ⇥
+        </button>
+      </div>
+    </aside>
+    <div id="main" class="min-h-screen lg:ml-[260px]">
+      <header
+        class="sticky top-0 z-30 flex h-[68px] items-center justify-between border-b border-gray-200 bg-white/95 px-4 backdrop-blur sm:px-7"
+      >
+        <div class="flex items-center gap-3">
+          <button
+            id="openNav"
+            class="rounded-lg p-2 hover:bg-gray-100 lg:hidden"
+            aria-label="Open navigation"
+          >
+            ☰
+          </button>
+          <div>
+            <p class="text-xs text-gray-400">
+              Workspace / <span id="crumb" class="text-gray-600">Overview</span>
+            </p>
+            <h1 id="topTitle" class="display text-sm font-bold sm:text-base">
+              Dashboard Overview
+            </h1>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 sm:gap-4">
+          <button
+            class="relative rounded-lg p-2 text-gray-500 hover:bg-gray-100"
+            aria-label="Notifications"
+            onclick="notify('You’re all caught up!')"
+          >
+            ♧<span
+              class="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-brand-600"
+            ></span></button
+          ><button
+            id="newListingTop"
+            class="rounded-lg bg-brand-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-brand-700 sm:px-4 sm:text-sm"
+          >
+            ＋ <span class="hidden sm:inline">Post New Listing</span
+            ><span class="sm:hidden">New listing</span>
+          </button>
+        </div>
+      </header>
+      <main class="mx-auto max-w-[1450px] p-4 sm:p-6 lg:p-7">
+        <section id="page-overview" class="page fade">
+          <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p
+                class="text-xs font-semibold uppercase tracking-[.14em] text-brand-600"
+              >
+                Seller workspace
+              </p>
+              <h2
+                class="display mt-1 text-2xl font-extrabold tracking-tight sm:text-[28px]"
+              >
+                Welcome back, Jane! 👋
+              </h2>
+              <p class="mt-1 text-sm text-gray-500">
+                Here’s what’s happening with your marketplace activity today.
+              </p>
+            </div>
+            <div class="text-xs text-gray-500">
+              Last updated just now
+              <span
+                class="ml-1 inline-block h-2 w-2 rounded-full bg-green-500"
+              ></span>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-3 xl:grid-cols-4 sm:gap-4">
+            <div class="card p-4 sm:p-5">
+              <div class="flex items-center justify-between">
+                <span
+                  class="grid h-9 w-9 place-items-center rounded-xl bg-red-50 text-brand-600"
+                  >◉</span
+                ><span
+                  class="rounded-full bg-green-50 px-2 py-1 text-[10px] font-bold text-green-700"
+                  >↗ 12%</span
+                >
+              </div>
+              <p class="mt-4 text-xs text-gray-500">Total Listing Views</p>
+              <p class="display mt-1 text-2xl font-extrabold">2,480</p>
+            </div>
+            <div class="card p-4 sm:p-5">
+              <div class="flex items-center justify-between">
+                <span
+                  class="grid h-9 w-9 place-items-center rounded-xl bg-blue-50 text-blue-600"
+                  >▣</span
+                ><span
+                  class="rounded-full bg-green-50 px-2 py-1 text-[10px] font-bold text-green-700"
+                  >↗ 5%</span
+                >
+              </div>
+              <p class="mt-4 text-xs text-gray-500">New Inquiries</p>
+              <p class="display mt-1 text-2xl font-extrabold">42</p>
+            </div>
+            <div class="card p-4 sm:p-5">
+              <div class="flex items-center justify-between">
+                <span
+                  class="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50 text-emerald-600"
+                  >▣</span
+                ><span
+                  class="rounded-full bg-gray-100 px-2 py-1 text-[10px] font-bold text-gray-500"
+                  >This month</span
+                >
+              </div>
+              <p class="mt-4 text-xs text-gray-500">Active Listings</p>
+              <p id="activeStat" class="display mt-1 text-2xl font-extrabold">
+                4
+              </p>
+            </div>
+            <div class="card p-4 sm:p-5">
+              <div class="flex items-center justify-between">
+                <span
+                  class="grid h-9 w-9 place-items-center rounded-xl bg-purple-50 text-purple-600"
+                  >★</span
+                ><span
+                  class="rounded-full bg-purple-50 px-2 py-1 text-[10px] font-bold text-purple-700"
+                  >Top rated</span
+                >
+              </div>
+              <p class="mt-4 text-xs text-gray-500">Seller Rating</p>
+              <p class="display mt-1 text-2xl font-extrabold">
+                4.8<span class="text-base text-gray-400">/5</span>
+              </p>
+            </div>
+          </div>
+          <div
+            class="mt-5 grid gap-5 xl:grid-cols-[minmax(0,1.8fr)_minmax(280px,.9fr)]"
+          >
+            <section class="card p-4 sm:p-5">
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <h3 class="display text-sm font-bold">Views over time</h3>
+                  <p class="mt-1 text-xs text-gray-400">
+                    Listing performance · Last 7 days
+                  </p>
+                </div>
+                <select
+                  aria-label="Chart period"
+                  id="chartRange"
+                  class="rounded-lg border border-gray-200 bg-white px-2 py-2 text-xs"
+                >
+                  <option>Last 7 Days</option>
+                  <option>Last 30 Days</option>
+                </select>
+              </div>
+              <div class="mt-4 h-[210px]">
+                <svg
+                  viewBox="0 0 620 220"
+                  class="h-full w-full"
+                  role="img"
+                  aria-label="Line chart showing views rising overall throughout the week"
+                >
+                  <defs>
+                    <linearGradient id="fill" x1="0" x2="0" y1="0" y2="1">
+                      <stop
+                        offset="0"
+                        stop-color="#dc2626"
+                        stop-opacity=".15"
+                      />
+                      <stop offset="1" stop-color="#dc2626" stop-opacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <g stroke="#eef0f3" stroke-width="1">
+                    <path d="M45 35H600M45 80H600M45 125H600M45 170H600" />
+                    <path
+                      d="M45 20V190M137 20V190M229 20V190M321 20V190M413 20V190M505 20V190M600 20V190"
+                    />
+                  </g>
+                  <path
+                    d="M45 160 C80 125 103 95 137 112 S200 160 229 132 S290 55 321 64 S384 120 413 95 S476 20 505 32 S570 48 600 70 L600 190 L45 190Z"
+                    fill="url(#fill)"
+                  />
+                  <path
+                    d="M45 160 C80 125 103 95 137 112 S200 160 229 132 S290 55 321 64 S384 120 413 95 S476 20 505 32 S570 48 600 70"
+                    fill="none"
+                    stroke="#dc2626"
+                    stroke-width="3.5"
+                    stroke-linecap="round"
+                  />
+                  <g fill="#dc2626">
+                    <circle cx="137" cy="112" r="4" />
+                    <circle cx="229" cy="132" r="4" />
+                    <circle cx="321" cy="64" r="4" />
+                    <circle cx="413" cy="95" r="4" />
+                    <circle cx="505" cy="32" r="4" />
+                  </g>
+                  <g fill="#9ca3af" font-size="10">
+                    <text x="14" y="38">800</text>
+                    <text x="14" y="83">600</text>
+                    <text x="14" y="128">400</text>
+                    <text x="14" y="173">200</text>
+                    <text x="39" y="208">Mon</text>
+                    <text x="130" y="208">Tue</text>
+                    <text x="222" y="208">Wed</text>
+                    <text x="314" y="208">Thu</text>
+                    <text x="406" y="208">Fri</text>
+                    <text x="498" y="208">Sat</text>
+                    <text x="590" y="208">Sun</text>
+                  </g>
+                </svg>
+              </div>
+            </section>
+            <section class="card p-4 sm:p-5">
+              <div class="flex items-center justify-between">
+                <h3 class="display text-sm font-bold">Recent activity</h3>
+                <button
+                  class="text-xs font-semibold text-brand-600 hover:text-brand-800"
+                  data-goto="customers"
+                >
+                  View all
+                </button>
+              </div>
+              <div class="mt-4 space-y-4">
+                <div class="flex gap-3">
+                  <span
+                    class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-red-50 text-brand-600"
+                    >▣</span
+                  >
+                  <div>
+                    <p class="text-xs font-semibold">
+                      New inquiry for Leather Sandals
+                    </p>
+                    <p class="mt-1 text-[11px] text-gray-400">2 minutes ago</p>
+                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <span
+                    class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-green-50 text-green-600"
+                    >✓</span
+                  >
+                  <div>
+                    <p class="text-xs font-semibold">
+                      Ad #4920 approved by admin
+                    </p>
+                    <p class="mt-1 text-[11px] text-gray-400">1 hour ago</p>
+                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <span
+                    class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-blue-50 text-blue-600"
+                    >★</span
+                  >
+                  <div>
+                    <p class="text-xs font-semibold">
+                      Received a 5-star rating from Kofi
+                    </p>
+                    <p class="mt-1 text-[11px] text-gray-400">4 hours ago</p>
+                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <span
+                    class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-purple-50 text-purple-600"
+                    >♧</span
+                  >
+                  <div>
+                    <p class="text-xs font-semibold">
+                      Promo started on social campaign
+                    </p>
+                    <p class="mt-1 text-[11px] text-gray-400">Yesterday</p>
+                  </div>
+                </div>
+              </div>
+              <button
+                data-goto="customers"
+                class="mt-5 w-full border-t border-gray-100 pt-4 text-center text-[10px] font-extrabold uppercase tracking-wider text-brand-600"
+              >
+                View all customer inquiries →
+              </button>
+            </section>
+          </div>
+          <section class="card mt-5 overflow-hidden">
+            <div
+              class="flex flex-wrap items-center justify-between gap-3 p-4 sm:p-5"
+            >
+              <div>
+                <h3 class="display text-sm font-bold">
+                  Manage active listings
+                </h3>
+                <p class="mt-1 text-xs text-gray-400">
+                  Edit details, review performance, or remove a post.
+                </p>
+              </div>
+              <button
+                data-goto="listings"
+                class="text-xs font-semibold text-brand-600 hover:text-brand-800"
+              >
+                Manage all listings →
+              </button>
+            </div>
+            <div id="overviewTable"></div>
+            <div class="border-t border-gray-100 p-4 text-center">
+              <button
+                data-goto="listings"
+                class="text-xs font-semibold text-gray-500 hover:text-brand-600"
+              >
+                View all listings
+              </button>
+            </div>
+          </section>
+        </section>
+        <section id="page-listings" class="page hidden fade">
+          <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 class="display text-2xl font-extrabold">My listings</h2>
+              <p class="mt-1 text-sm text-gray-500">
+                Manage the products and services you’ve posted.
+              </p>
+            </div>
+            <button
+              id="newListing"
+              class="rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700"
+            >
+              ＋ Create listing
+            </button>
+          </div>
+          <div class="card p-4">
+            <div class="flex flex-col gap-3 sm:flex-row">
+              <input
+                id="listingSearch"
+                type="search"
+                placeholder="Search your listings…"
+                class="min-w-0 flex-1 rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+                aria-label="Search listings"
+              /><select
+                id="statusFilter"
+                class="rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm"
+                aria-label="Filter by status"
+              >
+                <option value="all">All statuses</option>
+                <option>Active</option>
+                <option>Promoting</option>
+                <option>Paused</option>
+              </select>
+            </div>
+            <div id="listingTable" class="mt-4"></div>
+          </div>
+        </section>
+        <section id="page-customers" class="page hidden fade">
+          <div class="mb-6">
+            <h2 class="display text-2xl font-extrabold">Customer inquiries</h2>
+            <p class="mt-1 text-sm text-gray-500">
+              Review prospective buyers and their messages about your listings.
+            </p>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-3">
+            <div class="card p-4">
+              <p class="text-xs text-gray-500">Total inquiries</p>
+              <p class="display mt-2 text-2xl font-extrabold">42</p>
+            </div>
+            <div class="card p-4">
+              <p class="text-xs text-gray-500">Awaiting reply</p>
+              <p class="display mt-2 text-2xl font-extrabold text-brand-600">
+                3
+              </p>
+            </div>
+            <div class="card p-4">
+              <p class="text-xs text-gray-500">Replied this week</p>
+              <p class="display mt-2 text-2xl font-extrabold">18</p>
+            </div>
+          </div>
+          <div class="card mt-5 overflow-hidden">
+            <div class="flex flex-wrap items-center justify-between gap-3 p-4">
+              <h3 class="display text-sm font-bold">
+                Recent customer messages
+              </h3>
+              <input
+                id="customerSearch"
+                type="search"
+                placeholder="Search customers…"
+                aria-label="Search customers"
+                class="rounded-lg border border-gray-200 px-3 py-2 text-sm"
+              />
+            </div>
+            <div id="customerTable"></div>
+          </div>
+          <p class="mt-3 text-xs text-gray-400">
+            Demo customer records are illustrative. Connect your marketplace API
+            to show real customer data.
+          </p>
+        </section>
+        <section id="page-analytics" class="page hidden fade">
+          <div class="mb-6">
+            <h2 class="display text-2xl font-extrabold">Analytics</h2>
+            <p class="mt-1 text-sm text-gray-500">
+              Understand what shoppers view and where inquiries come from.
+            </p>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <div class="card p-5">
+              <p class="text-xs text-gray-500">Listing views</p>
+              <p class="display mt-2 text-3xl font-extrabold">2,480</p>
+              <p class="mt-2 text-xs text-green-600">
+                ↑ 12% vs previous period
+              </p>
+            </div>
+            <div class="card p-5">
+              <p class="text-xs text-gray-500">Customer inquiries</p>
+              <p class="display mt-2 text-3xl font-extrabold">42</p>
+              <p class="mt-2 text-xs text-green-600">↑ 5% vs previous period</p>
+            </div>
+            <div class="card p-5">
+              <p class="text-xs text-gray-500">Inquiry conversion</p>
+              <p class="display mt-2 text-3xl font-extrabold">1.7%</p>
+              <p class="mt-2 text-xs text-gray-400">Views to inquiries</p>
+            </div>
+          </div>
+          <div class="card mt-5 p-5">
+            <h3 class="display text-sm font-bold">Performance overview</h3>
+            <p class="mt-2 text-sm leading-6 text-gray-500">
+              The chart on your dashboard visualizes sample daily listing views.
+              Replace the demo values with event tracking from your production
+              analytics pipeline before making business decisions.
+            </p>
+          </div>
+        </section>
+        <section id="page-settings" class="page hidden fade">
+          <div class="mb-6">
+            <h2 class="display text-2xl font-extrabold">Account settings</h2>
+            <p class="mt-1 text-sm text-gray-500">
+              Manage your seller profile and communication preferences.
+            </p>
+          </div>
+          <div class="card max-w-2xl p-5">
+            <form id="settingsForm" class="space-y-4">
+              <div>
+                <label for="sellerName" class="mb-1 block text-sm font-semibold"
+                  >Name or business name</label
+                ><input
+                  id="sellerName"
+                  value="Jane Mwangi"
+                  class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  for="sellerEmail"
+                  class="mb-1 block text-sm font-semibold"
+                  >Email address</label
+                ><input
+                  id="sellerEmail"
+                  type="email"
+                  value="jane@example.com"
+                  class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  for="sellerLocation"
+                  class="mb-1 block text-sm font-semibold"
+                  >Location</label
+                ><input
+                  id="sellerLocation"
+                  value="Nairobi, Kenya"
+                  class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+                />
+              </div>
+              <button
+                class="rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700"
+              >
+                Save profile
+              </button>
+            </form>
+          </div>
+        </section>
+        <footer class="py-8 text-center text-xs text-gray-400">
+          © 2026 Africa Market Place · Seller dashboard
+          <span class="mx-1">·</span>
+          <a href="#" class="hover:text-brand-600">Help & support</a>
+        </footer>
+      </main>
+    </div>
+    <dialog id="editDialog" aria-labelledby="editHeading">
+      <form id="editForm" class="p-5 sm:p-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 id="editHeading" class="display text-xl font-bold">
+              Edit listing
+            </h2>
+            <p class="mt-1 text-sm text-gray-500">
+              Update the details customers see.
+            </p>
+          </div>
+          <button
+            type="button"
+            data-close-dialog
+            class="rounded-lg p-2 hover:bg-gray-100"
+            aria-label="Close edit dialog"
+          >
+            ✕
+          </button>
+        </div>
+        <input type="hidden" id="editId" />
+        <div class="mt-5 space-y-4">
+          <div>
+            <label for="editTitle" class="mb-1 block text-sm font-semibold"
+              >Listing title</label
+            ><input
+              id="editTitle"
+              required
+              maxlength="80"
+              class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+            />
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="editPrice" class="mb-1 block text-sm font-semibold"
+                >Price</label
+              ><input
+                id="editPrice"
+                required
+                class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+              />
+            </div>
+            <div>
+              <label for="editStatus" class="mb-1 block text-sm font-semibold"
+                >Status</label
+              ><select
+                id="editStatus"
+                class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm"
+              >
+                <option>Active</option>
+                <option>Promoting</option>
+                <option>Paused</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label for="editCategory" class="mb-1 block text-sm font-semibold"
+              >Category</label
+            ><select
+              id="editCategory"
+              class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm"
+            >
+              <option>For Sale</option>
+              <option>Fashion & Accessories</option>
+              <option>Home & Living</option>
+              <option>Services</option>
+            </select>
+          </div>
+          <div>
+            <label for="editLocation" class="mb-1 block text-sm font-semibold"
+              >Location</label
+            ><input
+              id="editLocation"
+              required
+              class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+            />
+          </div>
+          <div>
+            <label for="editDesc" class="mb-1 block text-sm font-semibold"
+              >Description</label
+            ><textarea
+              id="editDesc"
+              rows="3"
+              maxlength="500"
+              class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+            ></textarea>
+          </div>
+          <div class="flex justify-end gap-2 border-t border-gray-100 pt-4">
+            <button
+              type="button"
+              data-close-dialog
+              class="rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-semibold"
+            >
+              Cancel</button
+            ><button
+              id="saveEdit"
+              class="rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700"
+            >
+              Save changes
+            </button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="createDialog" aria-labelledby="createHeading">
+      <form id="createForm" class="p-5 sm:p-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 id="createHeading" class="display text-xl font-bold">
+              Create new listing
+            </h2>
+            <p class="mt-1 text-sm text-gray-500">
+              Add a product or service to your marketplace.
+            </p>
+          </div>
+          <button
+            type="button"
+            data-close-dialog
+            class="rounded-lg p-2 hover:bg-gray-100"
+            aria-label="Close create dialog"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="mt-5 space-y-4">
+          <div>
+            <label for="newTitle" class="mb-1 block text-sm font-semibold"
+              >Listing title</label
+            ><input
+              id="newTitle"
+              required
+              minlength="3"
+              maxlength="80"
+              placeholder="e.g. Handmade leather sandals"
+              class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+            />
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="newPrice" class="mb-1 block text-sm font-semibold"
+                >Price</label
+              ><input
+                id="newPrice"
+                required
+                placeholder="KSh 3,500"
+                class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+              />
+            </div>
+            <div>
+              <label for="newCategory" class="mb-1 block text-sm font-semibold"
+                >Category</label
+              ><select
+                id="newCategory"
+                class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm"
+              >
+                <option>For Sale</option>
+                <option>Fashion & Accessories</option>
+                <option>Home & Living</option>
+                <option>Services</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label for="newLocation" class="mb-1 block text-sm font-semibold"
+              >Location</label
+            ><input
+              id="newLocation"
+              required
+              placeholder="Nairobi, Kenya"
+              class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+            />
+          </div>
+          <div>
+            <label for="newDesc" class="mb-1 block text-sm font-semibold"
+              >Description</label
+            ><textarea
+              id="newDesc"
+              rows="3"
+              maxlength="500"
+              class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+            ></textarea>
+          </div>
+          <div class="flex justify-end gap-2 border-t border-gray-100 pt-4">
+            <button
+              type="button"
+              data-close-dialog
+              class="rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-semibold"
+            >
+              Cancel</button
+            ><button
+              class="rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700"
+            >
+              Publish listing
+            </button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="customerDialog" aria-labelledby="customerHeading">
+      <div class="p-5 sm:p-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 id="customerHeading" class="display text-xl font-bold">
+              Customer details
+            </h2>
+            <p class="mt-1 text-sm text-gray-500">Inquiry information</p>
+          </div>
+          <button
+            data-close-dialog
+            class="rounded-lg p-2 hover:bg-gray-100"
+            aria-label="Close customer details"
+          >
+            ✕
+          </button>
+        </div>
+        <div id="customerDetail" class="mt-5"></div>
+        <div class="mt-5 flex justify-end">
+          <button
+            data-close-dialog
+            class="rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </dialog>
+    <div
+      id="toast"
+      role="status"
+      aria-live="polite"
+      class="pointer-events-none fixed bottom-5 left-1/2 z-[100] -translate-x-1/2 translate-y-5 rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white opacity-0 shadow-xl transition duration-300"
+    ></div>
+    <script>
+      const $ = (s) => document.querySelector(s),
+        $$ = (s) => [...document.querySelectorAll(s)];
+      let listings = [
+        {
+          id: 1,
+          title: "Handmade Leather Sandals",
+          category: "Fashion & Accessories",
+          price: "KSh 3,500",
+          location: "Nairobi, Kenya",
+          status: "Active",
+          views: "1.2k",
+          chats: 28,
+          description:
+            "Handcrafted leather sandals made by local artisans. Available in multiple sizes.",
+          symbol: "👡",
+        },
+        {
+          id: 2,
+          title: "Maasai Beaded Necklace",
+          category: "Fashion & Accessories",
+          price: "KSh 2,800",
+          location: "Nairobi, Kenya",
+          status: "Promoting",
+          views: "3.5k",
+          chats: 64,
+          description:
+            "Traditional beaded necklace, handmade with colourful beads.",
+          symbol: "📿",
+        },
+        {
+          id: 3,
+          title: "Woven Storage Basket",
+          category: "Home & Living",
+          price: "KSh 1,200",
+          location: "Mombasa, Kenya",
+          status: "Active",
+          views: "840",
+          chats: 12,
+          description: "Handwoven basket for home storage and decor.",
+          symbol: "🧺",
+        },
+        {
+          id: 4,
+          title: "Small Business Branding",
+          category: "Services",
+          price: "KSh 5,000",
+          location: "Nairobi, Kenya",
+          status: "Paused",
+          views: "420",
+          chats: 6,
+          description: "Starter branding package for local businesses.",
+          symbol: "✦",
+        },
+      ];
+      const customers = [
+        {
+          id: 1,
+          name: "Amina Otieno",
+          initials: "AO",
+          email: "amina.otieno@example.com",
+          phone: "+254 712 345 678",
+          listing: "Handmade Leather Sandals",
+          message:
+            "Hello, are these sandals available in size 39? Could I arrange a pickup?",
+          time: "2 min ago",
+          status: "Awaiting reply",
+        },
+        {
+          id: 2,
+          name: "Kofi Mensah",
+          initials: "KM",
+          email: "kofi.mensah@example.com",
+          phone: "+233 24 555 0123",
+          listing: "Maasai Beaded Necklace",
+          message:
+            "I would like to order two necklaces. Do you offer delivery?",
+          time: "1 hour ago",
+          status: "Awaiting reply",
+        },
+        {
+          id: 3,
+          name: "Njeri Kamau",
+          initials: "NK",
+          email: "njeri.kamau@example.com",
+          phone: "+254 722 456 789",
+          listing: "Woven Storage Basket",
+          message: "Can you share the dimensions and available colours?",
+          time: "Yesterday",
+          status: "Replied",
+        },
+      ];
+      const moneySafe = (s) =>
+        String(s).replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      function notify(msg) {
+        let t = $("#toast");
+        t.textContent = msg;
+        t.classList.remove("opacity-0", "translate-y-5");
+        clearTimeout(window.toastTimer);
+        window.toastTimer = setTimeout(
+          () => t.classList.add("opacity-0", "translate-y-5"),
+          2600,
+        );
+      }
+      function statusBadge(s) {
+        let c =
+          s === "Active"
+            ? "bg-green-50 text-green-700"
+            : s === "Promoting"
+              ? "bg-amber-50 text-amber-700"
+              : "bg-gray-100 text-gray-600";
+        return `<span class="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-wide ${c}"><span class="h-1.5 w-1.5 rounded-full bg-current"></span>${s}</span>`;
+      }
+      function listingRows(items, compact = false) {
+        if (!items.length)
+          return '<div class="p-10 text-center text-sm text-gray-500">No listings found. Try changing your search or create a listing.</div>';
+        return `<div class="table-wrap"><table class="w-full min-w-[680px] text-left"><thead class="bg-gray-50 text-[9px] uppercase tracking-[.13em] text-gray-400"><tr><th class="px-5 py-3 font-semibold">Item details</th><th class="px-4 py-3 font-semibold">Status</th><th class="px-4 py-3 font-semibold">Price</th><th class="px-4 py-3 font-semibold">Stats</th><th class="px-5 py-3 text-right font-semibold">Actions</th></tr></thead><tbody class="divide-y divide-gray-100">${items.map((x) => `<tr class="hover:bg-gray-50/70"><td class="px-5 py-4"><div class="flex items-center gap-3"><div class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-orange-100 to-rose-100 text-2xl">${x.symbol || "📦"}</div><div><p class="text-xs font-bold text-gray-900">${moneySafe(x.title)}</p><p class="mt-1 text-[10px] text-gray-400">ID: AMP-${String(x.id).padStart(4, "0")} · ${moneySafe(x.location)}</p></div></div></td><td class="px-4 py-4">${statusBadge(x.status)}</td><td class="px-4 py-4 text-xs font-bold">${moneySafe(x.price)}</td><td class="px-4 py-4"><div class="text-xs font-bold">${x.views} <span class="font-normal text-gray-400">views</span></div><div class="mt-1 text-[10px] text-gray-400">${x.chats} inquiries</div></td><td class="px-5 py-4"><div class="flex justify-end gap-1.5"><button data-edit="${x.id}" class="rounded-lg border border-gray-200 px-2.5 py-2 text-xs hover:border-brand-500 hover:text-brand-600" aria-label="Edit ${moneySafe(x.title)}" title="Edit listing">✎</button><button data-customer-for="${x.id}" class="rounded-lg border border-gray-200 px-2.5 py-2 text-xs hover:border-blue-400 hover:text-blue-600" title="View customer inquiries" aria-label="View inquiries for ${moneySafe(x.title)}">▣</button><button data-delete="${x.id}" class="rounded-lg border border-gray-200 px-2.5 py-2 text-xs hover:border-red-400 hover:bg-red-50 hover:text-red-600" title="Delete listing" aria-label="Delete ${moneySafe(x.title)}">⌫</button></div></td></tr>`).join("")}</tbody></table></div>`;
+      }
+      function renderListings() {
+        let q = ($("#listingSearch")?.value || "").toLowerCase(),
+          st = $("#statusFilter")?.value || "all";
+        let filtered = listings.filter(
+          (x) =>
+            (x.title + " " + x.category + " " + x.location)
+              .toLowerCase()
+              .includes(q) &&
+            (st === "all" || x.status === st),
+        );
+        $("#listingTable").innerHTML = listingRows(filtered);
+        $("#overviewTable").innerHTML = listingRows(listings.slice(0, 3), true);
+        $("#activeStat").textContent = listings.filter(
+          (x) => x.status !== "Paused",
+        ).length;
+        $("#navListings").textContent = listings.length;
+      }
+      function renderCustomers() {
+        let q = ($("#customerSearch")?.value || "").toLowerCase();
+        let rows = customers.filter((c) =>
+          (c.name + " " + c.listing + " " + c.email + " " + c.message)
+            .toLowerCase()
+            .includes(q),
+        );
+        $("#customerTable").innerHTML = rows.length
+          ? `<div class="table-wrap"><table class="w-full min-w-[720px] text-left"><thead class="bg-gray-50 text-[10px] uppercase tracking-wider text-gray-400"><tr><th class="px-5 py-3">Customer</th><th class="px-4 py-3">Listing</th><th class="px-4 py-3">Message</th><th class="px-4 py-3">Received</th><th class="px-5 py-3 text-right">Details</th></tr></thead><tbody class="divide-y divide-gray-100">${rows.map((c) => `<tr class="hover:bg-gray-50"><td class="px-5 py-4"><div class="flex items-center gap-3"><span class="grid h-9 w-9 place-items-center rounded-full bg-blue-50 text-xs font-bold text-blue-700">${c.initials}</span><div><p class="text-xs font-bold">${c.name}</p><p class="mt-1 text-[10px] text-gray-400">${c.email}</p></div></div></td><td class="px-4 py-4 text-xs">${c.listing}</td><td class="max-w-xs px-4 py-4 text-xs leading-5 text-gray-500">${c.message}</td><td class="px-4 py-4 text-xs text-gray-500">${c.time}</td><td class="px-5 py-4 text-right"><button data-customer="${c.id}" class="rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold hover:border-brand-500 hover:text-brand-600">View details</button></td></tr>`).join("")}</tbody></table></div>`
+          : '<div class="p-10 text-center text-sm text-gray-500">No customer inquiries match your search.</div>';
+      }
+      function go(page) {
+        $$(".page").forEach((p) => p.classList.add("hidden"));
+        $("#page-" + page)?.classList.remove("hidden");
+        $$("[data-page]").forEach((b) => {
+          b.classList.toggle("active", b.dataset.page === page);
+          if (b.dataset.page === page) b.setAttribute("aria-current", "page");
+          else b.removeAttribute("aria-current");
+        });
+        const titles = {
+          overview: "Dashboard Overview",
+          listings: "My Listings",
+          customers: "Customer Inquiries",
+          analytics: "Analytics",
+          settings: "Account Settings",
+        };
+        $("#topTitle").textContent = titles[page] || "Dashboard";
+        $("#crumb").textContent = titles[page] || "Dashboard";
+        $("#sidebar").classList.remove("open");
+        $("#overlay").classList.add("hidden");
+        window.scrollTo({
+          top: 0,
+          behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "auto"
+            : "smooth",
+        });
+      }
+      function openEdit(id) {
+        let x = listings.find((a) => a.id === Number(id));
+        if (!x) return;
+        $("#editId").value = x.id;
+        $("#editTitle").value = x.title;
+        $("#editPrice").value = x.price;
+        $("#editStatus").value = x.status;
+        $("#editCategory").value = x.category;
+        $("#editLocation").value = x.location;
+        $("#editDesc").value = x.description;
+        $("#editDialog").showModal();
+      }
+      function openCustomer(id) {
+        let c = customers.find((a) => a.id === Number(id));
+        if (!c) return;
+        $("#customerDetail").innerHTML =
+          `<div class="flex items-center gap-3 rounded-xl bg-gray-50 p-4"><span class="grid h-12 w-12 place-items-center rounded-full bg-blue-100 font-bold text-blue-700">${c.initials}</span><div><h3 class="font-bold">${c.name}</h3><p class="text-xs text-gray-500">Customer inquiry</p></div></div><dl class="mt-4 space-y-3 text-sm"><div><dt class="text-xs text-gray-400">Email address</dt><dd class="mt-1 font-medium">${c.email}</dd></div><div><dt class="text-xs text-gray-400">Phone number</dt><dd class="mt-1 font-medium">${c.phone}</dd></div><div><dt class="text-xs text-gray-400">Interested in</dt><dd class="mt-1 font-medium">${c.listing}</dd></div><div><dt class="text-xs text-gray-400">Message</dt><dd class="mt-1 rounded-lg bg-gray-50 p-3 leading-6">${c.message}</dd></div><div><dt class="text-xs text-gray-400">Received</dt><dd class="mt-1">${c.time} · ${c.status}</dd></div></dl><a class="mt-4 inline-flex rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700" href="mailto:${c.email}?subject=${encodeURIComponent("Re: " + c.listing)}">Reply by email ↗</a>`;
+        $("#customerDialog").showModal();
+      }
+      document.addEventListener("click", (e) => {
+        let b = e.target.closest("button");
+        if (!b) return;
+        if (b.dataset.page) go(b.dataset.page);
+        if (b.dataset.goto) go(b.dataset.goto);
+        if (b.dataset.edit) openEdit(b.dataset.edit);
+        if (b.dataset.customer) openCustomer(b.dataset.customer);
+        if (b.dataset.customerFor) {
+          let x = listings.find((a) => a.id === Number(b.dataset.customerFor));
+          go("customers");
+          $("#customerSearch").value = x ? x.title : "";
+          renderCustomers();
+        }
+        if (b.dataset.delete) {
+          let x = listings.find((a) => a.id === Number(b.dataset.delete));
+          if (
+            x &&
+            confirm(`Delete “${x.title}”? This cannot be undone in this demo.`)
+          ) {
+            listings = listings.filter((a) => a.id !== x.id);
+            renderListings();
+            notify("Listing deleted.");
+          }
+        }
+        if (b.hasAttribute("data-close-dialog")) b.closest("dialog").close();
+      });
+      $("#openNav").onclick = () => {
+        $("#sidebar").classList.add("open");
+        $("#overlay").classList.remove("hidden");
+      };
+      $("#closeNav").onclick = () => {
+        $("#sidebar").classList.remove("open");
+        $("#overlay").classList.add("hidden");
+      };
+      $("#overlay").onclick = () => {
+        $("#sidebar").classList.remove("open");
+        $("#overlay").classList.add("hidden");
+      };
+      $("#newListingTop").onclick = $("#newListing").onclick = () =>
+        $("#createDialog").showModal();
+      $("#editForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        let x = listings.find((a) => a.id === Number($("#editId").value));
+        if (!x) return;
+        Object.assign(x, {
+          title: $("#editTitle").value.trim(),
+          price: $("#editPrice").value.trim(),
+          status: $("#editStatus").value,
+          category: $("#editCategory").value,
+          location: $("#editLocation").value.trim(),
+          description: $("#editDesc").value.trim(),
+        });
+        $("#editDialog").close();
+        renderListings();
+        notify("Listing updated successfully.");
+      });
+      $("#createForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        listings.unshift({
+          id: Math.max(0, ...listings.map((x) => x.id)) + 1,
+          title: $("#newTitle").value.trim(),
+          price: $("#newPrice").value.trim(),
+          category: $("#newCategory").value,
+          location: $("#newLocation").value.trim(),
+          status: "Active",
+          views: "0",
+          chats: 0,
+          description: $("#newDesc").value.trim(),
+          symbol: "📦",
+        });
+        e.target.reset();
+        $("#createDialog").close();
+        renderListings();
+        go("listings");
+        notify("Your listing was added to this demo.");
+      });
+      $("#listingSearch").addEventListener("input", renderListings);
+      $("#statusFilter").addEventListener("change", renderListings);
+      $("#customerSearch").addEventListener("input", renderCustomers);
+      $("#settingsForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        notify("Profile saved in this demo session.");
+      });
+      $$("dialog").forEach((d) =>
+        d.addEventListener("click", (e) => {
+          if (e.target === d) d.close();
+        }),
+      );
+      renderListings();
+      renderCustomers();
+    </script>
+  </body>
+</html>

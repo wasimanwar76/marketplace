@@ -1,0 +1,1626 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admin Console | Africa Market Place</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: "#fef2f2",
+                100: "#fee2e2",
+                500: "#ef4444",
+                600: "#dc2626",
+                700: "#b91c1c",
+              },
+              ink: {
+                900: "#111827",
+                800: "#1f2937",
+                600: "#4b5563",
+                500: "#6b7280",
+              },
+            },
+            fontFamily: {
+              display: ["Plus Jakarta Sans", "Inter", "sans-serif"],
+              sans: ["Inter", "sans-serif"],
+            },
+            boxShadow: {
+              card: "0 1px 2px rgba(17,24,39,.04),0 8px 24px -12px rgba(17,24,39,.12)",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Inter, system-ui, sans-serif;
+        color: #111827;
+        -webkit-font-smoothing: antialiased;
+      }
+      .display {
+        font-family: "Plus Jakarta Sans", Inter, sans-serif;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid #eef0f3;
+        border-radius: 16px;
+        box-shadow:
+          0 1px 2px #11182708,
+          0 8px 24px -12px #1118271c;
+      }
+      .navlink {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        color: #4b5563;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: left;
+        width: 100%;
+        transition: all 0.16s;
+      }
+      .navlink:hover,
+      .navlink.active {
+        background: #fef2f2;
+        color: #b91c1c;
+      }
+      .navlink.active {
+        box-shadow: inset -3px 0 #dc2626;
+      }
+      .navicon {
+        display: grid;
+        place-items: center;
+        width: 29px;
+        height: 29px;
+        border-radius: 9px;
+        background: #f3f4f6;
+        flex-shrink: 0;
+      }
+      .navlink.active .navicon {
+        background: #dc2626;
+        color: #fff;
+      }
+      .fade {
+        animation: up 0.3s ease both;
+      }
+      @keyframes up {
+        from {
+          opacity: 0;
+          transform: translateY(7px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      :focus-visible {
+        outline: 3px solid #f87171;
+        outline-offset: 2px;
+      }
+      dialog {
+        border: 0;
+        border-radius: 18px;
+        padding: 0;
+        width: min(560px, calc(100vw - 24px));
+        box-shadow: 0 24px 80px #11182735;
+      }
+      dialog::backdrop {
+        background: #11182788;
+        backdrop-filter: blur(3px);
+      }
+      @media (max-width: 1023px) {
+        #sidebar {
+          transform: translateX(-105%);
+        }
+        #sidebar.open {
+          transform: translateX(0);
+        }
+        #main {
+          margin-left: 0 !important;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+      .tablewrap {
+        overflow-x: auto;
+      }
+      .btn {
+        border-radius: 9px;
+        padding: 9px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        transition: all 0.15s;
+      }
+      .btn-red {
+        background: #dc2626;
+        color: white;
+      }
+      .btn-red:hover {
+        background: #b91c1c;
+      }
+      .btn-green {
+        background: #ecfdf5;
+        color: #047857;
+      }
+      .btn-green:hover {
+        background: #d1fae5;
+      }
+      .btn-gray {
+        border: 1px solid #e5e7eb;
+        background: white;
+      }
+      .btn-gray:hover {
+        border-color: #dc2626;
+        color: #b91c1c;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 4px 8px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+      }
+      .field {
+        width: 100%;
+        border: 1px solid #d1d5db;
+        border-radius: 9px;
+        padding: 10px 12px;
+        font-size: 13px;
+        background: #fff;
+      }
+      .field:focus {
+        border-color: #dc2626;
+        outline: 2px solid #fee2e2;
+      }
+    </style>
+  </head>
+  <body class="bg-[#f5f6f8]">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:bg-white focus:p-3"
+      >Skip to main content</a
+    >
+    <div
+      id="overlay"
+      class="hidden fixed inset-0 z-40 bg-gray-900/50 lg:hidden"
+    ></div>
+    <aside
+      id="sidebar"
+      class="fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col border-r border-gray-200 bg-white px-4 py-5 transition-transform duration-300 lg:translate-x-0"
+    >
+      <div class="mb-7 flex items-center justify-between px-2">
+        <a href="#" class="display text-[17px] font-extrabold tracking-tight"
+          >Africa<span class="text-brand-600">Market</span>Place</a
+        ><button
+          id="closeNav"
+          class="rounded-lg p-2 hover:bg-gray-100 lg:hidden"
+          aria-label="Close navigation"
+        >
+          ✕
+        </button>
+      </div>
+      <div
+        class="mb-3 px-2 text-[10px] font-extrabold uppercase tracking-[.16em] text-gray-400"
+      >
+        Administration
+      </div>
+      <nav class="space-y-1" aria-label="Admin navigation">
+        <button class="navlink active" data-page="overview">
+          <span class="navicon">⌂</span>Overview
+        </button>
+        <button class="navlink" data-page="moderation">
+          <span class="navicon">✓</span>Listing approvals
+          <span
+            id="pendingBadge"
+            class="ml-auto rounded-full bg-red-100 px-2 py-0.5 text-[10px] text-red-700"
+            >3</span
+          >
+        </button>
+        <button class="navlink" data-page="listings">
+          <span class="navicon">▤</span>All listings
+        </button>
+        <button class="navlink" data-page="users">
+          <span class="navicon">♙</span>Users & sellers
+        </button>
+        <button class="navlink" data-page="customers">
+          <span class="navicon">▣</span>Customer inquiries
+        </button>
+        <button class="navlink" data-page="ads">
+          <span class="navicon">↗</span>Advertisements
+        </button>
+        <button class="navlink" data-page="categories">
+          <span class="navicon">▦</span>Categories
+        </button>
+        <button class="navlink" data-page="reports">
+          <span class="navicon">⚑</span>Reports & moderation
+          <span
+            id="reportBadge"
+            class="ml-auto rounded-full bg-amber-100 px-2 py-0.5 text-[10px] text-amber-800"
+            >2</span
+          >
+        </button>
+        <button class="navlink" data-page="analytics">
+          <span class="navicon">⌁</span>Analytics
+        </button>
+        <button class="navlink" data-page="settings">
+          <span class="navicon">⚙</span>Settings
+        </button>
+      </nav>
+      <div class="mt-auto rounded-xl bg-gray-900 p-4 text-white">
+        <div class="flex items-center gap-2 text-sm font-bold">
+          <span class="text-red-400">●</span>Admin workspace
+        </div>
+        <p class="mt-2 text-xs leading-5 text-gray-300">
+          Review submissions and keep the marketplace safe and useful.
+        </p>
+        <p
+          class="mt-3 rounded-lg bg-white/10 px-2 py-1.5 text-[10px] text-gray-200"
+        >
+          Prototype · Sample data only
+        </p>
+      </div>
+      <div
+        class="mt-4 flex items-center gap-3 border-t border-gray-100 pt-4 px-1"
+      >
+        <div
+          class="grid h-10 w-10 place-items-center rounded-full bg-red-100 font-bold text-red-700"
+        >
+          AD
+        </div>
+        <div class="min-w-0 flex-1">
+          <p class="truncate text-xs font-bold">Marketplace Admin</p>
+          <p class="text-[10px] uppercase tracking-wide text-gray-400">
+            Super administrator
+          </p>
+        </div>
+        <button
+          aria-label="Sign out"
+          onclick="
+            notify('Connect your authentication provider to enable sign out.')
+          "
+          class="text-gray-400 hover:text-red-600"
+        >
+          ⇥
+        </button>
+      </div>
+    </aside>
+    <div id="main" class="min-h-screen lg:ml-[260px]">
+      <header
+        class="sticky top-0 z-30 flex h-[68px] items-center justify-between border-b border-gray-200 bg-white/95 px-4 backdrop-blur sm:px-7"
+      >
+        <div class="flex items-center gap-3">
+          <button
+            id="openNav"
+            class="rounded-lg p-2 hover:bg-gray-100 lg:hidden"
+            aria-label="Open navigation"
+          >
+            ☰
+          </button>
+          <div>
+            <p class="text-xs text-gray-400">
+              Admin / <span id="crumb" class="text-gray-600">Overview</span>
+            </p>
+            <h1 id="topTitle" class="display text-sm font-bold sm:text-base">
+              Admin overview
+            </h1>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 sm:gap-4">
+          <button
+            class="relative rounded-lg p-2 text-gray-500 hover:bg-gray-100"
+            aria-label="Notifications"
+            onclick="notify('No new admin notifications.')"
+          >
+            ♧<span
+              class="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-red-600"
+            ></span></button
+          ><button id="quickReview" class="btn btn-red">
+            Review pending <span id="quickPending">3</span>
+          </button>
+        </div>
+      </header>
+      <main id="mainContent" class="mx-auto max-w-[1500px] p-4 sm:p-6 lg:p-7">
+        <section id="page-overview" class="page fade">
+          <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p
+                class="text-xs font-bold uppercase tracking-[.14em] text-brand-600"
+              >
+                Marketplace operations
+              </p>
+              <h2
+                class="display mt-1 text-2xl font-extrabold tracking-tight sm:text-[28px]"
+              >
+                Good evening, Admin 👋
+              </h2>
+              <p class="mt-1 text-sm text-gray-500">
+                Review activity, manage sellers, and keep listings compliant.
+              </p>
+            </div>
+            <span class="text-xs text-gray-400"
+              >Demo data · Updated just now</span
+            >
+          </div>
+          <div
+            class="grid grid-cols-2 gap-3 sm:grid-cols-2 xl:grid-cols-4 sm:gap-4"
+          >
+            <div class="card p-4 sm:p-5">
+              <div class="flex items-center justify-between">
+                <span
+                  class="grid h-9 w-9 place-items-center rounded-xl bg-red-50 text-red-600"
+                  >▤</span
+                ><span class="pill bg-green-50 text-green-700">+12.4%</span>
+              </div>
+              <p class="mt-4 text-xs text-gray-500">Total listings</p>
+              <p id="statListings" class="display mt-1 text-2xl font-extrabold">
+                1,284
+              </p>
+              <p class="mt-1 text-[10px] text-gray-400">
+                Across all categories
+              </p>
+            </div>
+            <div class="card p-4 sm:p-5">
+              <div class="flex items-center justify-between">
+                <span
+                  class="grid h-9 w-9 place-items-center rounded-xl bg-amber-50 text-amber-700"
+                  >◷</span
+                ><span class="pill bg-amber-50 text-amber-800"
+                  >Needs action</span
+                >
+              </div>
+              <p class="mt-4 text-xs text-gray-500">Pending approvals</p>
+              <p id="statPending" class="display mt-1 text-2xl font-extrabold">
+                3
+              </p>
+              <p class="mt-1 text-[10px] text-gray-400">
+                Awaiting admin review
+              </p>
+            </div>
+            <div class="card p-4 sm:p-5">
+              <div class="flex items-center justify-between">
+                <span
+                  class="grid h-9 w-9 place-items-center rounded-xl bg-blue-50 text-blue-600"
+                  >♙</span
+                ><span class="pill bg-green-50 text-green-700">+8.1%</span>
+              </div>
+              <p class="mt-4 text-xs text-gray-500">Registered users</p>
+              <p class="display mt-1 text-2xl font-extrabold">3,642</p>
+              <p class="mt-1 text-[10px] text-gray-400">Sellers and buyers</p>
+            </div>
+            <div class="card p-4 sm:p-5">
+              <div class="flex items-center justify-between">
+                <span
+                  class="grid h-9 w-9 place-items-center rounded-xl bg-purple-50 text-purple-600"
+                  >⚑</span
+                ><span class="pill bg-amber-50 text-amber-800">Open queue</span>
+              </div>
+              <p class="mt-4 text-xs text-gray-500">Reports to review</p>
+              <p id="statReports" class="display mt-1 text-2xl font-extrabold">
+                2
+              </p>
+              <p class="mt-1 text-[10px] text-gray-400">
+                Reported content / users
+              </p>
+            </div>
+          </div>
+          <div
+            class="mt-5 grid gap-5 xl:grid-cols-[minmax(0,1.7fr)_minmax(280px,.8fr)]"
+          >
+            <section class="card p-4 sm:p-5">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h3 class="display text-sm font-bold">
+                    Marketplace activity
+                  </h3>
+                  <p class="mt-1 text-xs text-gray-400">
+                    Illustrative visits over the last 7 days
+                  </p>
+                </div>
+                <select
+                  id="activityPeriod"
+                  class="rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs"
+                  aria-label="Activity period"
+                >
+                  <option>Last 7 days</option>
+                  <option>Last 30 days</option>
+                </select>
+              </div>
+              <div class="mt-4 h-[220px]">
+                <svg
+                  viewBox="0 0 620 220"
+                  class="h-full w-full"
+                  role="img"
+                  aria-label="Illustrative line chart showing marketplace activity increasing over the week"
+                >
+                  <defs>
+                    <linearGradient id="area" x1="0" x2="0" y1="0" y2="1">
+                      <stop
+                        offset="0"
+                        stop-color="#dc2626"
+                        stop-opacity=".15"
+                      />
+                      <stop offset="1" stop-color="#dc2626" stop-opacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <g stroke="#eef0f3">
+                    <path d="M45 35H600M45 80H600M45 125H600M45 170H600" />
+                    <path
+                      d="M45 20V190M137 20V190M229 20V190M321 20V190M413 20V190M505 20V190M600 20V190"
+                    />
+                  </g>
+                  <path
+                    d="M45 150 C80 130 105 85 137 105 S195 148 229 122 S290 54 321 67 S383 105 413 88 S473 22 505 38 S570 45 600 58 L600 190 L45 190Z"
+                    fill="url(#area)"
+                  />
+                  <path
+                    d="M45 150 C80 130 105 85 137 105 S195 148 229 122 S290 54 321 67 S383 105 413 88 S473 22 505 38 S570 45 600 58"
+                    fill="none"
+                    stroke="#dc2626"
+                    stroke-width="3.5"
+                    stroke-linecap="round"
+                  />
+                  <g fill="#dc2626">
+                    <circle cx="137" cy="105" r="4" />
+                    <circle cx="229" cy="122" r="4" />
+                    <circle cx="321" cy="67" r="4" />
+                    <circle cx="413" cy="88" r="4" />
+                    <circle cx="505" cy="38" r="4" />
+                  </g>
+                  <g fill="#9ca3af" font-size="10">
+                    <text x="39" y="208">Mon</text>
+                    <text x="130" y="208">Tue</text>
+                    <text x="222" y="208">Wed</text>
+                    <text x="314" y="208">Thu</text>
+                    <text x="406" y="208">Fri</text>
+                    <text x="498" y="208">Sat</text>
+                    <text x="590" y="208">Sun</text>
+                  </g>
+                </svg>
+              </div>
+            </section>
+            <section class="card p-4 sm:p-5">
+              <div class="flex items-center justify-between">
+                <h3 class="display text-sm font-bold">Admin action queue</h3>
+                <span class="pill bg-red-50 text-red-700">Priority</span>
+              </div>
+              <div class="mt-4 space-y-3">
+                <button
+                  data-goto="moderation"
+                  class="flex w-full items-center gap-3 rounded-xl border border-gray-100 p-3 text-left hover:border-red-200 hover:bg-red-50/40"
+                >
+                  <span
+                    class="grid h-9 w-9 place-items-center rounded-lg bg-amber-50 text-amber-700"
+                    >✓</span
+                  ><span class="flex-1"
+                    ><span class="block text-xs font-bold"
+                      >Listing approvals</span
+                    ><span class="mt-1 block text-[11px] text-gray-400"
+                      ><b id="queuePending">3</b> waiting for review</span
+                    ></span
+                  ><span>→</span></button
+                ><button
+                  data-goto="reports"
+                  class="flex w-full items-center gap-3 rounded-xl border border-gray-100 p-3 text-left hover:border-red-200 hover:bg-red-50/40"
+                >
+                  <span
+                    class="grid h-9 w-9 place-items-center rounded-lg bg-red-50 text-red-600"
+                    >⚑</span
+                  ><span class="flex-1"
+                    ><span class="block text-xs font-bold"
+                      >Reported content</span
+                    ><span class="mt-1 block text-[11px] text-gray-400"
+                      ><b id="queueReports">2</b> need a decision</span
+                    ></span
+                  ><span>→</span></button
+                ><button
+                  data-goto="ads"
+                  class="flex w-full items-center gap-3 rounded-xl border border-gray-100 p-3 text-left hover:border-red-200 hover:bg-red-50/40"
+                >
+                  <span
+                    class="grid h-9 w-9 place-items-center rounded-lg bg-blue-50 text-blue-600"
+                    >↗</span
+                  ><span class="flex-1"
+                    ><span class="block text-xs font-bold">Ad campaigns</span
+                    ><span class="mt-1 block text-[11px] text-gray-400"
+                      >Review pending promotions</span
+                    ></span
+                  ><span>→</span>
+                </button>
+              </div>
+            </section>
+          </div>
+          <section class="card mt-5 overflow-hidden">
+            <div
+              class="flex flex-wrap items-center justify-between gap-3 p-4 sm:p-5"
+            >
+              <div>
+                <h3 class="display text-sm font-bold">
+                  Recent listing submissions
+                </h3>
+                <p class="mt-1 text-xs text-gray-400">
+                  Take action on new content before it appears publicly.
+                </p>
+              </div>
+              <button
+                data-goto="moderation"
+                class="text-xs font-bold text-brand-600 hover:text-brand-800"
+              >
+                Open approval queue →
+              </button>
+            </div>
+            <div id="overviewQueue"></div>
+          </section>
+        </section>
+        <section id="page-moderation" class="page hidden fade">
+          <div class="mb-6">
+            <h2 class="display text-2xl font-extrabold">Listing approvals</h2>
+            <p class="mt-1 text-sm text-gray-500">
+              Review new submissions and approve or reject them with a reason.
+            </p>
+          </div>
+          <div class="mb-4 grid gap-3 sm:grid-cols-3">
+            <div class="card p-4">
+              <p class="text-xs text-gray-500">Waiting for review</p>
+              <p
+                id="moderationCount"
+                class="display mt-2 text-2xl font-extrabold"
+              >
+                3
+              </p>
+            </div>
+            <div class="card p-4">
+              <p class="text-xs text-gray-500">Approved this session</p>
+              <p
+                id="approvedCount"
+                class="display mt-2 text-2xl font-extrabold text-green-700"
+              >
+                0
+              </p>
+            </div>
+            <div class="card p-4">
+              <p class="text-xs text-gray-500">Rejected this session</p>
+              <p
+                id="rejectedCount"
+                class="display mt-2 text-2xl font-extrabold text-red-600"
+              >
+                0
+              </p>
+            </div>
+          </div>
+          <div class="card p-4">
+            <div class="mb-4 flex flex-col gap-3 sm:flex-row">
+              <input
+                id="moderationSearch"
+                class="field flex-1"
+                type="search"
+                placeholder="Search title, seller, category…"
+                aria-label="Search pending listings"
+              /><select
+                id="moderationCategory"
+                class="field sm:max-w-[210px]"
+                aria-label="Filter category"
+              >
+                <option value="all">All categories</option>
+                <option>Fashion & Accessories</option>
+                <option>Electronics</option>
+                <option>Home & Living</option>
+                <option>Services</option>
+              </select>
+            </div>
+            <div id="moderationTable"></div>
+          </div>
+        </section>
+        <section id="page-listings" class="page hidden fade">
+          <div class="mb-6">
+            <h2 class="display text-2xl font-extrabold">All listings</h2>
+            <p class="mt-1 text-sm text-gray-500">
+              Search the marketplace inventory and change listing status.
+            </p>
+          </div>
+          <div class="card p-4">
+            <div class="mb-4 flex flex-col gap-3 sm:flex-row">
+              <input
+                id="allSearch"
+                class="field flex-1"
+                type="search"
+                placeholder="Search all listings…"
+                aria-label="Search all listings"
+              /><select
+                id="allStatus"
+                class="field sm:max-w-[210px]"
+                aria-label="Filter listing status"
+              >
+                <option value="all">All statuses</option>
+                <option>Pending</option>
+                <option>Approved</option>
+                <option>Rejected</option>
+                <option>Suspended</option>
+              </select>
+            </div>
+            <div id="allListingsTable"></div>
+          </div>
+        </section>
+        <section id="page-users" class="page hidden fade">
+          <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 class="display text-2xl font-extrabold">Users & sellers</h2>
+              <p class="mt-1 text-sm text-gray-500">
+                Review seller accounts and suspend or restore marketplace
+                access.
+              </p>
+            </div>
+            <button id="addUser" class="btn btn-red">＋ Add user (demo)</button>
+          </div>
+          <div class="card p-4">
+            <input
+              id="userSearch"
+              class="field mb-4"
+              type="search"
+              placeholder="Search name, email, role…"
+              aria-label="Search users"
+            />
+            <div id="usersTable"></div>
+          </div>
+        </section>
+        <section id="page-customers" class="page hidden fade">
+          <div class="mb-6">
+            <h2 class="display text-2xl font-extrabold">Customer inquiries</h2>
+            <p class="mt-1 text-sm text-gray-500">
+              Inspect marketplace inquiry records and flag suspicious patterns.
+            </p>
+          </div>
+          <div class="card p-4">
+            <input
+              id="inquirySearch"
+              class="field mb-4"
+              type="search"
+              placeholder="Search customer, listing, message…"
+              aria-label="Search customer inquiries"
+            />
+            <div id="inquiriesTable"></div>
+          </div>
+          <p class="mt-3 text-xs text-gray-400">
+            Customer records are fictional demo entries.
+          </p>
+        </section>
+        <section id="page-ads" class="page hidden fade">
+          <div class="mb-6">
+            <h2 class="display text-2xl font-extrabold">Advertisements</h2>
+            <p class="mt-1 text-sm text-gray-500">
+              Approve or reject paid promotions and review their campaign
+              details.
+            </p>
+          </div>
+          <div class="card p-4"><div id="adsTable"></div></div>
+        </section>
+        <section id="page-categories" class="page hidden fade">
+          <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 class="display text-2xl font-extrabold">Categories</h2>
+              <p class="mt-1 text-sm text-gray-500">
+                Manage the categories sellers can choose when posting.
+              </p>
+            </div>
+            <button id="addCategory" class="btn btn-red">
+              ＋ Add category
+            </button>
+          </div>
+          <div class="card p-4"><div id="categoriesTable"></div></div>
+        </section>
+        <section id="page-reports" class="page hidden fade">
+          <div class="mb-6">
+            <h2 class="display text-2xl font-extrabold">
+              Reports & moderation
+            </h2>
+            <p class="mt-1 text-sm text-gray-500">
+              Investigate reported content and record moderation decisions.
+            </p>
+          </div>
+          <div class="card p-4"><div id="reportsTable"></div></div>
+        </section>
+        <section id="page-analytics" class="page hidden fade">
+          <div class="mb-6">
+            <h2 class="display text-2xl font-extrabold">Analytics & reports</h2>
+            <p class="mt-1 text-sm text-gray-500">
+              High-level marketplace activity indicators for administrators.
+            </p>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div class="card p-5">
+              <p class="text-xs text-gray-500">Listing approval rate</p>
+              <p class="display mt-2 text-3xl font-extrabold">92.6%</p>
+            </div>
+            <div class="card p-5">
+              <p class="text-xs text-gray-500">Active sellers</p>
+              <p class="display mt-2 text-3xl font-extrabold">2,140</p>
+            </div>
+            <div class="card p-5">
+              <p class="text-xs text-gray-500">Inquiry volume</p>
+              <p class="display mt-2 text-3xl font-extrabold">8,412</p>
+            </div>
+            <div class="card p-5">
+              <p class="text-xs text-gray-500">Open reports</p>
+              <p
+                id="analyticsReports"
+                class="display mt-2 text-3xl font-extrabold"
+              >
+                2
+              </p>
+            </div>
+          </div>
+          <div class="card mt-5 p-5">
+            <h3 class="display text-sm font-bold">Export summary</h3>
+            <p class="mt-2 text-sm text-gray-500">
+              Download the current demo listing inventory as CSV. Production
+              exports should be permission-checked and logged.
+            </p>
+            <button id="exportCsv" class="btn btn-gray mt-4">
+              ↓ Export listings CSV
+            </button>
+          </div>
+        </section>
+        <section id="page-settings" class="page hidden fade">
+          <div class="mb-6">
+            <h2 class="display text-2xl font-extrabold">Admin settings</h2>
+            <p class="mt-1 text-sm text-gray-500">
+              Set marketplace review defaults and administrator preferences.
+            </p>
+          </div>
+          <div class="card max-w-2xl p-5">
+            <form id="settingsForm" class="space-y-4">
+              <div>
+                <label class="mb-1 block text-sm font-semibold" for="siteName"
+                  >Marketplace name</label
+                ><input
+                  id="siteName"
+                  class="field"
+                  value="Africa Market Place"
+                />
+              </div>
+              <div>
+                <label
+                  class="mb-1 block text-sm font-semibold"
+                  for="reviewGuideline"
+                  >Review guideline</label
+                ><textarea id="reviewGuideline" rows="3" class="field">
+Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and listings with insufficient information. Record a reason for each rejection.</textarea
+                >
+              </div>
+              <label class="flex items-center gap-3 text-sm"
+                ><input
+                  type="checkbox"
+                  checked
+                  class="h-4 w-4 accent-red-600"
+                />
+                Require approval for new listings</label
+              ><label class="flex items-center gap-3 text-sm"
+                ><input
+                  type="checkbox"
+                  checked
+                  class="h-4 w-4 accent-red-600"
+                />
+                Require rejection reason</label
+              ><button class="btn btn-red">Save settings (demo)</button>
+            </form>
+          </div>
+          <div class="card mt-5 max-w-2xl border-amber-200 p-5">
+            <h3 class="font-bold text-amber-800">Security reminder</h3>
+            <p class="mt-2 text-sm leading-6 text-gray-600">
+              This front-end prototype has no login or role enforcement. Do not
+              publish it as a real admin console until authentication,
+              server-side authorization, audit logging, and protected APIs are
+              implemented.
+            </p>
+          </div>
+        </section>
+        <footer class="py-8 text-center text-xs text-gray-400">
+          © 2026 Africa Market Place · Admin console prototype
+        </footer>
+      </main>
+    </div>
+    <dialog id="decisionDialog" aria-labelledby="decisionTitle">
+      <form id="decisionForm" class="p-5 sm:p-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 id="decisionTitle" class="display text-xl font-bold">
+              Reject listing
+            </h2>
+            <p id="decisionSub" class="mt-1 text-sm text-gray-500">
+              Add a reason so the seller understands the decision.
+            </p>
+          </div>
+          <button
+            type="button"
+            data-close
+            class="rounded-lg p-2 hover:bg-gray-100"
+            aria-label="Close dialog"
+          >
+            ✕
+          </button>
+        </div>
+        <input id="decisionId" type="hidden" /><input
+          id="decisionType"
+          type="hidden"
+        />
+        <div class="mt-5">
+          <label for="decisionReason" class="mb-1 block text-sm font-semibold"
+            >Reason / internal note</label
+          ><textarea
+            id="decisionReason"
+            rows="4"
+            class="field"
+            placeholder="Explain the decision…"
+            required
+          ></textarea>
+          <p class="mt-2 text-xs text-gray-400">
+            In production, store the decision, reviewer, timestamp, and seller
+            notification.
+          </p>
+        </div>
+        <div class="mt-5 flex justify-end gap-2">
+          <button type="button" data-close class="btn btn-gray">Cancel</button
+          ><button id="decisionSubmit" class="btn btn-red">
+            Confirm rejection
+          </button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="detailsDialog" aria-labelledby="detailsTitle">
+      <div class="p-5 sm:p-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 id="detailsTitle" class="display text-xl font-bold">
+              Listing details
+            </h2>
+            <p class="mt-1 text-sm text-gray-500">Submission information</p>
+          </div>
+          <button
+            data-close
+            class="rounded-lg p-2 hover:bg-gray-100"
+            aria-label="Close details"
+          >
+            ✕
+          </button>
+        </div>
+        <div id="detailsBody" class="mt-5"></div>
+        <div class="mt-5 flex justify-end">
+          <button data-close class="btn btn-gray">Close</button>
+        </div>
+      </div>
+    </dialog>
+    <div
+      id="toast"
+      role="status"
+      aria-live="polite"
+      class="pointer-events-none fixed bottom-5 left-1/2 z-[100] -translate-x-1/2 translate-y-5 rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white opacity-0 shadow-xl transition duration-300"
+    ></div>
+    <script>
+      const $ = (s) => document.querySelector(s),
+        $$ = (s) => [...document.querySelectorAll(s)];
+      let nextId = 8,
+        approvedThis = 0,
+        rejectedThis = 0;
+      let listings = [
+        {
+          id: 1,
+          title: "Handmade Leather Sandals",
+          seller: "Jane Mwangi",
+          email: "jane@example.com",
+          category: "Fashion & Accessories",
+          price: "KSh 3,500",
+          location: "Nairobi, Kenya",
+          status: "Pending",
+          date: "Oct 23, 2026",
+          views: 0,
+          description:
+            "Handcrafted leather sandals made by local artisans. Available in multiple sizes.",
+          symbol: "👡",
+        },
+        {
+          id: 2,
+          title: "Maasai Beaded Necklace",
+          seller: "Amina Njeri",
+          email: "amina@example.com",
+          category: "Fashion & Accessories",
+          price: "KSh 2,800",
+          location: "Nairobi, Kenya",
+          status: "Pending",
+          date: "Oct 23, 2026",
+          views: 0,
+          description:
+            "Traditional beaded necklace, handmade with colourful beads.",
+          symbol: "📿",
+        },
+        {
+          id: 3,
+          title: "Refurbished Android Phone",
+          seller: "Kofi Mensah",
+          email: "kofi@example.com",
+          category: "Electronics",
+          price: "KSh 12,000",
+          location: "Accra, Ghana",
+          status: "Pending",
+          date: "Oct 22, 2026",
+          views: 0,
+          description:
+            "Refurbished smartphone. Seller should provide condition and warranty details.",
+          symbol: "📱",
+        },
+        {
+          id: 4,
+          title: "Woven Storage Basket",
+          seller: "Njeri Kamau",
+          email: "njeri@example.com",
+          category: "Home & Living",
+          price: "KSh 1,200",
+          location: "Mombasa, Kenya",
+          status: "Approved",
+          date: "Oct 21, 2026",
+          views: 840,
+          description: "Handwoven basket for home storage and decor.",
+          symbol: "🧺",
+        },
+        {
+          id: 5,
+          title: "Small Business Branding",
+          seller: "David Otieno",
+          email: "david@example.com",
+          category: "Services",
+          price: "KSh 5,000",
+          location: "Nairobi, Kenya",
+          status: "Approved",
+          date: "Oct 20, 2026",
+          views: 420,
+          description: "Starter branding package for local businesses.",
+          symbol: "✦",
+        },
+        {
+          id: 6,
+          title: "Designer Handbag",
+          seller: "Mary Wanjiku",
+          email: "mary@example.com",
+          category: "Fashion & Accessories",
+          price: "KSh 6,900",
+          location: "Kisumu, Kenya",
+          status: "Rejected",
+          date: "Oct 19, 2026",
+          views: 0,
+          description: "Handbag listing awaiting correction.",
+          symbol: "👜",
+        },
+        {
+          id: 7,
+          title: "Used laptop",
+          seller: "Sam Okoro",
+          email: "sam@example.com",
+          category: "Electronics",
+          price: "KSh 28,000",
+          location: "Kampala, Uganda",
+          status: "Suspended",
+          date: "Oct 18, 2026",
+          views: 70,
+          description: "Used laptop listing temporarily suspended for review.",
+          symbol: "💻",
+        },
+      ];
+      let users = [
+        {
+          id: 1,
+          name: "Jane Mwangi",
+          email: "jane@example.com",
+          role: "Seller",
+          joined: "Aug 12, 2026",
+          status: "Active",
+          listings: 5,
+        },
+        {
+          id: 2,
+          name: "Amina Njeri",
+          email: "amina@example.com",
+          role: "Seller",
+          joined: "Sep 03, 2026",
+          status: "Active",
+          listings: 3,
+        },
+        {
+          id: 3,
+          name: "Kofi Mensah",
+          email: "kofi@example.com",
+          role: "Seller",
+          joined: "Sep 18, 2026",
+          status: "Active",
+          listings: 7,
+        },
+        {
+          id: 4,
+          name: "Njeri Kamau",
+          email: "njeri@example.com",
+          role: "Buyer",
+          joined: "Oct 02, 2026",
+          status: "Active",
+          listings: 1,
+        },
+        {
+          id: 5,
+          name: "Sam Okoro",
+          email: "sam@example.com",
+          role: "Seller",
+          joined: "Jul 21, 2026",
+          status: "Suspended",
+          listings: 2,
+        },
+      ];
+      let inquiries = [
+        {
+          id: 1,
+          name: "Amina Otieno",
+          email: "amina.otieno@example.com",
+          listing: "Handmade Leather Sandals",
+          message: "Are these sandals available in size 39?",
+          date: "2 min ago",
+        },
+        {
+          id: 2,
+          name: "Kofi Mensah",
+          email: "kofi.mensah@example.com",
+          listing: "Maasai Beaded Necklace",
+          message: "Do you offer delivery for two necklaces?",
+          date: "1 hour ago",
+        },
+        {
+          id: 3,
+          name: "Njeri Kamau",
+          email: "njeri.kamau@example.com",
+          listing: "Woven Storage Basket",
+          message: "Can you share the dimensions?",
+          date: "Yesterday",
+        },
+      ];
+      let ads = [
+        {
+          id: 4920,
+          name: "Handmade sandals promotion",
+          seller: "Jane Mwangi",
+          budget: "KSh 2,000",
+          duration: "7 days",
+          status: "Pending",
+        },
+        {
+          id: 4921,
+          name: "Weekend craft market",
+          seller: "Amina Njeri",
+          budget: "KSh 3,500",
+          duration: "14 days",
+          status: "Approved",
+        },
+        {
+          id: 4922,
+          name: "Phone store campaign",
+          seller: "Kofi Mensah",
+          budget: "KSh 1,500",
+          duration: "5 days",
+          status: "Pending",
+        },
+      ];
+      let categories = [
+        "For Sale",
+        "Fashion & Accessories",
+        "Electronics",
+        "Home & Living",
+        "Services",
+        "Autos",
+        "Property",
+        "Jobs & Business",
+      ];
+      let reports = [
+        {
+          id: 301,
+          subject: "Possibly misleading phone condition",
+          target: "Refurbished Android Phone",
+          reporter: "Buyer #1042",
+          reason: "Condition details may be inaccurate",
+          status: "Open",
+        },
+        {
+          id: 302,
+          subject: "Duplicate listing",
+          target: "Designer Handbag",
+          reporter: "Seller #0081",
+          reason: "Same item posted multiple times",
+          status: "Open",
+        },
+      ];
+      const esc = (s) =>
+        String(s ?? "").replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      function notify(msg) {
+        let t = $("#toast");
+        t.textContent = msg;
+        t.classList.remove("opacity-0", "translate-y-5");
+        clearTimeout(window.toastTimer);
+        window.toastTimer = setTimeout(
+          () => t.classList.add("opacity-0", "translate-y-5"),
+          2700,
+        );
+      }
+      function pill(s) {
+        let c =
+          {
+            Pending: "bg-amber-50 text-amber-800",
+            Approved: "bg-green-50 text-green-700",
+            Rejected: "bg-red-50 text-red-700",
+            Suspended: "bg-gray-100 text-gray-700",
+            Active: "bg-green-50 text-green-700",
+            Open: "bg-amber-50 text-amber-800",
+            Resolved: "bg-green-50 text-green-700",
+            Paused: "bg-gray-100 text-gray-700",
+          }[s] || "bg-gray-100 text-gray-600";
+        return `<span class="pill ${c}">${esc(s)}</span>`;
+      }
+      function table(head, body, empty = "No records found.") {
+        return body
+          ? `<div class="tablewrap"><table class="w-full min-w-[760px] text-left"><thead class="bg-gray-50 text-[10px] uppercase tracking-wider text-gray-400"><tr>${head.map((h) => `<th class="px-4 py-3 font-bold">${h}</th>`).join("")}</tr></thead><tbody class="divide-y divide-gray-100">${body}</tbody></table></div>`
+          : `<div class="p-10 text-center text-sm text-gray-500">${empty}</div>`;
+      }
+      function listingRow(x, moderation = false) {
+        return `<tr class="hover:bg-gray-50/70"><td class="px-4 py-4"><div class="flex items-center gap-3"><div class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-orange-50 text-xl">${x.symbol || "📦"}</div><div><p class="text-xs font-bold">${esc(x.title)}</p><p class="mt-1 text-[10px] text-gray-400">AMP-${String(x.id).padStart(4, "0")} · ${esc(x.location)}</p><p class="mt-1 text-[10px] text-gray-500">Seller: ${esc(x.seller)}</p></div></div></td><td class="px-4 py-4 text-xs">${esc(x.category)}</td><td class="px-4 py-4 text-xs font-bold">${esc(x.price)}</td><td class="px-4 py-4">${pill(x.status)}</td><td class="px-4 py-4 text-xs text-gray-500">${esc(x.date)}</td><td class="px-4 py-4"><div class="flex flex-wrap gap-1.5">${moderation && x.status === "Pending" ? `<button class="btn btn-green" data-approve="${x.id}">✓ Approve</button><button class="btn btn-gray" data-reject="${x.id}">Reject</button>` : `<button class="btn btn-gray" data-details="${x.id}">Details</button>${x.status === "Approved" ? `<button class="btn btn-gray" data-suspend="${x.id}">Suspend</button>` : ""}${x.status === "Suspended" ? `<button class="btn btn-green" data-restore="${x.id}">Restore</button>` : ""}`}</div></td></tr>`;
+      }
+      function renderModeration() {
+        let q = ($("#moderationSearch")?.value || "").toLowerCase(),
+          cat = $("#moderationCategory")?.value || "all";
+        let rows = listings.filter(
+          (x) =>
+            x.status === "Pending" &&
+            (x.title + " " + x.seller + " " + x.category)
+              .toLowerCase()
+              .includes(q) &&
+            (cat === "all" || x.category === cat),
+        );
+        $("#moderationTable").innerHTML = table(
+          [
+            "Submission / seller",
+            "Category",
+            "Price",
+            "Status",
+            "Submitted",
+            "Actions",
+          ],
+          rows.map((x) => listingRow(x, true)).join(""),
+          "No pending submissions match.",
+        );
+        $("#moderationCount").textContent = listings.filter(
+          (x) => x.status === "Pending",
+        ).length;
+        $("#pendingBadge").textContent = listings.filter(
+          (x) => x.status === "Pending",
+        ).length;
+        $("#quickPending").textContent = listings.filter(
+          (x) => x.status === "Pending",
+        ).length;
+        $("#queuePending").textContent = listings.filter(
+          (x) => x.status === "Pending",
+        ).length;
+        $("#statPending").textContent = listings.filter(
+          (x) => x.status === "Pending",
+        ).length;
+        $("#approvedCount").textContent = approvedThis;
+        $("#rejectedCount").textContent = rejectedThis;
+      }
+      function renderAll() {
+        let q = ($("#allSearch")?.value || "").toLowerCase(),
+          s = $("#allStatus")?.value || "all";
+        let rows = listings.filter(
+          (x) =>
+            (x.title + " " + x.seller + " " + x.category)
+              .toLowerCase()
+              .includes(q) &&
+            (s === "all" || x.status === s),
+        );
+        $("#allListingsTable").innerHTML = table(
+          [
+            "Listing / seller",
+            "Category",
+            "Price",
+            "Status",
+            "Submitted",
+            "Actions",
+          ],
+          rows.map((x) => listingRow(x, false)).join(""),
+        );
+      }
+      function renderUsers() {
+        let q = ($("#userSearch")?.value || "").toLowerCase();
+        let rows = users.filter((u) =>
+          (u.name + " " + u.email + " " + u.role).toLowerCase().includes(q),
+        );
+        $("#usersTable").innerHTML = table(
+          ["User", "Role", "Joined", "Listings", "Status", "Actions"],
+          rows
+            .map(
+              (u) =>
+                `<tr><td class="px-4 py-4"><p class="text-xs font-bold">${esc(u.name)}</p><p class="mt-1 text-[10px] text-gray-400">${esc(u.email)}</p></td><td class="px-4 py-4 text-xs">${u.role}</td><td class="px-4 py-4 text-xs text-gray-500">${u.joined}</td><td class="px-4 py-4 text-xs">${u.listings}</td><td class="px-4 py-4">${pill(u.status)}</td><td class="px-4 py-4">${u.status === "Active" ? `<button class="btn btn-gray" data-user-suspend="${u.id}">Suspend</button>` : `<button class="btn btn-green" data-user-restore="${u.id}">Restore</button>`}</td></tr>`,
+            )
+            .join(""),
+        );
+      }
+      function renderInquiries() {
+        let q = ($("#inquirySearch")?.value || "").toLowerCase();
+        let rows = inquiries.filter((c) =>
+          (c.name + " " + c.email + " " + c.listing + " " + c.message)
+            .toLowerCase()
+            .includes(q),
+        );
+        $("#inquiriesTable").innerHTML = table(
+          ["Customer", "Listing", "Message", "Received", "Action"],
+          rows
+            .map(
+              (c) =>
+                `<tr><td class="px-4 py-4"><p class="text-xs font-bold">${esc(c.name)}</p><p class="mt-1 text-[10px] text-gray-400">${esc(c.email)}</p></td><td class="px-4 py-4 text-xs">${esc(c.listing)}</td><td class="max-w-sm px-4 py-4 text-xs leading-5 text-gray-500">${esc(c.message)}</td><td class="px-4 py-4 text-xs text-gray-500">${esc(c.date)}</td><td class="px-4 py-4"><button class="btn btn-gray" data-inquiry="${c.id}">View</button></td></tr>`,
+            )
+            .join(""),
+        );
+      }
+      function renderAds() {
+        $("#adsTable").innerHTML = table(
+          ["Campaign", "Seller", "Budget", "Duration", "Status", "Decision"],
+          ads
+            .map(
+              (a) =>
+                `<tr><td class="px-4 py-4 text-xs font-bold">${esc(a.name)} <span class="block mt-1 text-[10px] font-normal text-gray-400">Ad #${a.id}</span></td><td class="px-4 py-4 text-xs">${esc(a.seller)}</td><td class="px-4 py-4 text-xs font-bold">${esc(a.budget)}</td><td class="px-4 py-4 text-xs">${esc(a.duration)}</td><td class="px-4 py-4">${pill(a.status)}</td><td class="px-4 py-4"><div class="flex gap-1.5">${a.status === "Pending" ? `<button class="btn btn-green" data-ad-approve="${a.id}">Approve</button><button class="btn btn-gray" data-ad-reject="${a.id}">Reject</button>` : '<span class="text-xs text-gray-400">Reviewed</span>'}</div></td></tr>`,
+            )
+            .join(""),
+        );
+      }
+      function renderCategories() {
+        $("#categoriesTable").innerHTML = table(
+          ["Category", "Listings (sample)", "Status", "Actions"],
+          categories
+            .map(
+              (c, i) =>
+                `<tr><td class="px-4 py-4 text-xs font-bold">${esc(c)}</td><td class="px-4 py-4 text-xs text-gray-500">${[214, 186, 142, 118, 97, 74, 68, 45][i] || 0}</td><td class="px-4 py-4">${pill("Active")}</td><td class="px-4 py-4"><button class="btn btn-gray" data-category-delete="${i}">Remove</button></td></tr>`,
+            )
+            .join(""),
+        );
+      }
+      function renderReports() {
+        let open = reports.filter((r) => r.status === "Open");
+        $("#reportsTable").innerHTML = table(
+          [
+            "Report",
+            "Reported target",
+            "Reporter",
+            "Reason",
+            "Status",
+            "Actions",
+          ],
+          reports
+            .map(
+              (r) =>
+                `<tr><td class="px-4 py-4 text-xs font-bold">#${r.id} · ${esc(r.subject)}</td><td class="px-4 py-4 text-xs">${esc(r.target)}</td><td class="px-4 py-4 text-xs">${esc(r.reporter)}</td><td class="px-4 py-4 text-xs text-gray-500">${esc(r.reason)}</td><td class="px-4 py-4">${pill(r.status)}</td><td class="px-4 py-4">${r.status === "Open" ? `<button class="btn btn-red" data-report-resolve="${r.id}">Resolve</button>` : '<span class="text-xs text-gray-400">Complete</span>'}</td></tr>`,
+            )
+            .join(""),
+        );
+        $("#reportBadge").textContent = open.length;
+        $("#queueReports").textContent = open.length;
+        $("#statReports").textContent = open.length;
+        $("#analyticsReports").textContent = open.length;
+      }
+      function renderOverview() {
+        $("#overviewQueue").innerHTML = table(
+          [
+            "Submission / seller",
+            "Category",
+            "Price",
+            "Status",
+            "Submitted",
+            "Actions",
+          ],
+          listings
+            .filter((x) => x.status === "Pending")
+            .slice(0, 4)
+            .map((x) => listingRow(x, true))
+            .join(""),
+          "Approval queue is clear.",
+        );
+        $("#statListings").textContent = (
+          1284 +
+          listings.length -
+          7
+        ).toLocaleString();
+        renderModeration();
+        renderReports();
+      }
+      function go(page) {
+        $$(".page").forEach((p) => p.classList.add("hidden"));
+        $("#page-" + page)?.classList.remove("hidden");
+        $$("[data-page]").forEach((b) => {
+          b.classList.toggle("active", b.dataset.page === page);
+          if (b.dataset.page === page) b.setAttribute("aria-current", "page");
+          else b.removeAttribute("aria-current");
+        });
+        let t = {
+          overview: "Admin overview",
+          moderation: "Listing approvals",
+          listings: "All listings",
+          users: "Users & sellers",
+          customers: "Customer inquiries",
+          ads: "Advertisements",
+          categories: "Categories",
+          reports: "Reports & moderation",
+          analytics: "Analytics & reports",
+          settings: "Admin settings",
+        };
+        $("#topTitle").textContent = t[page] || "Admin";
+        $("#crumb").textContent = t[page] || "Admin";
+        $("#sidebar").classList.remove("open");
+        $("#overlay").classList.add("hidden");
+        if (page === "moderation") renderModeration();
+        if (page === "listings") renderAll();
+        if (page === "users") renderUsers();
+        if (page === "customers") renderInquiries();
+        if (page === "ads") renderAds();
+        if (page === "categories") renderCategories();
+        if (page === "reports") renderReports();
+        window.scrollTo({
+          top: 0,
+          behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "auto"
+            : "smooth",
+        });
+      }
+      function decision(id, type) {
+        let x = listings.find((a) => a.id === Number(id));
+        if (!x) return;
+        if (type === "approve") {
+          if (
+            confirm(
+              `Approve “${x.title}” and make it eligible to appear in the marketplace?`,
+            )
+          ) {
+            x.status = "Approved";
+            approvedThis++;
+            refresh();
+            notify("Listing approved in this demo.");
+          }
+        } else {
+          $("#decisionId").value = x.id;
+          $("#decisionType").value = type;
+          $("#decisionTitle").textContent = "Reject listing";
+          $("#decisionSub").textContent =
+            "Provide a clear reason for the seller and the audit trail.";
+          $("#decisionSubmit").textContent = "Confirm rejection";
+          $("#decisionReason").value = "";
+          $("#decisionDialog").showModal();
+        }
+      }
+      function details(id) {
+        let x = listings.find((a) => a.id === Number(id));
+        if (!x) return;
+        $("#detailsBody").innerHTML =
+          `<div class="flex gap-4 rounded-xl bg-gray-50 p-4"><div class="grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-orange-100 text-3xl">${x.symbol || "📦"}</div><div><h3 class="font-bold">${esc(x.title)}</h3><p class="mt-1 text-xs text-gray-500">AMP-${String(x.id).padStart(4, "0")} · ${pill(x.status)}</p><p class="mt-2 text-sm font-bold">${esc(x.price)}</p></div></div><dl class="mt-4 grid gap-4 sm:grid-cols-2 text-sm"><div><dt class="text-xs text-gray-400">Seller</dt><dd class="mt-1 font-semibold">${esc(x.seller)}</dd></div><div><dt class="text-xs text-gray-400">Seller email</dt><dd class="mt-1">${esc(x.email)}</dd></div><div><dt class="text-xs text-gray-400">Category</dt><dd class="mt-1">${esc(x.category)}</dd></div><div><dt class="text-xs text-gray-400">Location</dt><dd class="mt-1">${esc(x.location)}</dd></div><div class="sm:col-span-2"><dt class="text-xs text-gray-400">Description</dt><dd class="mt-1 leading-6">${esc(x.description)}</dd></div><div><dt class="text-xs text-gray-400">Submitted</dt><dd class="mt-1">${esc(x.date)}</dd></div></dl>`;
+        $("#detailsDialog").showModal();
+      }
+      function refresh() {
+        renderModeration();
+        renderAll();
+        renderUsers();
+        renderInquiries();
+        renderAds();
+        renderCategories();
+        renderReports();
+        renderOverview();
+      }
+      document.addEventListener("click", (e) => {
+        let b = e.target.closest("button");
+        if (!b) return;
+        if (b.dataset.page) go(b.dataset.page);
+        if (b.dataset.goto) go(b.dataset.goto);
+        if (b.dataset.approve) decision(b.dataset.approve, "approve");
+        if (b.dataset.reject) decision(b.dataset.reject, "reject");
+        if (b.dataset.details) details(b.dataset.details);
+        if (b.dataset.suspend) {
+          let x = listings.find((a) => a.id === +b.dataset.suspend);
+          if (x && confirm(`Suspend “${x.title}”?`)) {
+            x.status = "Suspended";
+            refresh();
+            notify("Listing suspended in demo.");
+          }
+        }
+        if (b.dataset.restore) {
+          let x = listings.find((a) => a.id === +b.dataset.restore);
+          if (x) {
+            x.status = "Approved";
+            refresh();
+            notify("Listing restored in demo.");
+          }
+        }
+        if (b.dataset.userSuspend || b.dataset.userRestore) {
+          let id = +(b.dataset.userSuspend || b.dataset.userRestore),
+            u = users.find((a) => a.id === id);
+          if (u) {
+            u.status = b.dataset.userSuspend ? "Suspended" : "Active";
+            renderUsers();
+            notify(`User ${u.status.toLowerCase()} in demo.`);
+          }
+        }
+        if (b.dataset.inquiry) {
+          let c = inquiries.find((a) => a.id === +b.dataset.inquiry);
+          if (c)
+            alert(
+              `Customer: ${c.name}\nEmail: ${c.email}\nListing: ${c.listing}\nMessage: ${c.message}`,
+            );
+        }
+        if (b.dataset.adApprove || b.dataset.adReject) {
+          let a = ads.find(
+            (x) => x.id === +(b.dataset.adApprove || b.dataset.adReject),
+          );
+          if (a) {
+            if (b.dataset.adReject && !confirm(`Reject campaign "${a.name}"?`))
+              return;
+            a.status = b.dataset.adApprove ? "Approved" : "Rejected";
+            renderAds();
+            notify(`Campaign ${a.status.toLowerCase()} in demo.`);
+          }
+        }
+        if (b.dataset.categoryDelete !== undefined) {
+          let i = +b.dataset.categoryDelete;
+          if (confirm(`Remove category "${categories[i]}" from this demo?`)) {
+            categories.splice(i, 1);
+            renderCategories();
+            notify("Category removed in demo.");
+          }
+        }
+        if (b.dataset.reportResolve) {
+          let r = reports.find((x) => x.id === +b.dataset.reportResolve);
+          if (r) {
+            r.status = "Resolved";
+            renderReports();
+            notify("Report marked resolved in demo.");
+          }
+        }
+        if (b.hasAttribute("data-close")) b.closest("dialog").close();
+      });
+      $("#quickReview").onclick = () => go("moderation");
+      $("#openNav").onclick = () => {
+        $("#sidebar").classList.add("open");
+        $("#overlay").classList.remove("hidden");
+      };
+      $("#closeNav").onclick = $("#overlay").onclick = () => {
+        $("#sidebar").classList.remove("open");
+        $("#overlay").classList.add("hidden");
+      };
+      $("#decisionForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        let x = listings.find((a) => a.id === +$("#decisionId").value);
+        if (!x) return;
+        x.status = "Rejected";
+        x.rejectionReason = $("#decisionReason").value.trim();
+        rejectedThis++;
+        $("#decisionDialog").close();
+        refresh();
+        notify("Listing rejected and reason recorded in this demo.");
+      });
+      ["moderationSearch", "moderationCategory"].forEach((id) =>
+        $("#" + id).addEventListener(
+          id === "moderationSearch" ? "input" : "change",
+          renderModeration,
+        ),
+      );
+      $("#allSearch").addEventListener("input", renderAll);
+      $("#allStatus").addEventListener("change", renderAll);
+      $("#userSearch").addEventListener("input", renderUsers);
+      $("#inquirySearch").addEventListener("input", renderInquiries);
+      $("#addUser").onclick = () => {
+        let name = prompt("Enter demo user name:");
+        if (!name?.trim()) return;
+        let email = prompt("Enter email address:");
+        if (!email?.trim()) return;
+        users.unshift({
+          id: Math.max(0, ...users.map((x) => x.id)) + 1,
+          name: name.trim(),
+          email: email.trim(),
+          role: "Seller",
+          joined: "Oct 23, 2026",
+          status: "Active",
+          listings: 0,
+        });
+        renderUsers();
+        notify("Demo user added. Production needs a secure invite workflow.");
+      };
+      $("#addCategory").onclick = () => {
+        let c = prompt("Enter new category name:");
+        if (
+          c?.trim() &&
+          !categories.some((x) => x.toLowerCase() === c.trim().toLowerCase())
+        ) {
+          categories.push(c.trim());
+          renderCategories();
+          notify("Category added in demo.");
+        } else if (c) notify("Category is blank or already exists.");
+      };
+      $("#settingsForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        notify("Settings saved in this demo session.");
+      });
+      $("#exportCsv").onclick = () => {
+        let rows = [
+          [
+            "ID",
+            "Title",
+            "Seller",
+            "Email",
+            "Category",
+            "Price",
+            "Location",
+            "Status",
+            "Submitted",
+          ],
+          ...listings.map((x) => [
+            x.id,
+            x.title,
+            x.seller,
+            x.email,
+            x.category,
+            x.price,
+            x.location,
+            x.status,
+            x.date,
+          ]),
+        ];
+        let csv = rows
+          .map((r) =>
+            r
+              .map((v) => '"' + String(v ?? "").replace(/"/g, '""') + '"')
+              .join(","),
+          )
+          .join("\r\n");
+        let blob = new Blob([csv], { type: "text/csv;charset=utf-8;" }),
+          url = URL.createObjectURL(blob),
+          a = document.createElement("a");
+        a.href = url;
+        a.download = "marketplace-listings-demo.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+        notify("CSV export generated.");
+      };
+      $$("dialog").forEach((d) =>
+        d.addEventListener("click", (e) => {
+          if (e.target === d) d.close();
+        }),
+      );
+      refresh();
+    </script>
+  </body>
+</html>

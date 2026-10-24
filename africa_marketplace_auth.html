@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in | Africa Market Place</title>
+  <meta name="description" content="Sign in or create your Africa Market Place account using email OTP verification." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { brand: { 50:'#fff1f2', 100:'#ffe4e6', 500:'#ef4444', 600:'#dc2626', 700:'#b91c1c' } },
+        fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','sans-serif'] }
+      }}
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-slate-50 font-sans text-slate-900">
+  <main class="min-h-screen grid lg:grid-cols-2">
+    <section class="hidden lg:flex relative overflow-hidden bg-brand-600 text-white p-12 xl:p-16 flex-col justify-between">
+      <div class="absolute -top-24 -right-20 w-96 h-96 rounded-full bg-white/10"></div>
+      <div class="absolute -bottom-32 -left-20 w-[28rem] h-[28rem] rounded-full bg-black/10"></div>
+      <a href="#" class="relative z-10 flex items-center gap-3 w-fit">
+        <span class="grid place-items-center h-11 w-11 rounded-2xl bg-white text-brand-600 font-extrabold text-xl">A</span>
+        <span class="font-extrabold text-xl tracking-tight">Africa Market Place</span>
+      </a>
+      <div class="relative z-10 max-w-lg">
+        <p class="text-sm font-semibold uppercase tracking-[.22em] text-white/75">Discover. Connect. Trade.</p>
+        <h1 class="mt-5 text-4xl xl:text-5xl font-extrabold leading-tight">Your marketplace starts here.</h1>
+        <p class="mt-5 text-lg leading-8 text-white/85">Sign in securely with your email, or create an account in just a few steps.</p>
+        <div class="mt-9 space-y-4 text-sm text-white/90">
+          <p class="flex items-center gap-3"><span class="grid place-items-center w-6 h-6 rounded-full bg-white/20">✓</span> One-time email verification code</p>
+          <p class="flex items-center gap-3"><span class="grid place-items-center w-6 h-6 rounded-full bg-white/20">✓</span> Simple account setup</p>
+          <p class="flex items-center gap-3"><span class="grid place-items-center w-6 h-6 rounded-full bg-white/20">✓</span> Manage your marketplace activity</p>
+        </div>
+      </div>
+      <p class="relative z-10 text-xs text-white/70">© <span id="year"></span> Africa Market Place</p>
+    </section>
+
+    <section class="flex items-center justify-center px-4 py-10 sm:px-8">
+      <div class="w-full max-w-md">
+        <a href="#" class="lg:hidden flex items-center justify-center gap-2 mb-8">
+          <span class="grid place-items-center h-10 w-10 rounded-xl bg-brand-600 text-white font-extrabold text-lg">A</span>
+          <span class="font-extrabold text-lg tracking-tight">Africa Market Place</span>
+        </a>
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/50 sm:p-8">
+          <div id="authView">
+            <div>
+              <p class="text-sm font-semibold text-brand-600">WELCOME</p>
+              <h2 class="mt-2 text-2xl font-extrabold tracking-tight">Your account</h2>
+              <p class="mt-2 text-sm leading-6 text-slate-500">Log in or sign up to continue to Africa Market Place.</p>
+            </div>
+
+            <div class="mt-6 grid grid-cols-2 gap-1 rounded-xl bg-slate-100 p-1" role="tablist" aria-label="Account access">
+              <button id="loginTab" type="button" class="rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-sm">Log in</button>
+              <button id="signupTab" type="button" class="rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-500">Sign up</button>
+            </div>
+
+            <form id="loginForm" class="mt-6 space-y-4">
+              <div>
+                <label for="loginEmail" class="mb-2 block text-sm font-semibold">Email address</label>
+                <input id="loginEmail" name="email" type="email" autocomplete="email" required placeholder="you@example.com"
+                  class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition placeholder:text-slate-400 focus:border-brand-600 focus:ring-4 focus:ring-brand-100" />
+              </div>
+              <button id="loginButton" type="submit" class="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 font-semibold text-white transition hover:bg-brand-700 focus:outline-none focus:ring-4 focus:ring-brand-100 disabled:cursor-not-allowed disabled:opacity-60">
+                Continue with email <span aria-hidden="true">→</span>
+              </button>
+              <p class="text-center text-xs leading-5 text-slate-500">We’ll email you a one-time verification code. No password needed.</p>
+            </form>
+
+            <form id="signupForm" class="mt-6 hidden space-y-4">
+              <div>
+                <label for="fullName" class="mb-2 block text-sm font-semibold">Full name</label>
+                <input id="fullName" name="fullName" type="text" autocomplete="name" maxlength="100" required placeholder="Your full name"
+                  class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition placeholder:text-slate-400 focus:border-brand-600 focus:ring-4 focus:ring-brand-100" />
+              </div>
+              <div>
+                <label for="signupEmail" class="mb-2 block text-sm font-semibold">Email address</label>
+                <input id="signupEmail" name="email" type="email" autocomplete="email" required placeholder="you@example.com"
+                  class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition placeholder:text-slate-400 focus:border-brand-600 focus:ring-4 focus:ring-brand-100" />
+              </div>
+              <div>
+                <label for="country" class="mb-2 block text-sm font-semibold">Country <span class="font-normal text-slate-400">(optional)</span></label>
+                <select id="country" name="country" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none focus:border-brand-600 focus:ring-4 focus:ring-brand-100">
+                  <option value="">Select your country</option>
+                  <option>Kenya</option><option>Nigeria</option><option>Ghana</option><option>South Africa</option>
+                  <option>Uganda</option><option>Tanzania</option><option>Rwanda</option><option>Ethiopia</option>
+                  <option>India</option><option>Other</option>
+                </select>
+              </div>
+              <button id="signupButton" type="submit" class="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 font-semibold text-white transition hover:bg-brand-700 focus:outline-none focus:ring-4 focus:ring-brand-100 disabled:cursor-not-allowed disabled:opacity-60">
+                Create account <span aria-hidden="true">→</span>
+              </button>
+              <p class="text-center text-xs leading-5 text-slate-500">By continuing, you agree to use the marketplace responsibly.</p>
+            </form>
+          </div>
+
+          <div id="otpView" class="hidden">
+            <button id="backButton" type="button" class="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-slate-900">← Back</button>
+            <div class="grid h-12 w-12 place-items-center rounded-2xl bg-brand-50 text-brand-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            </div>
+            <h2 class="mt-5 text-2xl font-extrabold tracking-tight">Check your email</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-500">Enter the one-time code sent to <span id="otpEmail" class="font-semibold text-slate-800 break-all"></span>.</p>
+            <form id="otpForm" class="mt-6 space-y-4">
+              <div>
+                <label for="otpCode" class="mb-2 block text-sm font-semibold">Verification code</label>
+                <input id="otpCode" name="otp" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6,8}" minlength="6" maxlength="8" required placeholder="Enter email code"
+                  class="w-full rounded-xl border border-slate-300 px-4 py-3 text-center text-xl font-bold tracking-[.35em] outline-none transition placeholder:text-sm placeholder:font-normal placeholder:tracking-normal focus:border-brand-600 focus:ring-4 focus:ring-brand-100" />
+                <p class="mt-2 text-xs text-slate-500">Use the code from your email. Check spam if it doesn’t arrive.</p>
+              </div>
+              <button id="verifyButton" type="submit" class="w-full rounded-xl bg-brand-600 px-4 py-3 font-semibold text-white transition hover:bg-brand-700 focus:outline-none focus:ring-4 focus:ring-brand-100 disabled:cursor-not-allowed disabled:opacity-60">Verify and continue</button>
+            </form>
+            <button id="resendButton" type="button" class="mt-4 w-full py-2 text-sm font-semibold text-brand-600 hover:text-brand-700">Resend code</button>
+          </div>
+
+          <div id="message" class="mt-5 hidden rounded-xl px-4 py-3 text-sm leading-5" role="status" aria-live="polite"></div>
+        </div>
+        <p class="mt-6 text-center text-xs leading-5 text-slate-400">Your account is protected by email verification.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // IMPORTANT: Replace these placeholders with your Supabase project's public URL and anon/publishable key.
+    // Never put a service_role key in browser code.
+    const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_OR_PUBLISHABLE_KEY";
+
+    const configured = !SUPABASE_URL.includes("YOUR_PROJECT_ID") &&
+      !SUPABASE_ANON_KEY.includes("YOUR_SUPABASE_ANON_OR_PUBLISHABLE_KEY");
+    const supabaseClient = configured && window.supabase
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
+
+    const $ = (id) => document.getElementById(id);
+    let mode = "login";
+    let currentEmail = "";
+    let otpType = "email";
+    let signupMetadata = {};
+
+    $("year").textContent = new Date().getFullYear();
+
+    function showMessage(text, type = "error") {
+      const box = $("message");
+      box.textContent = text;
+      box.className = "mt-5 rounded-xl px-4 py-3 text-sm leading-5 " +
+        (type === "success" ? "bg-emerald-50 text-emerald-800 border border-emerald-200" :
+         type === "info" ? "bg-blue-50 text-blue-800 border border-blue-200" :
+         "bg-red-50 text-red-800 border border-red-200");
+      box.classList.remove("hidden");
+    }
+    function clearMessage() { $("message").classList.add("hidden"); }
+    function setBusy(button, busy, label) {
+      button.disabled = busy;
+      if (busy) {
+        button.dataset.originalText = button.textContent;
+        button.textContent = label || "Please wait…";
+      } else if (button.dataset.originalText) {
+        button.textContent = button.dataset.originalText;
+        delete button.dataset.originalText;
+      }
+    }
+    function switchMode(nextMode) {
+      mode = nextMode;
+      clearMessage();
+      $("loginForm").classList.toggle("hidden", mode !== "login");
+      $("signupForm").classList.toggle("hidden", mode !== "signup");
+      $("loginTab").className = mode === "login"
+        ? "rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-sm"
+        : "rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-500";
+      $("signupTab").className = mode === "signup"
+        ? "rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-sm"
+        : "rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-500";
+    }
+    function showOtp(email, type) {
+      currentEmail = email;
+      otpType = type;
+      $("authView").classList.add("hidden");
+      $("otpView").classList.remove("hidden");
+      $("otpEmail").textContent = email;
+      $("otpCode").value = "";
+      $("otpCode").focus();
+      clearMessage();
+    }
+    function showAuth() {
+      $("otpView").classList.add("hidden");
+      $("authView").classList.remove("hidden");
+      clearMessage();
+    }
+    function checkConfigured() {
+      if (!supabaseClient) {
+        showMessage("Connect Supabase first: add your project URL and anon/publishable key in this file, then try again.");
+        return false;
+      }
+      return true;
+    }
+
+    $("loginTab").addEventListener("click", () => switchMode("login"));
+    $("signupTab").addEventListener("click", () => switchMode("signup"));
+    $("backButton").addEventListener("click", () => { showAuth(); });
+    $("loginForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearMessage();
+      if (!checkConfigured()) return;
+      const button = $("loginButton");
+      const email = $("loginEmail").value.trim().toLowerCase();
+      setBusy(button, true, "Sending code…");
+      try {
+        const { error } = await supabaseClient.auth.signInWithOtp({
+          email,
+          options: { shouldCreateUser: false }
+        });
+        if (error) throw error;
+        showOtp(email, "email");
+        showMessage("Verification code sent. Check your inbox.", "success");
+      } catch (error) {
+        showMessage(error.message || "Could not send a code. Please try again.");
+      } finally { setBusy(button, false); }
+    });
+
+    $("signupForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearMessage();
+      if (!checkConfigured()) return;
+      const button = $("signupButton");
+      const fullName = $("fullName").value.trim();
+      const email = $("signupEmail").value.trim().toLowerCase();
+      const country = $("country").value;
+      if (!fullName) { showMessage("Please enter your full name."); return; }
+      signupMetadata = { full_name: fullName, country: country || null };
+      setBusy(button, true, "Creating account…");
+      try {
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password: crypto.randomUUID() + "Aa1!",
+          options: { data: signupMetadata, emailRedirectTo: window.location.origin }
+        });
+        if (error) throw error;
+        // Supabase Auth must be configured to send a numeric OTP for email signup.
+        showOtp(email, "signup");
+        showMessage("Account details submitted. Enter the verification code from your email.", "success");
+      } catch (error) {
+        showMessage(error.message || "Could not create your account. Please try again.");
+      } finally { setBusy(button, false); }
+    });
+
+    $("otpForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearMessage();
+      if (!checkConfigured()) return;
+      const button = $("verifyButton");
+      const token = $("otpCode").value.trim();
+      setBusy(button, true, "Verifying…");
+      try {
+        const { data, error } = await supabaseClient.auth.verifyOtp({
+          email: currentEmail,
+          token,
+          type: otpType
+        });
+        if (error) throw error;
+
+        // Save small profile fields in user metadata. A database trigger can copy these to public.profiles.
+        if (data.user && otpType === "signup" && Object.keys(signupMetadata).length) {
+          const { error: updateError } = await supabaseClient.auth.updateUser({ data: signupMetadata });
+          if (updateError) console.warn("Profile metadata update failed:", updateError.message);
+        }
+        showMessage("Email verified successfully. You are signed in.", "success");
+        $("otpView").classList.add("hidden");
+        $("authView").classList.remove("hidden");
+        $("authView").innerHTML = `
+          <div class="text-center py-5">
+            <div class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-emerald-100 text-emerald-700 text-2xl">✓</div>
+            <h2 class="mt-5 text-2xl font-extrabold">You're signed in</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-500">Your email <span class="font-semibold text-slate-800 break-all">${escapeHtml(currentEmail)}</span> has been verified.</p>
+            <button id="continueButton" class="mt-6 w-full rounded-xl bg-brand-600 px-4 py-3 font-semibold text-white hover:bg-brand-700">Continue to marketplace</button>
+            <button id="signOutButton" class="mt-3 w-full rounded-xl border border-slate-300 px-4 py-3 font-semibold text-slate-700 hover:bg-slate-50">Sign out</button>
+          </div>`;
+        $("continueButton").addEventListener("click", () => {
+          // Change this to your marketplace page URL after integrating the page.
+          window.location.href = "marketplace.html";
+        });
+        $("signOutButton").addEventListener("click", async () => {
+          await supabaseClient.auth.signOut();
+          window.location.reload();
+        });
+      } catch (error) {
+        showMessage(error.message || "That code is invalid or expired. Request a new one.");
+      } finally { setBusy(button, false); }
+    });
+
+    $("resendButton").addEventListener("click", async () => {
+      clearMessage();
+      if (!checkConfigured()) return;
+      const button = $("resendButton");
+      setBusy(button, true, "Sending…");
+      try {
+        if (otpType === "signup") {
+          // Re-send signup confirmation OTP. Supabase supports resend(type: signup).
+          const { error } = await supabaseClient.auth.resend({ type: "signup", email: currentEmail });
+          if (error) throw error;
+        } else {
+          const { error } = await supabaseClient.auth.signInWithOtp({
+            email: currentEmail,
+            options: { shouldCreateUser: false }
+          });
+          if (error) throw error;
+        }
+        showMessage("A new verification code has been sent.", "success");
+      } catch (error) {
+        showMessage(error.message || "Could not resend the code.");
+      } finally { setBusy(button, false); }
+    });
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+      }[char]));
+    }
+  </script>
+</body>
+</html>

@@ -170,9 +170,122 @@
           background 0.15s,
           transform 0.15s;
       }
+
+      #dashboardActionLoader {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(15, 23, 42, 0.48);
+        backdrop-filter: blur(7px);
+      }
+      #dashboardActionLoader.active {
+        display: flex;
+      }
+      .dashboard-loader-card {
+        width: min(100%, 360px);
+        padding: 30px 26px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.75);
+        border-radius: 24px;
+        background: #fff;
+        box-shadow: 0 25px 80px rgba(15, 23, 42, 0.25);
+      }
+      .dashboard-loader-ring {
+        width: 58px;
+        height: 58px;
+        margin: 0 auto 18px;
+        border: 4px solid #fee2e2;
+        border-top-color: #dc2626;
+        border-right-color: #f87171;
+        border-radius: 50%;
+        animation: dashboardSpin 0.7s linear infinite;
+      }
+      .dashboard-action-spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        vertical-align: -3px;
+        margin-right: 8px;
+        border: 2px solid currentColor;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: dashboardSpin 0.65s linear infinite;
+      }
+      @keyframes dashboardSpin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .dashboard-loader-ring,
+        .dashboard-action-spinner {
+          animation: none !important;
+        }
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+      #authGate {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .auth-spinner {
+        width: 42px;
+        height: 42px;
+        border: 4px solid #fee2e2;
+        border-top-color: #dc2626;
+        border-radius: 50%;
+        animation: authSpin 0.65s linear infinite;
+      }
+      @keyframes authSpin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </head>
   <body class="bg-[#f5f6f8]">
+    <div id="authGate" role="status" aria-live="polite">
+      <div class="text-center">
+        <div class="auth-spinner mx-auto"></div>
+        <h2 class="mt-4 text-lg font-bold">Africa Market Place</h2>
+        <p id="authGateText" class="mt-2 text-sm text-gray-500">
+          Verifying your secure session…
+        </p>
+      </div>
+    </div>
+    <div
+      id="dashboardActionLoader"
+      role="status"
+      aria-live="polite"
+      aria-hidden="true"
+    >
+      <div class="dashboard-loader-card">
+        <div class="dashboard-loader-ring" aria-hidden="true"></div>
+        <h2 class="text-lg font-extrabold text-gray-900">
+          Africa Market Place
+        </h2>
+        <p id="dashboardLoaderTitle" class="mt-3 font-semibold text-gray-900">
+          Saving your profile
+        </p>
+        <p
+          id="dashboardLoaderMessage"
+          class="mt-1 text-sm leading-relaxed text-gray-500"
+        >
+          Please wait while we securely save your changes.
+        </p>
+      </div>
+    </div>
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-white focus:p-3 focus:rounded-lg"
@@ -255,17 +368,19 @@
           JM
         </div>
         <div class="min-w-0 flex-1">
-          <p class="truncate text-xs font-bold">Jane Mwangi</p>
+          <p class="truncate text-xs font-bold">Account Member</p>
           <p class="text-[10px] uppercase tracking-wide text-gray-400">
-            Premium member
+            Seller account
           </p>
         </div>
         <button
-          aria-label="Sign out"
-          onclick="notify('Demo dashboard: sign-out is not connected.')"
-          class="text-gray-400 hover:text-red-600"
+          id="logoutButton"
+          type="button"
+          aria-label="Log out"
+          title="Log out"
+          class="rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-600 hover:border-red-200 hover:bg-red-50 hover:text-red-700 disabled:opacity-60"
         >
-          ⇥
+          Log out
         </button>
       </div>
     </aside>
@@ -320,7 +435,7 @@
               <h2
                 class="display mt-1 text-2xl font-extrabold tracking-tight sm:text-[28px]"
               >
-                Welcome back, Jane! 👋
+                Welcome back! 👋
               </h2>
               <p class="mt-1 text-sm text-gray-500">
                 Here’s what’s happening with your marketplace activity today.
@@ -695,7 +810,7 @@
                   >Name or business name</label
                 ><input
                   id="sellerName"
-                  value="Jane Mwangi"
+                  value="Account Member"
                   class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
                 />
               </div>
@@ -972,6 +1087,74 @@
     <script>
       const $ = (s) => document.querySelector(s),
         $$ = (s) => [...document.querySelectorAll(s)];
+      const AMP_SUPABASE_URL = "https://zbflylizwpvvpayepwgx.supabase.co";
+      const AMP_SUPABASE_KEY = "sb_publishable_9jTj9baoA67fBanhR2V8AA_t9m_mWBg";
+      const ampAuth = window.supabase.createClient(
+        AMP_SUPABASE_URL,
+        AMP_SUPABASE_KEY,
+      );
+      let ampCurrentUser = null,
+        ampCurrentProfile = null;
+      (async function protectSellerDashboard() {
+        const gate = document.getElementById("authGate");
+        try {
+          const { data, error } = await ampAuth.auth.getSession();
+          if (error) throw error;
+          if (!data.session || !data.session.user) {
+            window.location.replace("index.html?login=required");
+            return;
+          }
+          ampCurrentUser = data.session.user;
+          const { data: profile, error: profileError } = await ampAuth
+            .from("profiles")
+            .select("*")
+            .eq("id", ampCurrentUser.id)
+            .maybeSingle();
+          if (profileError) throw profileError;
+          ampCurrentProfile = profile || {};
+          const displayName =
+            ampCurrentProfile.full_name ||
+            ampCurrentUser.user_metadata?.full_name ||
+            ampCurrentUser.email ||
+            "Seller";
+          const emailText =
+            ampCurrentProfile.email || ampCurrentUser.email || "";
+          const sideName = document.querySelector(
+            "#sidebar .mt-5 .min-w-0 p.truncate",
+          );
+          const sideRole = document.querySelector(
+            "#sidebar .mt-5 .min-w-0 p.text-\\[10px\\]",
+          );
+          const welcome = document.querySelector("#page-overview h2");
+          if (sideName) sideName.textContent = displayName;
+          if (sideRole) {
+            sideRole.textContent = emailText;
+            sideRole.className = "truncate text-[10px] text-gray-500";
+          }
+          if (welcome)
+            welcome.textContent =
+              "Welcome back, " + displayName.split(/\\s+/)[0] + "! 👋";
+          const map = {
+            sellerName: ampCurrentProfile.full_name || displayName,
+            sellerEmail: emailText,
+            sellerPhone: ampCurrentProfile.phone || "",
+            sellerCity: ampCurrentProfile.city || "",
+            sellerBio: ampCurrentProfile.bio || "",
+          };
+          Object.entries(map).forEach(([id, value]) => {
+            const el = document.getElementById(id);
+            if (el) el.value = value;
+          });
+          gate.remove();
+        } catch (e) {
+          document.getElementById("authGateText").textContent =
+            "Session check failed. Redirecting to login…";
+          window.setTimeout(
+            () => window.location.replace("index.html?login=required"),
+            500,
+          );
+        }
+      })();
       let listings = [
         {
           id: 1,
@@ -1226,38 +1409,150 @@
         renderListings();
         notify("Listing updated successfully.");
       });
-      $("#createForm").addEventListener("submit", (e) => {
+      $("#createForm").addEventListener("submit", async (e) => {
         e.preventDefault();
-        listings.unshift({
-          id: Math.max(0, ...listings.map((x) => x.id)) + 1,
-          title: $("#newTitle").value.trim(),
-          price: $("#newPrice").value.trim(),
-          category: $("#newCategory").value,
-          location: $("#newLocation").value.trim(),
-          status: "Active",
-          views: "0",
-          chats: 0,
-          description: $("#newDesc").value.trim(),
-          symbol: "📦",
-        });
-        e.target.reset();
-        $("#createDialog").close();
-        renderListings();
-        go("listings");
-        notify("Your listing was added to this demo.");
+        const publishButton =
+          e.submitter ||
+          e.target.querySelector('button[type="submit"], button:not([type])');
+        const originalPublishText = publishButton
+          ? publishButton.textContent
+          : "Publish listing";
+        if (publishButton) {
+          publishButton.disabled = true;
+          publishButton.textContent = "Publishing…";
+        }
+        try {
+          listings.unshift({
+            id: Math.max(0, ...listings.map((x) => x.id)) + 1,
+            title: $("#newTitle").value.trim(),
+            price: $("#newPrice").value.trim(),
+            category: $("#newCategory").value,
+            location: $("#newLocation").value.trim(),
+            status: "Active",
+            views: "0",
+            chats: 0,
+            description: $("#newDesc").value.trim(),
+            symbol: "📦",
+          });
+          e.target.reset();
+          $("#createDialog").close();
+          renderListings();
+          go("listings");
+          notify(
+            "Listing added to this dashboard preview. Connect a listings table/API to persist it online.",
+          );
+        } finally {
+          if (publishButton) {
+            publishButton.disabled = false;
+            publishButton.textContent = originalPublishText;
+          }
+        }
       });
       $("#listingSearch").addEventListener("input", renderListings);
       $("#statusFilter").addEventListener("change", renderListings);
       $("#customerSearch").addEventListener("input", renderCustomers);
-      $("#settingsForm").addEventListener("submit", (e) => {
+      $("#settingsForm").addEventListener("submit", async (e) => {
         e.preventDefault();
-        notify("Profile saved in this demo session.");
+        const submit = e.submitter;
+        const overlay = document.getElementById("dashboardActionLoader");
+        const loaderTitle = document.getElementById("dashboardLoaderTitle");
+        const loaderMessage = document.getElementById("dashboardLoaderMessage");
+        const original = submit ? submit.innerHTML : "Save profile";
+        if (submit) {
+          submit.disabled = true;
+          submit.innerHTML =
+            '<span class="dashboard-action-spinner" aria-hidden="true"></span>Saving profile…';
+        }
+        if (overlay) {
+          overlay.classList.add("active");
+          overlay.setAttribute("aria-hidden", "false");
+        }
+        if (loaderTitle) loaderTitle.textContent = "Saving your profile";
+        if (loaderMessage)
+          loaderMessage.textContent =
+            "Please wait while we securely save your changes.";
+        try {
+          if (!ampCurrentUser)
+            throw new Error("Your session has expired. Please log in again.");
+          const patch = {
+            id: ampCurrentUser.id,
+            full_name: $("#sellerName").value.trim(),
+            email: ampCurrentUser.email,
+            phone: $("#sellerPhone").value.trim() || null,
+            city: $("#sellerCity").value.trim() || null,
+            bio: $("#sellerBio").value.trim() || null,
+            updated_at: new Date().toISOString(),
+          };
+          const { error } = await ampAuth
+            .from("profiles")
+            .upsert(patch, { onConflict: "id" });
+          if (error) throw error;
+          const sideName = document.querySelector(
+            "#sidebar .mt-5 .min-w-0 p.truncate",
+          );
+          if (sideName)
+            sideName.textContent = patch.full_name || ampCurrentUser.email;
+          notify("Profile saved successfully.");
+        } catch (err) {
+          notify(
+            err.message ||
+              "Unable to save profile. Check your profiles table RLS policy.",
+          );
+        } finally {
+          if (overlay) {
+            overlay.classList.remove("active");
+            overlay.setAttribute("aria-hidden", "true");
+          }
+          if (submit) {
+            submit.disabled = false;
+            submit.innerHTML = original || "Save profile";
+          }
+        }
       });
       $$("dialog").forEach((d) =>
         d.addEventListener("click", (e) => {
           if (e.target === d) d.close();
         }),
       );
+      const logoutButton = document.getElementById("logoutButton");
+      if (logoutButton) {
+        logoutButton.addEventListener("click", async () => {
+          logoutButton.disabled = true;
+          logoutButton.innerHTML =
+            '<span class="dashboard-action-spinner" aria-hidden="true"></span>Logging out…';
+          const actionLoader = document.getElementById("dashboardActionLoader");
+          if (actionLoader) {
+            actionLoader.classList.add("active");
+            actionLoader.setAttribute("aria-hidden", "false");
+          }
+          const actionTitle = document.getElementById("dashboardLoaderTitle");
+          const actionMessage = document.getElementById(
+            "dashboardLoaderMessage",
+          );
+          if (actionTitle) actionTitle.textContent = "Signing you out";
+          if (actionMessage)
+            actionMessage.textContent =
+              "Ending your secure session. Please wait.";
+          const gate = document.getElementById("authGate");
+          const gateText = document.getElementById("authGateText");
+          if (gate) gate.style.display = "flex";
+          if (gateText) gateText.textContent = "Signing you out securely…";
+          try {
+            const { error } = await ampAuth.auth.signOut();
+            if (error) throw error;
+            window.location.replace("index.html");
+          } catch (err) {
+            if (gate) gate.style.display = "none";
+            if (actionLoader) {
+              actionLoader.classList.remove("active");
+              actionLoader.setAttribute("aria-hidden", "true");
+            }
+            logoutButton.disabled = false;
+            logoutButton.textContent = "Log out";
+            notify(err.message || "Unable to log out. Please try again.");
+          }
+        });
+      }
       renderListings();
       renderCustomers();
     </script>

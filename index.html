@@ -40,7 +40,6 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
-    <script src="./block.js"></script>
 
     <script type="application/ld+json">
       {
@@ -4266,8 +4265,35 @@
               throw new Error(
                 "Authentication is not configured. Please contact support.",
               );
-            // Do not query public.profiles before authentication: RLS correctly blocks
-            // anonymous profile reads. Supabase Auth will report duplicate emails.
+            // Check duplicates through a narrowly scoped database RPC (not direct
+            // anonymous reads from profiles, which should remain protected by RLS).
+            const duplicateCheck = await supabaseClient.rpc(
+              "check_signup_duplicates",
+              {
+                p_email: email,
+                p_phone: fullPhone,
+              },
+            );
+            if (duplicateCheck.error) {
+              throw new Error(
+                "Could not check whether this email or phone is already registered. Please run the signup SQL setup shown with this update, then try again.",
+              );
+            }
+            const duplicate = Array.isArray(duplicateCheck.data)
+              ? duplicateCheck.data[0]
+              : duplicateCheck.data;
+            if (duplicate && duplicate.email_exists) {
+              showErr("mEmail", true);
+              throw new Error(
+                "This email address is already registered. Please log in or use another email.",
+              );
+            }
+            if (duplicate && duplicate.phone_exists) {
+              showErr("mPhone", true);
+              throw new Error(
+                "This mobile number is already registered. Please use another number.",
+              );
+            }
             var result = await supabaseClient.auth.signUp({
               email: email,
               password: password,
@@ -4282,31 +4308,48 @@
                 },
               },
             });
-            if (result.error) throw result.error;
-            // With email confirmation enabled, signup may not create a session.
-            // Only save directly when authenticated; otherwise the auth.users trigger
-            // should create the profile safely on the server.
-            if (result.data && result.data.user && result.data.session) {
-              await ensureAmpProfile(result.data.user, {
-                full_name: name,
-                email: email,
-                phone: fullPhone,
-                country_code: countryCode,
-                city: city,
-                bio: bio || null,
-                account_status: "active",
-              });
+            if (result.error) {
+              const authMessage = String(result.error.message || "");
+              if (
+                /already registered|already exists|user exists/i.test(
+                  authMessage,
+                )
+              ) {
+                showErr("mEmail", true);
+                throw new Error(
+                  "This email address is already registered. Please log in or use another email.",
+                );
+              }
+              throw result.error;
             }
+            if (!result.data || !result.data.user || !result.data.session) {
+              throw new Error(
+                "Account created but no active session was returned. In Supabase Dashboard, open Authentication → Providers → Email and turn off Confirm email to enable immediate login.",
+              );
+            }
+            await ensureAmpProfile(result.data.user, {
+              full_name: name,
+              email: email,
+              phone: fullPhone,
+              country_code: countryCode,
+              city: city,
+              bio: bio || null,
+              account_status: "active",
+            });
             window.ampSignupEmail = email;
             $("#formBody").innerHTML =
-              `<div class="py-4 text-center"><span class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-700 text-3xl">✓</span><p class="mt-4 text-xs font-bold uppercase tracking-widest text-emerald-700">Success</p><h3 class="mt-2 text-2xl font-bold text-gray-900">Account created successfully!</h3><p class="mt-3 text-sm leading-6 text-gray-600">Welcome to Africa Market Place. Your account registration has been submitted.</p><p class="mt-3 break-all rounded-lg bg-blue-50 p-3 text-sm font-semibold text-blue-800">${escapeHTML(email)}</p><button id="successLoginButton" type="button" class="mt-5 w-full rounded-lg bg-brand-600 py-3 font-semibold text-white">Continue to login</button><button id="successDoneButton" type="button" class="mt-2 w-full rounded-lg border border-gray-300 py-3 font-semibold text-gray-700">Done</button></div>`;
+              `<div class="py-4 text-center"><span class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-700 text-3xl">✓</span><p class="mt-4 text-xs font-bold uppercase tracking-widest text-emerald-700">Success</p><h3 class="mt-2 text-2xl font-bold text-gray-900">Account created successfully!</h3><p class="mt-3 text-sm leading-6 text-gray-600">Welcome to Africa Market Place. Your profile has been saved successfully.</p><p class="mt-3 break-all rounded-lg bg-blue-50 p-3 text-sm font-semibold text-blue-800">${escapeHTML(email)}</p><button id="successLoginButton" type="button" class="mt-5 w-full rounded-lg bg-brand-600 py-3 font-semibold text-white">Continue to seller dashboard</button></div>`;
             $("#modalTitle").textContent = "Account created successfully";
             $("#modalSub").textContent =
               "Your Africa Market Place account has been created.";
             $("#successLoginButton").addEventListener("click", function () {
-              showLoginView(email);
+              setAccountFlowLoader(
+                true,
+                "Opening your seller dashboard",
+                "Your profile is ready.",
+              );
+              window.location.href = "africa-marketplace-seller-dashboard.html";
             });
-            $("#successDoneButton").addEventListener("click", closeModal);
           } catch (err) {
             memberMessage(
               err.message ||

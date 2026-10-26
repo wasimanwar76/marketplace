@@ -56,8 +56,7 @@
       }
     </script>
 
-        <script src="./block.js"></script>
-
+    <script src="./block.js"></script>
 
     <!-- Tailwind CSS (Play CDN) with project configuration -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -3482,48 +3481,8 @@
           },
         ];
 
-        var LISTINGS = [
-          {
-            cat: "sale",
-            tag: "For Sale",
-            title: "Handwoven Basket",
-            loc: "Lagos, Nigeria",
-            price: "₦12,000",
-            from: "#fcd34d",
-            to: "#b45309",
-            art: "basket",
-          },
-          {
-            cat: "services",
-            tag: "Services",
-            title: "Home Cleaning Pro",
-            loc: "Accra, Ghana",
-            price: "From ₦8,000",
-            from: "#5eead4",
-            to: "#0f766e",
-            art: "clean",
-          },
-          {
-            cat: "autos",
-            tag: "Autos",
-            title: "2019 Sedan — Low Miles",
-            loc: "Nairobi, Kenya",
-            price: "KSh 1.2M",
-            from: "#cbd5e1",
-            to: "#334155",
-            art: "car",
-          },
-          {
-            cat: "housing",
-            tag: "Housing",
-            title: "Furnished 2-Bed Flat",
-            loc: "Cape Town, SA",
-            price: "R14,500/mo",
-            from: "#fda4af",
-            to: "#9f1239",
-            art: "home",
-          },
-        ];
+        // Populated from approved records in Supabase; no demo listings.
+        var LISTINGS = [];
 
         var ART = {
           basket:
@@ -3584,37 +3543,172 @@
           empty = $("#emptyState"),
           status = $("#filterStatus");
 
+        function escapeHtml(value) {
+          return String(value == null ? "" : value).replace(
+            /[&<>"']/g,
+            function (ch) {
+              return {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              }[ch];
+            },
+          );
+        }
+
+        function categorySlug(value) {
+          var v = String(value || "").toLowerCase();
+          if (/auto|vehicle|car|motor/.test(v)) return "autos";
+          if (/service|repair|clean|professional/.test(v)) return "services";
+          if (/job|career|employment/.test(v)) return "jobs";
+          if (/hous|property|rent|real estate|accommodation/.test(v))
+            return "housing";
+          if (/event|ticket|concert/.test(v)) return "events";
+          return "sale";
+        }
+
         function card(l, i) {
+          var imageMarkup = l.image
+            ? '<img src="' +
+              escapeHtml(l.image) +
+              '" alt="' +
+              escapeHtml(l.title) +
+              '" loading="lazy" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" onerror="this.remove()">' +
+              '<div class="hidden h-full w-full bg-gray-100"></div>'
+            : '<div class="h-full w-full bg-gray-100" role="img" aria-label="No listing photo available"></div>';
           return (
             '<article class="reveal group overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-gray-100 transition duration-300 hover:-translate-y-1 hover:shadow-lift" style="--d:' +
             i * 70 +
             'ms">' +
-            '<div class="listing-art relative overflow-hidden" style="background:linear-gradient(135deg,' +
-            l.from +
-            "," +
-            l.to +
-            ')">' +
-            '<svg viewBox="0 0 120 120" class="absolute inset-0 h-full w-full transition duration-500 group-hover:scale-105" preserveAspectRatio="xMidYMid slice" role="img" aria-label="' +
-            l.title +
-            ' illustration">' +
-            ART[l.art] +
-            "</svg></div>" +
+            '<div class="listing-art relative overflow-hidden bg-gray-100">' +
+            imageMarkup +
+            "</div>" +
             '<div class="p-4"><p class="text-[10px] font-bold uppercase tracking-wider text-brand-600">' +
-            l.tag +
+            escapeHtml(l.tag) +
             "</p>" +
             '<h3 class="mt-1 font-semibold leading-snug">' +
-            l.title +
+            escapeHtml(l.title) +
             "</h3>" +
             '<p class="mt-0.5 text-xs text-ink-500">' +
-            l.loc +
+            escapeHtml(l.loc) +
             "</p>" +
             '<div class="mt-4 flex items-center justify-between"><span class="font-display font-bold">' +
-            l.price +
+            escapeHtml(l.price) +
             "</span>" +
             '<button type="button" data-view="' +
-            l.title.replace(/"/g, "&quot;") +
+            escapeHtml(l.id) +
             '" class="text-xs font-semibold text-brand-600 hover:text-brand-800">View</button></div></div></article>'
           );
+        }
+
+        async function loadRealListings() {
+          if (!supabaseClient) {
+            grid.innerHTML =
+              '<p class="col-span-full py-8 text-center text-gray-500">Marketplace data is not configured.</p>';
+            return;
+          }
+          grid.innerHTML =
+            '<div class="col-span-full flex items-center justify-center gap-3 py-10 text-sm text-gray-500"><span class="loader-ring !h-6 !w-6 !border-2"></span>Loading approved listings…</div>';
+          status.textContent = "Loading listings from the marketplace…";
+          try {
+            var result = await supabaseClient
+              .from("items")
+              .select(
+                "id,title,description,price,currency,country_code,city,image_urls,category_id,status,published_at,created_at,categories(name)",
+              )
+              .eq("status", "approved")
+              .order("published_at", { ascending: false, nullsFirst: false })
+              .order("created_at", { ascending: false });
+
+            // If the optional category relationship is not configured, load items without the join.
+            if (result.error) {
+              result = await supabaseClient
+                .from("items")
+                .select(
+                  "id,title,description,price,currency,country_code,city,image_urls,category_id,status,published_at,created_at",
+                )
+                .eq("status", "approved")
+                .order("created_at", { ascending: false });
+            }
+            if (result.error) throw result.error;
+
+            var rows = result.data || [];
+            var categoryNames = {};
+            if (
+              rows.some(function (row) {
+                return !row.categories;
+              })
+            ) {
+              var catsResult = await supabaseClient
+                .from("categories")
+                .select("id,name");
+              if (!catsResult.error) {
+                (catsResult.data || []).forEach(function (c) {
+                  categoryNames[c.id] = c.name;
+                });
+              }
+            }
+            LISTINGS = rows.map(function (item) {
+              var relation = Array.isArray(item.categories)
+                ? item.categories[0]
+                : item.categories;
+              var categoryName =
+                (relation && relation.name) ||
+                categoryNames[item.category_id] ||
+                "";
+              var category = categorySlug(categoryName);
+              var currency = String(item.currency || "").trim();
+              var amount =
+                item.price == null
+                  ? ""
+                  : Number(item.price).toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    });
+              var image = Array.isArray(item.image_urls)
+                ? item.image_urls.find(function (url) {
+                    return typeof url === "string" && /^https?:\/\//i.test(url);
+                  })
+                : "";
+              return {
+                id: item.id,
+                cat: category,
+                tag:
+                  categoryName ||
+                  (
+                    CATEGORIES.find(function (c) {
+                      return c.id === category;
+                    }) || CATEGORIES[0]
+                  ).label,
+                title: item.title || "Untitled listing",
+                description: item.description || "",
+                loc:
+                  [item.city, item.country_code].filter(Boolean).join(", ") ||
+                  "Location not provided",
+                price: amount
+                  ? (currency ? currency + " " : "") + amount
+                  : "Price on request",
+                image: image || "",
+              };
+            });
+            renderListings();
+            status.textContent = LISTINGS.length
+              ? "Showing " +
+                LISTINGS.length +
+                " approved listing" +
+                (LISTINGS.length === 1 ? "" : "s")
+              : "No approved listings are available yet.";
+          } catch (err) {
+            console.error("Unable to load approved marketplace listings:", err);
+            LISTINGS = [];
+            grid.innerHTML =
+              '<p class="col-span-full py-8 text-center text-gray-500">Unable to load listings. Please check your connection and try again.</p><div class="col-span-full text-center"><button type="button" id="retryListings" class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white">Try again</button></div>';
+            status.textContent = "Marketplace listings could not be loaded.";
+            var retry = $("#retryListings");
+            if (retry) retry.addEventListener("click", loadRealListings);
+            empty.classList.add("hidden");
+          }
         }
 
         function renderListings() {
@@ -3623,29 +3717,32 @@
           var out = LISTINGS.filter(function (l) {
             return (
               (!state.cat || l.cat === state.cat) &&
-              (!q || (l.title + " " + l.tag).toLowerCase().indexOf(q) > -1) &&
+              (!q ||
+                (l.title + " " + l.tag + " " + (l.description || ""))
+                  .toLowerCase()
+                  .indexOf(q) > -1) &&
               (!loc || l.loc.toLowerCase().indexOf(loc) > -1)
             );
           });
           grid.innerHTML = out.map(card).join("");
           empty.classList.toggle("hidden", out.length > 0);
           var parts = [];
-          if (state.cat)
-            parts.push(
-              CATEGORIES.filter(function (c) {
-                return c.id === state.cat;
-              })[0].label,
-            );
+          if (state.cat) {
+            var selectedCategory = CATEGORIES.find(function (c) {
+              return c.id === state.cat;
+            });
+            if (selectedCategory) parts.push(selectedCategory.label);
+          }
           if (q) parts.push("“" + state.q.trim() + "”");
           if (loc) parts.push("in " + state.loc.trim());
-          status.textContent = parts.length
-            ? "Showing " +
+          if (parts.length)
+            status.textContent =
+              "Showing " +
               out.length +
               " result" +
               (out.length === 1 ? "" : "s") +
               " for " +
-              parts.join(" ")
-            : "";
+              parts.join(" ");
           $$(".cat-btn").forEach(function (b) {
             var on = b.dataset.cat === state.cat;
             b.setAttribute("aria-pressed", on);
@@ -3687,15 +3784,30 @@
           renderListings();
         }
         $("#resetFilters").addEventListener("click", resetAll);
-        $("#viewAll").addEventListener("click", function () {
-          resetAll();
-          toast("Showing all featured listings");
-        });
 
+        $("#viewAll").addEventListener("click", function () {
+          const isLocal =
+            window.location.protocol === "file:" ||
+            window.location.hostname === "localhost" ||
+            window.location.hostname === "127.0.0.1";
+
+          const marketplaceUrl = isLocal ? "marketplace.html" : "/marketplace";
+
+          window.location.href = marketplaceUrl;
+        });
         grid.addEventListener("click", function (e) {
           var v = e.target.closest("[data-view]");
           if (!v) return;
-          toast("“" + v.dataset.view + "” — sign in to contact the seller.");
+          var selected = LISTINGS.find(function (item) {
+            return item.id === v.dataset.view;
+          });
+          if (selected) {
+            toast(
+              "“" +
+                selected.title +
+                "” selected. Open the marketplace listing to view full details.",
+            );
+          }
         });
 
         /* ---------- Reveal on scroll ---------- */
@@ -4398,7 +4510,7 @@
 
         /* ---------- Init ---------- */
         $("#year").textContent = new Date().getFullYear();
-        renderListings();
+        loadRealListings();
         observe();
         if (
           new URLSearchParams(window.location.search).get("login") ===

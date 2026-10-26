@@ -215,6 +215,13 @@
           transition-delay: 0ms !important;
         }
       }
+
+      /* Public browsing page: hide seller posting controls, keep visitor authentication available. */
+      [data-open="create"], #dlg-create { display: none !important; }
+      button { transition: transform .15s ease, opacity .15s ease, background-color .15s ease; }
+      button.is-loading { pointer-events: none; opacity: .78; }
+      .btn-spinner { display:inline-block; width:1rem; height:1rem; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:btnSpin .7s linear infinite; vertical-align:middle; margin-right:.45rem; }
+      @keyframes btnSpin { to { transform:rotate(360deg); } }
     </style>
   </head>
 
@@ -407,32 +414,10 @@
             </nav>
           </div>
 
-          <div class="flex items-center gap-2 sm:gap-3 lg:px-6">
-            <button
-              type="button"
-              data-open="create"
-              class="hidden items-center gap-1.5 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700 active:scale-95 sm:inline-flex"
-            >
-              <svg
-                class="h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                aria-hidden="true"
-              >
-                <path d="M12 5v14M5 12h14" /></svg
-              >Post
-            </button>
-            <button
-              type="button"
-              data-open="member"
-              class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold transition hover:border-brand-600 hover:text-brand-600 active:scale-95 sm:px-4"
-            >
-              <span class="hidden sm:inline">Become a Member</span
-              ><span class="sm:hidden">Join</span>
-            </button>
+          <div class="flex items-center justify-end gap-2 sm:gap-3 lg:px-6">
+            <button type="button" data-auth-control="login" data-auth-mode="login" data-action-loader class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold transition hover:border-brand-600 hover:text-brand-600 active:scale-95 sm:px-4">Log in</button>
+            <button type="button" data-auth-control="signup" data-auth-mode="signup" data-action-loader class="rounded-lg bg-brand-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-brand-700 active:scale-95 sm:px-4">Sign up</button>
+          </div>
           </div>
         </div>
       </header>
@@ -651,26 +636,6 @@
         </li>
       </ul>
 
-      <div class="mt-3 px-2">
-        <button
-          type="button"
-          data-open="create"
-          class="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-card transition hover:bg-brand-700 active:scale-[.98]"
-        >
-          <svg
-            class="h-4 w-4"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            aria-hidden="true"
-          >
-            <path d="M12 5v14M5 12h14" /></svg
-          >Create new listing
-        </button>
-      </div>
-
       <hr class="my-4 border-gray-200" />
 
       <div class="px-2">
@@ -794,13 +759,6 @@
             >
               Clear filters
             </button>
-            <button
-              type="button"
-              data-open="create"
-              class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700"
-            >
-              Create a listing
-            </button>
           </div>
         </div>
 
@@ -813,41 +771,6 @@
             Choose the category that best matches what you offer or need.
           </p>
           <div id="dirGrid" class="mt-6 grid gap-5 md:grid-cols-2"></div>
-        </section>
-
-        <!-- Advertise CTA -->
-        <section
-          class="cta-pattern mt-16 overflow-hidden rounded-3xl text-white shadow-lift"
-          aria-labelledby="cta-h"
-        >
-          <div class="px-6 py-12 text-center sm:px-12 sm:py-14">
-            <h2
-              id="cta-h"
-              class="font-display text-2xl font-extrabold tracking-tight sm:text-3xl"
-            >
-              Want more eyes on your listing?
-            </h2>
-            <p class="mx-auto mt-3 max-w-xl text-sm text-red-50 sm:text-base">
-              We promote small businesses on Facebook, Instagram and TikTok
-              through reels, stories and posts. Affordable, visible, targeted.
-            </p>
-            <div class="mt-7 flex flex-wrap justify-center gap-3">
-              <button
-                type="button"
-                data-open="member"
-                class="rounded-lg bg-white px-6 py-3 text-sm font-semibold text-ink-900 transition hover:bg-gray-100 active:scale-95"
-              >
-                Become a Member
-              </button>
-              <button
-                type="button"
-                data-open="create"
-                class="rounded-lg bg-brand-800 px-6 py-3 text-sm font-semibold text-white transition hover:bg-ink-900 active:scale-95"
-              >
-                Start Selling Now
-              </button>
-            </div>
-          </div>
         </section>
 
         <footer
@@ -879,26 +802,6 @@
         </footer>
       </div>
     </main>
-
-    <!-- Mobile FAB -->
-    <button
-      type="button"
-      data-open="create"
-      class="fixed bottom-5 right-4 z-30 inline-flex items-center gap-2 rounded-full bg-brand-600 px-5 py-3.5 text-sm font-semibold text-white shadow-lift transition hover:bg-brand-700 active:scale-95 lg:hidden"
-      aria-label="Create new listing"
-    >
-      <svg
-        class="h-5 w-5"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        aria-hidden="true"
-      >
-        <path d="M12 5v14M5 12h14" /></svg
-      >Sell
-    </button>
 
     <!-- Toast -->
     <div
@@ -1208,10 +1111,10 @@
         <div class="flex items-start justify-between gap-4">
           <div>
             <h2 id="mTitle" class="font-display text-xl font-bold">
-              Join Africa Market Place
+              Create a Visitor Account
             </h2>
             <p class="mt-1 text-sm text-ink-600">
-              Create your free profile in a minute.
+              Create an account to save listings and contact sellers.
             </p>
           </div>
           <button
@@ -1235,21 +1138,6 @@
         </div>
         <div id="mBody" class="mt-5 space-y-4">
           <div>
-            <label for="mName" class="text-sm font-medium"
-              >Full name or business name</label
-            >
-            <input
-              id="mName"
-              type="text"
-              required
-              autocomplete="name"
-              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
-            />
-            <p class="mt-1 hidden text-xs text-brand-700" id="mNameErr">
-              Please enter your name.
-            </p>
-          </div>
-          <div>
             <label for="mEmail" class="text-sm font-medium"
               >Email address</label
             >
@@ -1265,25 +1153,32 @@
             </p>
           </div>
           <div>
-            <label for="mRole" class="text-sm font-medium">I want to</label>
+            <label for="mPassword" class="text-sm font-medium">Password</label>
+            <input id="mPassword" type="password" required minlength="8" autocomplete="new-password" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100" />
+            <p class="mt-1 text-xs text-ink-500" id="mPasswordHelp">Use at least 8 characters.</p>
+          </div>
+          <p id="mAuthErr" class="hidden rounded-lg bg-red-50 p-3 text-sm text-red-700" role="alert"></p>
+          <div id="mSignupOnly" class="space-y-4">
+            <div>
+              <label for="mName" class="text-sm font-medium">Your full name</label>
+              <input id="mName" type="text" required autocomplete="name" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100" />
+              <p class="mt-1 hidden text-xs text-brand-700" id="mNameErr">Please enter your name.</p>
+            </div>
+            <label for="mRole" class="text-sm font-medium">How do you plan to use the marketplace?</label>
             <select
               id="mRole"
               class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
             >
-              <option value="advertise">Advertise my business</option>
-              <option value="sell">Sell products or services</option>
-              <option value="buy" selected>Buy and discover</option>
+              <option value="visitor_browse" selected>Browse products and services</option>
+              <option value="visitor_save">Save favourite listings</option>
+              <option value="visitor_contact">Contact sellers about listings</option>
             </select>
           </div>
-          <button
-            type="submit"
-            class="w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 active:scale-[.98]"
-          >
-            Create my profile
+          <button id="mSubmit" type="submit" class="w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 active:scale-[.98]">
+            <span id="mSubmitText">Create my profile</span>
           </button>
-          <p class="text-center text-xs text-ink-500">
-            By joining you agree to our terms and privacy policy.
-          </p>
+          <p class="text-center text-sm text-ink-600"><span id="mModePrompt">Already a member?</span> <button id="mModeToggle" type="button" class="font-semibold text-brand-600 hover:underline">Log in</button></p>
+          <p class="text-center text-xs text-ink-500">Your account is securely managed by Supabase Authentication.</p>
         </div>
         <div id="mDone" class="mt-6 hidden text-center">
           <span
@@ -1688,6 +1583,81 @@
                 AMP_SUPABASE_ANON_KEY,
               )
             : null;
+        var ampUser = null;
+        var authMode = "signup";
+
+        function setAuthMode(mode) {
+          authMode = mode;
+          var signup = mode === "signup";
+          $("#mTitle").textContent = signup ? "Create a Visitor Account" : "Visitor Login";
+          $("#mSubmitText").textContent = signup ? "Create visitor account" : "Log in";
+          $("#mModePrompt").textContent = signup ? "Already a member?" : "New to Africa Market Place?";
+          $("#mModeToggle").textContent = signup ? "Log in" : "Create an account";
+          $("#mSignupOnly").classList.toggle("hidden", !signup);
+          $("#mName").required = signup;
+          $("#mRole").required = signup;
+          $("#mPassword").autocomplete = signup ? "new-password" : "current-password";
+          $("#mPasswordHelp").textContent = signup ? "Use at least 8 characters." : "Enter your account password.";
+          $("#mAuthErr").classList.add("hidden");
+          $("#mDone").classList.add("hidden");
+          $("#mBody").classList.remove("hidden");
+        }
+        function updateAuthHeader(user) {
+          ampUser = user || null;
+          var authButtons = $$('[data-auth-control]');
+          authButtons.forEach(function (b) {
+            if (ampUser) {
+              if (b.dataset.authControl === "login") {
+                b.textContent = (ampUser.user_metadata && ampUser.user_metadata.full_name) || ampUser.email || "My account";
+                b.dataset.authMode = "account";
+                b.setAttribute("aria-label", "Signed in as " + (ampUser.email || "user"));
+              } else {
+                b.textContent = "Log out";
+                b.dataset.authMode = "logout";
+                b.setAttribute("aria-label", "Log out");
+              }
+            } else {
+              if (b.dataset.authControl === "login") {
+                b.textContent = "Log in";
+                b.dataset.authMode = "login";
+                b.setAttribute("aria-label", "Log in");
+              } else {
+                b.textContent = "Sign up";
+                b.dataset.authMode = "signup";
+                b.setAttribute("aria-label", "Sign up");
+              }
+            }
+          });
+        }
+        async function saveMarketplaceVisitor(user, pageName) {
+          if (!ampPublicClient || !user) return;
+          var meta = user.user_metadata || {};
+          var row = {
+            user_id: user.id,
+            visitor_name: meta.full_name || null,
+            email: user.email || null,
+            visited_page: pageName || window.location.pathname || "/marketplace.html",
+            visited_at: new Date().toISOString()
+          };
+          try {
+            var saved = await ampPublicClient.from("marketplace_visitors").insert(row);
+            if (saved.error) {
+              console.warn("Visitor activity could not be saved. Check marketplace_visitors INSERT RLS policy:", saved.error.message);
+            }
+          } catch (err) {
+            console.warn("Visitor activity could not be saved:", err && err.message || err);
+          }
+        }
+        async function refreshAuth() {
+          if (!ampPublicClient) return;
+          try {
+            var res = await ampPublicClient.auth.getSession();
+            updateAuthHeader(res.data && res.data.session ? res.data.session.user : null);
+            ampPublicClient.auth.onAuthStateChange(function (_event, session) {
+              updateAuthHeader(session ? session.user : null);
+            });
+          } catch (_) { /* keep public browsing available if auth is temporarily unavailable */ }
+        }
 
         function mapDbItem(row, index, categoryRows) {
           var catName =
@@ -1778,6 +1748,7 @@
           }
           listings = (result.data || []).map(mapDbItem);
           nextId = listings.length + 1;
+          renderDatabaseBrowseCategories();
           update(false);
           if (!listings.length) {
             $("#emptyTitle").textContent = "No approved listings yet";
@@ -1828,11 +1799,38 @@
           });
         });
         document.addEventListener("click", function (e) {
+          var authButton = e.target.closest("[data-auth-mode]");
+          if (authButton) {
+            var mode = authButton.dataset.authMode;
+            if (mode === "account") { toast("You are signed in as " + (ampUser && ampUser.email || "this account") + ". Use Log out to end your session."); return; }
+            if (mode === "logout") {
+              authButton.disabled = true;
+              var oldText = authButton.textContent;
+              authButton.innerHTML = '<span class="btn-spinner" aria-hidden="true"></span>Logging out…';
+              ampPublicClient.auth.signOut().then(function (r) {
+                if (r.error) toast("Could not log out. Please try again.");
+                else { updateAuthHeader(null); toast("You have been logged out."); }
+              }).catch(function(){ toast("Could not log out. Please try again."); }).finally(function(){ authButton.disabled = false; updateAuthHeader(ampUser); });
+              return;
+            }
+            setAuthMode(mode === "login" ? "login" : "signup");
+            $("#memberForm").reset();
+            $("#mBody").classList.remove("hidden");
+            $("#mDone").classList.add("hidden");
+            openDlg("member");
+            return;
+          }
           var c = e.target.closest("[data-close]");
           if (c) return closeDlg(c.closest("dialog"));
           var o = e.target.closest("[data-open]");
           if (o) {
             var n = o.dataset.open;
+            if (n === "create" && !ampUser) {
+              setAuthMode("signup");
+              openDlg("member");
+              toast("Please sign up or log in before posting a listing.");
+              return;
+            }
             var d = openDlg(n);
             if (n === "create") {
               resetCreate();
@@ -1841,6 +1839,7 @@
               }, 30);
             }
             if (n === "member") {
+              setAuthMode("signup");
               $("#mBody").classList.remove("hidden");
               $("#mDone").classList.add("hidden");
               $("#memberForm").reset();
@@ -2307,7 +2306,36 @@
             "</ul></article>"
           );
         }).join("");
+        function renderDatabaseBrowseCategories() {
+          var approved = listings.filter(function (item) { return item.status === "approved"; });
+          var groups = {};
+          approved.forEach(function (item) {
+            var category = String(item.category || "Other").trim() || "Other";
+            var subcategory = String(item.sub || "").trim();
+            if (!groups[category]) groups[category] = { name: category, subs: {}, count: 0 };
+            groups[category].count += 1;
+            if (subcategory) groups[category].subs[subcategory] = true;
+          });
+          if (!approved.length) return; // Keep category discovery visible when there are no approved listings yet.
+          var entries = Object.keys(groups).sort().map(function (name) { return groups[name]; });
+          $("#dirGrid").innerHTML = entries.map(function (group) {
+            var subs = Object.keys(group.subs);
+            var label = subs.length ? subs : ["Browse listings"];
+            return '<article class="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-card transition hover:shadow-lift"><header class="flex items-center justify-between gap-3 border-b border-gray-100 bg-gradient-to-r from-brand-50 to-white px-5 py-4"><div><h3 class="font-display text-base font-bold text-ink-900">' + esc(group.name) + '</h3><p class="text-xs text-ink-600">' + group.count + ' approved listing' + (group.count === 1 ? '' : 's') + '</p></div><span class="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-700">' + group.count + '</span></header><ul class="flex flex-wrap gap-2 p-5">' + label.map(function (sub) { return '<li><button type="button" data-dir-dbcat="' + esc(group.name) + '" data-dir-dbsub="' + esc(sub === 'Browse listings' ? '' : sub) + '" class="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-ink-800 transition hover:border-brand-600 hover:bg-brand-50 hover:text-brand-700">' + esc(sub) + '</button></li>'; }).join('') + '</ul></article>';
+          }).join('');
+        }
         $("#dirGrid").addEventListener("click", function (e) {
+          var dbButton = e.target.closest("[data-dir-dbcat]");
+          if (dbButton) {
+            state.view = "all";
+            var name = dbButton.dataset.dirDbcat;
+            var matchedCategory = CATS.find(function (c) { return c.label.toLowerCase() === name.toLowerCase() || c.id.toLowerCase() === name.toLowerCase(); });
+            state.cat = matchedCategory ? matchedCategory.id : null;
+            state.sub = dbButton.dataset.dirDbsub || null;
+            state.q = state.cat ? state.q : name;
+            update(true);
+            return;
+          }
           var b = e.target.closest("[data-dircat]");
           if (!b) return;
           state.view = "all";
@@ -2490,27 +2518,74 @@
             "index.html?login=required&next=africa-marketplace-seller-dashboard.html";
         });
 
-        /* ---------- Member form ---------- */
-        $("#memberForm").addEventListener("submit", function (e) {
+        /* ---------- Supabase account signup/login ---------- */
+        $("#mModeToggle").addEventListener("click", function () {
+          var toggle = this;
+          toggle.disabled = true;
+          var original = toggle.textContent;
+          toggle.innerHTML = '<span class="btn-spinner" aria-hidden="true"></span>Loading…';
+          setTimeout(function(){ setAuthMode(authMode === "signup" ? "login" : "signup"); toggle.disabled = false; }, 180);
+        });
+        $("#memberForm").addEventListener("submit", async function (e) {
           e.preventDefault();
-          var name = $("#mName").value.trim(),
-            email = $("#mEmail").value.trim();
-          var okN = name.length > 1,
-            okE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-          $("#mNameErr").classList.toggle("hidden", okN);
-          $("#mEmailErr").classList.toggle("hidden", okE);
-          $("#mName").setAttribute("aria-invalid", String(!okN));
-          $("#mEmail").setAttribute("aria-invalid", String(!okE));
-          if (!okN) return $("#mName").focus();
-          if (!okE) return $("#mEmail").focus();
-          $("#mDoneMsg").textContent =
-            "Thanks, " +
-            name.split(" ")[0] +
-            ". We’ll email " +
-            email +
-            " with your next steps.";
-          $("#mBody").classList.add("hidden");
-          $("#mDone").classList.remove("hidden");
+          var name = $("#mName").value.trim();
+          var email = $("#mEmail").value.trim().toLowerCase();
+          var password = $("#mPassword").value;
+          var errBox = $("#mAuthErr");
+          errBox.classList.add("hidden");
+          if (!ampPublicClient) { errBox.textContent = "Account service is unavailable. Please try again later."; errBox.classList.remove("hidden"); return; }
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errBox.textContent = "Enter a valid email address."; errBox.classList.remove("hidden"); $("#mEmail").focus(); return; }
+          if (password.length < 8) { errBox.textContent = "Password must contain at least 8 characters."; errBox.classList.remove("hidden"); $("#mPassword").focus(); return; }
+          if (authMode === "signup" && name.length < 2) { errBox.textContent = "Please enter your full name."; errBox.classList.remove("hidden"); $("#mName").focus(); return; }
+          var btn = $("#mSubmit");
+          btn.disabled = true;
+          btn.classList.add("opacity-70", "cursor-wait", "is-loading");
+          $("#mSubmitText").innerHTML = '<span class="btn-spinner" aria-hidden="true"></span>' + (authMode === "signup" ? "Creating account…" : "Logging in…");
+          try {
+            var result;
+            if (authMode === "signup") {
+              result = await ampPublicClient.auth.signUp({ email: email, password: password, options: { data: { full_name: name, role: $("#mRole").value } } });
+              if (result.error) throw result.error;
+              if (result.data && result.data.session) {
+                updateAuthHeader(result.data.user);
+                await saveMarketplaceVisitor(result.data.user, "signup");
+                closeDlg($("#dlg-member"));
+                toast("Account created successfully.");
+              } else {
+                errBox.textContent = "Please check your email for the confirmation link, then log in.";
+                errBox.classList.remove("hidden");
+                setAuthMode("login");
+                $("#mEmail").value = email;
+              }
+            } else {
+              result = await ampPublicClient.auth.signInWithPassword({ email: email, password: password });
+              if (result.error) throw result.error;
+              updateAuthHeader(result.data.user);
+              await saveMarketplaceVisitor(result.data.user, "login");
+              closeDlg($("#dlg-member"));
+              toast("Welcome back. You are logged in.");
+            }
+          } catch (error) {
+            var message = String(error && error.message || "");
+            if (/invalid login credentials/i.test(message)) message = "Email or password is incorrect. If you are new, create an account first.";
+            else if (/already registered|user already exists/i.test(message)) message = "An account may already exist for this email. Please log in with your password.";
+            else if (/password/i.test(message) && /weak|short/i.test(message)) message = "Choose a stronger password with at least 8 characters.";
+            errBox.textContent = message || "Unable to complete authentication. Please try again.";
+            errBox.classList.remove("hidden");
+          } finally {
+            btn.disabled = false;
+            btn.classList.remove("opacity-70", "cursor-wait", "is-loading");
+            $("#mSubmitText").textContent = authMode === "signup" ? "Create visitor account" : "Log in";
+          }
+        });
+
+        /* ---------- Lightweight action-button loading feedback ---------- */
+        document.addEventListener("click", function(e) {
+          var b = e.target.closest("button[data-action-loader]");
+          if (!b || b.disabled || b.dataset.authMode) return;
+          b.classList.add("is-loading");
+          b.setAttribute("aria-busy", "true");
+          setTimeout(function(){ b.classList.remove("is-loading"); b.removeAttribute("aria-busy"); }, 450);
         });
 
         /* ---------- Init ---------- */
@@ -2525,6 +2600,7 @@
           $("#sideQ").value = state.q;
         }
         if (params.get("loc")) state.loc = params.get("loc");
+        refreshAuth();
         loadApprovedListings();
       })();
     </script>

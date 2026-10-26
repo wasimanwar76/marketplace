@@ -21,6 +21,7 @@
     />
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       tailwind.config = {
         theme: {
@@ -1673,261 +1674,117 @@
         ];
 
         // [cat, sub, title, price, loc, art, description]
-        var RAW = [
-          [
-            "sale",
-            "Arts and Crafts",
-            "Handwoven Basket",
-            "₦12,000",
-            "Lagos, Nigeria",
-            "basket",
-            "Beautiful handwoven storage basket made by local artisans. Sturdy, lightweight and perfect for the home or as a gift.",
-          ],
-          [
-            "sale",
-            "Cell Phones",
-            "Samsung Galaxy A54 128GB",
-            "₦285,000",
-            "Lagos, Nigeria",
-            "phone",
-            "Lightly used, no scratches, with box and charger. Battery health excellent. Inspect before you buy.",
-          ],
-          [
-            "sale",
-            "Computers",
-            "MacBook Air 128GB — all OK",
-            "GH₵ 9,500",
-            "Accra, Ghana",
-            "laptop",
-            "Works perfectly, minor wear on the lid. Comes with charger. Available for pickup in Accra.",
-          ],
-          [
-            "sale",
-            "Musical Instruments",
-            "Acoustic Guitar with bag",
-            "KSh 8,500",
-            "Nairobi, Kenya",
-            "guitar",
-            "Full-size acoustic guitar with a padded gig bag. Great tone, ideal for beginners and church bands.",
-          ],
-          [
-            "sale",
-            "Clothes and Accessories",
-            "Ankara Print Dress",
-            "R450",
-            "Cape Town, South Africa",
-            "shirt",
-            "Tailor-made Ankara dress, sizes S to XL. Bright, breathable cotton. Custom orders welcome.",
-          ],
-          [
-            "sale",
-            "Furniture",
-            "3-Seater Sofa, like new",
-            "CFA 120,000",
-            "Lomé, Togo",
-            "sofa",
-            "Comfortable 3-seater in excellent condition. Moving sale, buyer collects.",
-          ],
-          [
-            "sale",
-            "Books",
-            "WAEC and JAMB Study Set",
-            "₦6,500",
-            "Lagos, Nigeria",
-            "book",
-            "Complete past-question set with answers. Clean pages, no markings.",
-          ],
-          [
-            "sale",
-            "Beauty and Health",
-            "Raw Shea Butter 500g",
-            "GH₵ 60",
-            "Accra, Ghana",
-            "heart",
-            "Unrefined shea butter from northern Ghana. Great for skin and hair. Bulk prices available.",
-          ],
-          [
-            "autos",
-            "Cars and Trucks",
-            "2019 Toyota Corolla — Low Miles",
-            "KSh 1.2M",
-            "Nairobi, Kenya",
-            "car",
-            "Single owner, full service history, new tyres. Clean logbook and ready for transfer.",
-          ],
-          [
-            "autos",
-            "Motorcycles",
-            "Bajaj Boxer 150",
-            "₦850,000",
-            "Lagos, Nigeria",
-            "bike",
-            "Reliable and fuel efficient, perfect for deliveries or commuting. Papers complete.",
-          ],
-          [
-            "autos",
-            "Auto Parts",
-            "Brake Pads Set (Toyota)",
-            "CFA 25,000",
-            "Lomé, Togo",
-            "tool",
-            "Brand new front brake pads. Fits most Corolla and Camry models. Fitting available.",
-          ],
-          [
-            "autos",
-            "Wheels and Tires",
-            "4 Used Tyres, 70% tread",
-            "R3,200",
-            "Cape Town, South Africa",
-            "car",
-            "Set of four used tyres, 195/65 R15. Plenty of life left.",
-          ],
-          [
-            "services",
-            "Household",
-            "Home Cleaning Pro",
-            "From GH₵ 200",
-            "Accra, Ghana",
-            "clean",
-            "Reliable, insured cleaners for homes and offices. Weekly and one-off bookings.",
-          ],
-          [
-            "services",
-            "Event",
-            "Wedding and Event Photography",
-            "KSh 35,000",
-            "Nairobi, Kenya",
-            "camera",
-            "Full-day coverage, edited gallery in 7 days. Packages for weddings, birthdays and corporate events.",
-          ],
-          [
-            "services",
-            "Skilled Trade",
-            "Certified Electrician",
-            "₦15,000 / visit",
-            "Lagos, Nigeria",
-            "tool",
-            "Wiring, repairs and installations. Fast response and safety-first workmanship.",
-          ],
-          [
-            "services",
-            "Lessons",
-            "Maths and Science Tutoring",
-            "KSh 1,500 / hr",
-            "Nairobi, Kenya",
-            "book",
-            "Experienced teacher offering one-on-one and small group lessons, online or in person.",
-          ],
-          [
-            "jobs",
-            "Sales and Business Development",
-            "Sales Associate, Retail",
-            "CFA 90,000 / mo",
-            "Lomé, Togo",
-            "job",
-            "Growing retail shop is hiring a friendly, reliable sales associate. Full-time, training provided.",
-          ],
-          [
-            "jobs",
-            "Software, QA and DBA",
-            "Junior Web Developer (Hybrid)",
-            "R22,000 / mo",
-            "Cape Town, South Africa",
-            "job",
-            "Join a small product team. HTML, CSS and JavaScript required. Mentorship included.",
-          ],
-          [
-            "jobs",
-            "Customer Service",
-            "Customer Support Agent",
-            "GH₵ 3,200 / mo",
-            "Accra, Ghana",
-            "job",
-            "Handle customer chats and calls for an e-commerce brand. Good English and a positive attitude.",
-          ],
-          [
-            "housing",
-            "Apartments and Housing",
-            "Furnished 2-Bed Flat",
-            "R14,500 / mo",
-            "Cape Town, South Africa",
-            "home",
-            "Bright, secure apartment close to transport. Wi-Fi ready, parking included.",
-          ],
-          [
-            "housing",
-            "Rooms and Shared",
-            "Room in Shared House",
-            "₦180,000 / yr",
-            "Lagos, Nigeria",
-            "home",
-            "Clean room in a friendly shared house. Water and power backup included.",
-          ],
-          [
-            "housing",
-            "Office and Commercial",
-            "Shop / Office Space",
-            "CFA 150,000 / mo",
-            "Lomé, Togo",
-            "home",
-            "Street-facing space, ideal for a small shop or studio. Flexible lease terms.",
-          ],
-          [
-            "events",
-            "Events",
-            "Small Business Showcase (Nov 14)",
-            "Free",
-            "Lagos, Nigeria",
-            "ticket",
-            "Meet sellers, swap tips and grow your network at our in-person showcase.",
-          ],
-          [
-            "events",
-            "Classes",
-            "Social Media Selling Masterclass",
-            "Free for members",
-            "Nairobi, Kenya",
-            "ticket",
-            "Learn to sell on Facebook, Instagram and TikTok. Online session, Nov 28.",
-          ],
-          [
-            "events",
-            "Volunteers",
-            "Community Clean-up Day",
-            "Free",
-            "Accra, Ghana",
-            "ticket",
-            "Join neighbours to clean up the local market area. Gloves and bags provided.",
-          ],
-          [
-            "sale",
-            "Free Items",
-            "Kids' Story Books, free",
-            "Free",
-            "Accra, Ghana",
-            "book",
-            "Box of children's story books to a good home. Pickup only.",
-          ],
-        ];
+        // Public marketplace displays ONLY approved records fetched from Supabase.
+        // Demo RAW listings have been removed.
+        var listings = [];
+        var nextId = 1;
+        var AMP_SUPABASE_URL = "https://zbflylizwpvvpayepwgx.supabase.co";
+        var AMP_SUPABASE_ANON_KEY =
+          "sb_publishable_9jTj9baoA67fBanhR2V8AA_t9m_mWBg";
+        var ampPublicClient =
+          window.supabase && window.supabase.createClient
+            ? window.supabase.createClient(
+                AMP_SUPABASE_URL,
+                AMP_SUPABASE_ANON_KEY,
+              )
+            : null;
 
-        var listings = RAW.map(function (r, i) {
+        function mapDbItem(row, index, categoryRows) {
+          var catName =
+            row.categories && (row.categories.name || row.categories.title)
+              ? row.categories.name || row.categories.title
+              : "";
+          var matched = CATS.filter(function (c) {
+            return (
+              c.label.toLowerCase() === String(catName).toLowerCase() ||
+              c.id.toLowerCase() === String(catName).toLowerCase()
+            );
+          })[0];
+          var catId = matched ? matched.id : "sale";
+          var subName = row.subcategory || row.sub_category || "";
+          var priceText =
+            row.price === null || row.price === undefined
+              ? "Contact for price"
+              : (row.currency ? String(row.currency).trim() : "KES") +
+                " " +
+                Number(row.price).toLocaleString();
+          var images = Array.isArray(row.image_urls) ? row.image_urls : [];
           return {
-            id: i + 1,
-            cat: r[0],
-            sub: r[1],
-            title: r[2],
-            price: r[3],
-            loc: r[4],
-            art: r[5],
-            desc: r[6],
-            seller: SELLERS[i % SELLERS.length],
-            pal: PAL[i % PAL.length],
-            fresh: i < 8,
+            id: row.id,
+            dbId: row.id,
+            cat: catId,
+            sub: subName || "General",
+            title: row.title || "Untitled listing",
+            price: priceText,
+            loc:
+              [row.city, row.country_code].filter(Boolean).join(", ") ||
+              "Location not specified",
+            art: CAT_ART[catId] || "basket",
+            desc: row.description || "",
+            seller: "Africa Market Place seller",
+            pal: PAL[index % PAL.length],
+            fresh: false,
             mine: false,
-            img: "",
+            img: images[0] || "",
+            images: images,
+            status: row.status,
+            createdAt: row.created_at,
           };
-        });
-        var nextId = listings.length + 1;
+        }
+
+        async function loadApprovedListings() {
+          var grid = $("#grid");
+          grid.innerHTML =
+            '<div class="col-span-full rounded-xl border border-gray-200 bg-white p-8 text-center text-sm text-ink-500"><span class="inline-block animate-spin mr-2">◌</span>Loading approved listings…</div>';
+          if (!ampPublicClient) {
+            grid.innerHTML = "";
+            $("#emptyTitle").textContent = "Marketplace connection unavailable";
+            $("#emptyMsg").textContent =
+              "Please refresh the page. If this continues, contact support.";
+            $("#empty").classList.remove("hidden");
+            return;
+          }
+          var result = await ampPublicClient
+            .from("items")
+            .select(
+              "id,title,description,price,currency,country_code,city,image_urls,status,created_at,category_id,subcategory,categories(name)",
+            )
+            .eq("status", "approved")
+            .order("published_at", { ascending: false, nullsFirst: false })
+            .order("created_at", { ascending: false });
+          if (result.error) {
+            // Fallback supports projects without a configured categories relationship.
+            result = await ampPublicClient
+              .from("items")
+              .select(
+                "id,title,description,price,currency,country_code,city,image_urls,status,created_at,category_id",
+              )
+              .eq("status", "approved")
+              .order("created_at", { ascending: false });
+          }
+          if (result.error) {
+            console.error(
+              "Could not load approved marketplace listings:",
+              result.error,
+            );
+            listings = [];
+            grid.innerHTML = "";
+            $("#emptyTitle").textContent = "We couldn't load listings";
+            $("#emptyMsg").textContent =
+              "Please refresh and try again. If the problem continues, the marketplace database permissions may need to be checked.";
+            $("#empty").classList.remove("hidden");
+            $("#resetBtn").textContent = "Try again";
+            return;
+          }
+          listings = (result.data || []).map(mapDbItem);
+          nextId = listings.length + 1;
+          update(false);
+          if (!listings.length) {
+            $("#emptyTitle").textContent = "No approved listings yet";
+            $("#emptyMsg").textContent =
+              "New listings will appear here after an administrator approves them.";
+          }
+        }
 
         var state = {
           view: "all",
@@ -2487,7 +2344,7 @@
             return;
           }
           var c = e.target.closest("[data-id]");
-          if (c) openDetail(+c.dataset.id);
+          if (c) openDetail(c.dataset.id);
         });
 
         var current = null;
@@ -2518,7 +2375,7 @@
         }
         $("#dMsg").addEventListener("click", function () {
           toast(
-            "Sign in or become a member to message " + current.seller + ".",
+            "Seller messaging will be available after buyer accounts are connected.",
           );
         });
         $("#dSave").addEventListener("click", function () {
@@ -2627,32 +2484,10 @@
             return $("#cTitleIn").focus();
           }
           err.classList.add("hidden");
-          var cat = $("#cCat").value;
-          listings.unshift({
-            id: nextId++,
-            cat: cat,
-            sub: $("#cSub").value,
-            title: title,
-            price: $("#cPrice").value.trim() || "Contact for price",
-            loc: $("#cLoc").value,
-            art: CAT_ART[cat],
-            desc: $("#cDesc").value.trim(),
-            seller: "You",
-            pal: PAL[nextId % PAL.length],
-            fresh: true,
-            mine: true,
-            img: photoData,
-          });
           closeDlg($("#dlg-create"));
-          state.view = "mine";
-          state.cat = null;
-          state.sub = null;
-          state.q = "";
-          state.loc = "";
-          $("#topQ").value = "";
-          $("#sideQ").value = "";
-          update(true);
-          toast("Your listing is live!");
+          // Publishing is handled by the authenticated seller dashboard only.
+          window.location.href =
+            "index.html?login=required&next=africa-marketplace-seller-dashboard.html";
         });
 
         /* ---------- Member form ---------- */
@@ -2680,6 +2515,9 @@
 
         /* ---------- Init ---------- */
         $("#year").textContent = new Date().getFullYear();
+        $("#resetBtn").addEventListener("click", function () {
+          loadApprovedListings();
+        });
         var params = new URLSearchParams(location.search);
         if (params.get("q")) {
           state.q = params.get("q");
@@ -2687,7 +2525,7 @@
           $("#sideQ").value = state.q;
         }
         if (params.get("loc")) state.loc = params.get("loc");
-        update(false);
+        loadApprovedListings();
       })();
     </script>
   </body>

@@ -89,6 +89,72 @@
         background: #dc2626;
         color: white;
       }
+      .listing-action-btn {
+        width: 40px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        background: #fff;
+        color: #4b5563;
+        transition:
+          transform 0.16s ease,
+          background 0.16s ease,
+          border-color 0.16s ease,
+          box-shadow 0.16s ease;
+      }
+      .listing-action-btn svg {
+        width: 17px;
+        height: 17px;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .listing-action-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 5px 12px rgba(17, 24, 39, 0.08);
+      }
+      .listing-action-edit:hover {
+        border-color: #fca5a5;
+        background: #fff5f5;
+        color: #b91c1c;
+      }
+      .listing-action-inquiries:hover {
+        border-color: #93c5fd;
+        background: #eff6ff;
+        color: #1d4ed8;
+      }
+      .listing-action-delete:hover {
+        border-color: #fca5a5;
+        background: #fef2f2;
+        color: #b91c1c;
+      }
+      dialog.app-modal {
+        width: min(92vw, 440px);
+        padding: 0;
+        border: 1px solid #f1f1f1;
+        border-radius: 22px;
+        box-shadow: 0 24px 80px rgba(15, 23, 42, 0.24);
+        color: #111827;
+      }
+      dialog.app-modal::backdrop {
+        background: rgba(15, 23, 42, 0.52);
+        backdrop-filter: blur(4px);
+      }
+      .modal-icon {
+        width: 48px;
+        height: 48px;
+        display: grid;
+        place-items: center;
+        border-radius: 15px;
+        background: #fef2f2;
+        color: #dc2626;
+        flex-shrink: 0;
+      }
       .card {
         background: white;
         border: 1px solid #f0f1f3;
@@ -228,6 +294,273 @@
           animation: none !important;
         }
       }
+
+      /* Premium create-listing modal polish */
+      #createDialog {
+        max-width: min(760px, calc(100vw - 24px));
+        max-height: calc(100dvh - 28px);
+        overflow: hidden;
+        border-radius: 24px;
+      }
+      #createDialog form {
+        max-height: calc(100dvh - 28px);
+        overflow-y: auto;
+        padding: 0;
+      }
+      #createDialog .create-hero {
+        position: relative;
+        overflow: hidden;
+        padding: 24px 26px 22px;
+        color: #fff;
+        background: linear-gradient(
+          125deg,
+          #dc2626 0%,
+          #b91c1c 58%,
+          #991b1b 100%
+        );
+      }
+      #createDialog .create-hero:after {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        right: -54px;
+        top: -82px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+      #createDialog .create-hero p {
+        color: rgba(255, 255, 255, 0.84);
+      }
+      #createDialog .create-body {
+        padding: 22px 26px 26px;
+      }
+      #createDialog .create-field-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-size: 13px;
+        font-weight: 800;
+        color: #1f2937;
+      }
+      #createDialog .create-step {
+        display: inline-grid;
+        place-items: center;
+        width: 23px;
+        height: 23px;
+        border-radius: 8px;
+        background: #fee2e2;
+        color: #b91c1c;
+        font-size: 11px;
+        font-weight: 900;
+      }
+      #createDialog .create-select {
+        width: 100%;
+        min-height: 49px;
+        border: 1px solid #e5e7eb;
+        border-radius: 13px;
+        background-color: #fff;
+        padding: 12px 42px 12px 13px;
+        color: #111827;
+        font-size: 14px;
+        font-weight: 600;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+        transition:
+          border-color 0.18s,
+          box-shadow 0.18s;
+      }
+      #createDialog .create-select:focus {
+        outline: none;
+        border-color: #ef4444;
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.11);
+      }
+      #createDialog .create-select:disabled {
+        background: #f9fafb;
+        color: #9ca3af;
+        cursor: not-allowed;
+      }
+      #createDialog .category-picker-card {
+        border: 1px solid #f0f1f3;
+        border-radius: 17px;
+        padding: 15px;
+        background: linear-gradient(180deg, #fff, #fffafa);
+      }
+      #createDialog .category-picker-card.selected {
+        border-color: #fecaca;
+        background: #fff7f7;
+      }
+      #createDialog .category-helper {
+        margin-top: 7px;
+        font-size: 11px;
+        line-height: 1.5;
+        color: #9ca3af;
+      }
+      #createDialog .category-visual-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+      #createDialog .category-visual-card {
+        min-width: 0;
+        overflow: hidden;
+        border: 1px solid #eceef2;
+        border-radius: 17px;
+        background: #fff;
+        text-align: left;
+        transition:
+          border-color 0.18s,
+          box-shadow 0.18s,
+          transform 0.18s;
+      }
+      #createDialog .category-visual-card:hover {
+        border-color: #fca5a5;
+        box-shadow: 0 8px 20px rgba(127, 29, 29, 0.08);
+        transform: translateY(-1px);
+      }
+      #createDialog .category-visual-card[aria-pressed="true"] {
+        border-color: #dc2626;
+        box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+      }
+      #createDialog .category-visual-head {
+        display: grid;
+        grid-template-columns: 42px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 11px;
+        padding: 13px;
+        background: linear-gradient(110deg, #fff4f4, #fff);
+        border-bottom: 1px solid #f1f1f3;
+        min-height: 82px;
+      }
+      #createDialog
+        .category-visual-card[aria-pressed="true"]
+        .category-visual-head {
+        background: linear-gradient(110deg, #dc2626, #a91c1c);
+        color: #fff;
+      }
+      #createDialog .category-visual-icon {
+        display: grid;
+        place-items: center;
+        flex: 0 0 42px;
+        height: 42px;
+        border-radius: 13px;
+        background: #dc2626;
+        color: white;
+        font-size: 20px;
+      }
+      #createDialog
+        .category-visual-card[aria-pressed="true"]
+        .category-visual-icon {
+        background: rgba(255, 255, 255, 0.18);
+      }
+      #createDialog .category-visual-count {
+        justify-self: end;
+        border-radius: 999px;
+        padding: 5px 9px;
+        background: #fff1f2;
+        color: #b91c1c;
+        font-size: 10px;
+        font-weight: 900;
+        white-space: nowrap;
+      }
+      #createDialog .category-chip-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 14px;
+      }
+      #createDialog .category-chip {
+        border: 1px solid #dfe3ea;
+        border-radius: 999px;
+        padding: 7px 12px;
+        background: white;
+        color: #111827;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.15;
+        transition: all 0.15s;
+      }
+      #createDialog .category-chip:hover {
+        border-color: #f87171;
+        background: #fff7f7;
+      }
+      #createDialog .category-chip[aria-pressed="true"] {
+        border-color: #dc2626;
+        background: #fff1f2;
+        color: #b91c1c;
+        box-shadow: 0 0 0 1px #fecaca inset;
+      }
+      @media (max-width: 760px) {
+        #createDialog .category-visual-grid {
+          grid-template-columns: 1fr;
+          gap: 9px;
+        }
+        #createDialog .category-visual-head {
+          grid-template-columns: 44px minmax(0, 1fr) auto;
+          padding: 12px;
+          min-height: 72px;
+        }
+        #createDialog .category-visual-head .block.text-sm {
+          font-size: 14px;
+          line-height: 1.25;
+        }
+        #createDialog .category-visual-head .mt-1.block.text-\[11px\] {
+          font-size: 12px;
+          line-height: 1.35;
+        }
+        #createDialog .category-picker-card {
+          padding: 12px;
+        }
+        #createDialog .category-chip-list {
+          padding: 10px;
+          gap: 7px;
+        }
+        #createDialog .category-chip {
+          font-size: 13px;
+          padding: 8px 11px;
+        }
+      }
+      #createDialog .create-input {
+        width: 100%;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 11px 13px;
+        font-size: 14px;
+        transition:
+          border-color 0.18s,
+          box-shadow 0.18s;
+      }
+      #createDialog .create-input:focus {
+        outline: none;
+        border-color: #ef4444;
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+      }
+      #createDialog .create-section-title {
+        font-size: 12px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #9ca3af;
+      }
+      #createDialog .create-publish-btn {
+        min-height: 46px;
+        border-radius: 12px;
+        padding: 0 19px;
+        font-size: 13px;
+        font-weight: 800;
+        box-shadow: 0 7px 16px rgba(220, 38, 38, 0.17);
+      }
+      @media (max-width: 560px) {
+        #createDialog .create-hero {
+          padding: 20px 18px;
+        }
+        #createDialog .create-body {
+          padding: 18px;
+        }
+        #createDialog {
+          border-radius: 20px;
+        }
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -253,6 +586,23 @@
         to {
           transform: rotate(360deg);
         }
+      }
+    </style>
+
+    <style>
+      #editDialog {
+        width: min(720px, calc(100vw - 24px));
+        max-width: none;
+        max-height: calc(100dvh - 24px);
+        padding: 0;
+        border: 0;
+        border-radius: 24px;
+        box-shadow: 0 28px 90px rgba(15, 23, 42, 0.28);
+        overflow: auto;
+      }
+      #editDialog::backdrop {
+        background: rgba(15, 23, 42, 0.58);
+        backdrop-filter: blur(5px);
       }
     </style>
   </head>
@@ -712,9 +1062,12 @@
                 aria-label="Filter by status"
               >
                 <option value="all">All statuses</option>
-                <option>Active</option>
-                <option>Promoting</option>
-                <option>Paused</option>
+                <option value="pending">Pending review</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+                <option value="suspended">Suspended</option>
+                <option value="draft">Draft</option>
+                <option value="archived">Archived</option>
               </select>
             </div>
             <div id="listingTable" class="mt-4"></div>
@@ -854,203 +1207,641 @@
         </footer>
       </main>
     </div>
-    <dialog id="editDialog" aria-labelledby="editHeading">
-      <form id="editForm" class="p-5 sm:p-6">
-        <div class="flex items-start justify-between">
+    <dialog
+      id="editDialog"
+      aria-labelledby="editHeading"
+      class="edit-listing-dialog"
+    >
+      <form id="editForm" class="p-5 sm:p-7">
+        <div
+          class="flex items-start justify-between gap-4 border-b border-gray-100 pb-5"
+        >
           <div>
-            <h2 id="editHeading" class="display text-xl font-bold">
-              Edit listing
+            <span
+              class="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-[10px] font-extrabold uppercase tracking-[.14em] text-red-700"
+              >Seller workspace</span
+            >
+            <h2
+              id="editHeading"
+              class="display mt-3 text-2xl font-extrabold tracking-tight"
+            >
+              Edit your listing
             </h2>
-            <p class="mt-1 text-sm text-gray-500">
-              Update the details customers see.
+            <p class="mt-1 text-sm leading-6 text-gray-500">
+              Update the details buyers see. Your changes will be saved to your
+              account.
             </p>
           </div>
           <button
             type="button"
             data-close-dialog
-            class="rounded-lg p-2 hover:bg-gray-100"
+            class="rounded-xl border border-gray-200 p-2.5 text-gray-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-700"
             aria-label="Close edit dialog"
           >
             ✕
           </button>
         </div>
+        <div
+          id="editFormMessage"
+          class="hidden mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800"
+          role="alert"
+        >
+          <p id="editFormMessageText"></p>
+        </div>
         <input type="hidden" id="editId" />
-        <div class="mt-5 space-y-4">
-          <div>
-            <label for="editTitle" class="mb-1 block text-sm font-semibold"
-              >Listing title</label
+        <div class="mt-5 grid gap-4 sm:grid-cols-2">
+          <div class="sm:col-span-2">
+            <label
+              for="editTitle"
+              class="mb-1.5 block text-sm font-bold text-gray-800"
+              >Listing title <span class="text-red-600">*</span></label
             ><input
               id="editTitle"
               required
-              maxlength="80"
-              class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+              minlength="3"
+              maxlength="160"
+              placeholder="e.g. Quality office chair"
+              class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-red-400 focus:ring-4 focus:ring-red-100"
             />
           </div>
-          <div class="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label for="editPrice" class="mb-1 block text-sm font-semibold"
-                >Price</label
-              ><input
-                id="editPrice"
-                required
-                class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
-              />
-            </div>
-            <div>
-              <label for="editStatus" class="mb-1 block text-sm font-semibold"
-                >Status</label
-              ><select
-                id="editStatus"
-                class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm"
-              >
-                <option>Active</option>
-                <option>Promoting</option>
-                <option>Paused</option>
-              </select>
-            </div>
+          <div>
+            <label
+              for="editPrice"
+              class="mb-1.5 block text-sm font-bold text-gray-800"
+              >Price</label
+            ><input
+              id="editPrice"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="Leave blank for price on request"
+              class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-red-400 focus:ring-4 focus:ring-red-100"
+            />
           </div>
           <div>
-            <label for="editCategory" class="mb-1 block text-sm font-semibold"
-              >Category</label
+            <label
+              for="editCurrency"
+              class="mb-1.5 block text-sm font-bold text-gray-800"
+              >Currency <span class="text-red-600">*</span></label
             ><select
-              id="editCategory"
-              class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm"
+              id="editCurrency"
+              required
+              class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-red-400 focus:ring-4 focus:ring-red-100"
             >
-              <option>For Sale</option>
-              <option>Fashion & Accessories</option>
-              <option>Home & Living</option>
-              <option>Services</option>
+              <option value="KES">KES — Kenyan Shilling</option>
+              <option value="NGN">NGN — Nigerian Naira</option>
+              <option value="GHS">GHS — Ghanaian Cedi</option>
+              <option value="ZAR">ZAR — South African Rand</option>
+              <option value="UGX">UGX — Ugandan Shilling</option>
+              <option value="TZS">TZS — Tanzanian Shilling</option>
+              <option value="RWF">RWF — Rwandan Franc</option>
+              <option value="ETB">ETB — Ethiopian Birr</option>
+              <option value="EGP">EGP — Egyptian Pound</option>
+              <option value="MAD">MAD — Moroccan Dirham</option>
+              <option value="XOF">XOF — West African CFA Franc</option>
+              <option value="XAF">XAF — Central African CFA Franc</option>
+              <option value="USD">USD — US Dollar</option>
+              <option value="EUR">EUR — Euro</option>
+              <option value="GBP">GBP — British Pound</option>
             </select>
           </div>
-          <div>
-            <label for="editLocation" class="mb-1 block text-sm font-semibold"
-              >Location</label
-            ><input
-              id="editLocation"
+          <div class="sm:col-span-2">
+            <label
+              for="editCategory"
+              class="mb-1.5 block text-sm font-bold text-gray-800"
+              >Main category <span class="text-red-600">*</span></label
+            ><select
+              id="editCategory"
               required
-              class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+              class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-red-400 focus:ring-4 focus:ring-red-100"
+            >
+              <option value="">Choose a category</option>
+              <option value="local:For Sale">For Sale</option>
+              <option value="local:Autos">Autos</option>
+              <option value="local:Services">Services</option>
+              <option value="local:Housing">Housing</option>
+              <option value="local:Events and Community">
+                Events and Community
+              </option>
+              <option value="local:Jobs">Jobs</option>
+            </select>
+            <p class="mt-1.5 text-xs text-gray-500">
+              Choose the category that best matches your listing.
+            </p>
+          </div>
+          <div>
+            <label
+              for="editCity"
+              class="mb-1.5 block text-sm font-bold text-gray-800"
+              >City / town <span class="text-red-600">*</span></label
+            ><input
+              id="editCity"
+              required
+              maxlength="120"
+              placeholder="e.g. Nairobi"
+              class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-red-400 focus:ring-4 focus:ring-red-100"
             />
           </div>
           <div>
-            <label for="editDesc" class="mb-1 block text-sm font-semibold"
-              >Description</label
+            <label
+              for="editCountryCode"
+              class="mb-1.5 block text-sm font-bold text-gray-800"
+              >Country <span class="text-red-600">*</span></label
+            ><select
+              id="editCountryCode"
+              required
+              class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-red-400 focus:ring-4 focus:ring-red-100"
+            >
+              <option value="">Choose your country</option>
+              <option value="KE">Kenya (KE)</option>
+              <option value="NG">Nigeria (NG)</option>
+              <option value="GH">Ghana (GH)</option>
+              <option value="ZA">South Africa (ZA)</option>
+              <option value="UG">Uganda (UG)</option>
+              <option value="TZ">Tanzania (TZ)</option>
+              <option value="RW">Rwanda (RW)</option>
+              <option value="ET">Ethiopia (ET)</option>
+              <option value="EG">Egypt (EG)</option>
+              <option value="MA">Morocco (MA)</option>
+              <option value="IN">India (IN)</option>
+              <option value="US">United States (US)</option>
+              <option value="GB">United Kingdom (GB)</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <label
+              for="editDesc"
+              class="mb-1.5 block text-sm font-bold text-gray-800"
+              >Description <span class="text-red-600">*</span></label
             ><textarea
               id="editDesc"
-              rows="3"
-              maxlength="500"
-              class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
+              required
+              minlength="10"
+              maxlength="10000"
+              rows="5"
+              placeholder="Describe the item or service, its condition, and useful details…"
+              class="w-full resize-y rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm leading-6 outline-none transition focus:border-red-400 focus:ring-4 focus:ring-red-100"
             ></textarea>
+            <div class="mt-1 flex justify-between gap-3 text-xs text-gray-400">
+              <span>Use clear, accurate details to help buyers.</span
+              ><span id="editDescCount">0 / 10000</span>
+            </div>
           </div>
-          <div class="flex justify-end gap-2 border-t border-gray-100 pt-4">
-            <button
-              type="button"
-              data-close-dialog
-              class="rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-semibold"
+          <div
+            class="sm:col-span-2 flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3"
+          >
+            <div>
+              <p class="text-sm font-bold text-gray-800">
+                Listing review status
+              </p>
+              <p class="mt-0.5 text-xs text-gray-500">
+                Status is managed by marketplace moderation.
+              </p>
+            </div>
+            <span
+              id="editStatusBadge"
+              class="rounded-full bg-amber-100 px-3 py-1.5 text-xs font-bold text-amber-800"
+              >Pending review</span
             >
-              Cancel</button
-            ><button
-              id="saveEdit"
-              class="rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700"
-            >
-              Save changes
-            </button>
           </div>
+        </div>
+        <div
+          class="mt-6 flex flex-col-reverse gap-3 border-t border-gray-100 pt-5 sm:flex-row sm:justify-end"
+        >
+          <button
+            type="button"
+            data-close-dialog
+            class="rounded-xl border border-gray-200 px-5 py-3 text-sm font-bold text-gray-700 transition hover:bg-gray-50"
+          >
+            Cancel</button
+          ><button
+            id="saveEdit"
+            type="submit"
+            class="inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-100 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            Save changes
+          </button>
         </div>
       </form>
     </dialog>
     <dialog id="createDialog" aria-labelledby="createHeading">
-      <form id="createForm" class="p-5 sm:p-6">
-        <div class="flex items-start justify-between">
-          <div>
-            <h2 id="createHeading" class="display text-xl font-bold">
-              Create new listing
-            </h2>
-            <p class="mt-1 text-sm text-gray-500">
-              Add a product or service to your marketplace.
-            </p>
-          </div>
-          <button
-            type="button"
-            data-close-dialog
-            class="rounded-lg p-2 hover:bg-gray-100"
-            aria-label="Close create dialog"
-          >
-            ✕
-          </button>
-        </div>
-        <div class="mt-5 space-y-4">
-          <div>
-            <label for="newTitle" class="mb-1 block text-sm font-semibold"
-              >Listing title</label
-            ><input
-              id="newTitle"
-              required
-              minlength="3"
-              maxlength="80"
-              placeholder="e.g. Handmade leather sandals"
-              class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
-            />
-          </div>
-          <div class="grid gap-4 sm:grid-cols-2">
+      <form id="createForm">
+        <div class="create-hero">
+          <div class="relative z-10 flex items-start justify-between gap-4">
             <div>
-              <label for="newPrice" class="mb-1 block text-sm font-semibold"
-                >Price</label
-              ><input
-                id="newPrice"
-                required
-                placeholder="KSh 3,500"
-                class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
-              />
-            </div>
-            <div>
-              <label for="newCategory" class="mb-1 block text-sm font-semibold"
-                >Category</label
-              ><select
-                id="newCategory"
-                class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm"
+              <div
+                class="mb-3 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[10px] font-extrabold uppercase tracking-[.15em]"
               >
-                <option>For Sale</option>
-                <option>Fashion & Accessories</option>
-                <option>Home & Living</option>
-                <option>Services</option>
-              </select>
+                Africa Market Place <span class="opacity-70">/</span> Seller
+              </div>
+              <h2
+                id="createHeading"
+                class="display text-2xl font-extrabold tracking-tight sm:text-[28px]"
+              >
+                Create new listing
+              </h2>
+              <p class="mt-2 max-w-md text-sm">
+                Showcase what you offer. Choose the right category and add clear
+                details to help buyers find you.
+              </p>
             </div>
-          </div>
-          <div>
-            <label for="newLocation" class="mb-1 block text-sm font-semibold"
-              >Location</label
-            ><input
-              id="newLocation"
-              required
-              placeholder="Nairobi, Kenya"
-              class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
-            />
-          </div>
-          <div>
-            <label for="newDesc" class="mb-1 block text-sm font-semibold"
-              >Description</label
-            ><textarea
-              id="newDesc"
-              rows="3"
-              maxlength="500"
-              class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
-            ></textarea>
-          </div>
-          <div class="flex justify-end gap-2 border-t border-gray-100 pt-4">
             <button
               type="button"
               data-close-dialog
-              class="rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-semibold"
+              class="relative z-10 rounded-xl border border-white/25 bg-white/10 p-2.5 text-white hover:bg-white/20"
+              aria-label="Close create dialog"
             >
-              Cancel</button
-            ><button
-              class="rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700"
-            >
-              Publish listing
+              ✕
             </button>
+          </div>
+          <div
+            class="relative z-10 mt-5 flex flex-wrap gap-2 text-[11px] font-semibold"
+          >
+            <span class="rounded-full bg-white/15 px-3 py-1.5">1. Details</span
+            ><span class="rounded-full bg-white/15 px-3 py-1.5"
+              >2. Category</span
+            ><span class="rounded-full bg-white/15 px-3 py-1.5">3. Photos</span>
+          </div>
+        </div>
+        <div class="create-body space-y-6">
+          <div
+            id="createFormMessage"
+            class="hidden rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
+            role="alert"
+            aria-live="polite"
+          >
+            <div class="flex items-start gap-2">
+              <span aria-hidden="true" class="mt-0.5">ⓘ</span>
+              <div>
+                <p id="createFormMessageTitle" class="font-bold">
+                  Please check your listing
+                </p>
+                <p id="createFormMessageText" class="mt-1 leading-5"></p>
+              </div>
+            </div>
+          </div>
+          <section class="space-y-3">
+            <p class="create-section-title">Listing information</p>
+            <div>
+              <label for="newTitle" class="create-field-label"
+                ><span class="create-step">1</span> Listing title</label
+              >
+              <input
+                id="newTitle"
+                required
+                minlength="3"
+                maxlength="160"
+                placeholder="e.g. Handmade leather sandals"
+                class="create-input"
+              />
+            </div>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label for="newPrice" class="create-field-label"
+                  >Price
+                  <span class="font-normal text-gray-400"
+                    >(optional)</span
+                  ></label
+                ><input
+                  id="newPrice"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="Enter price"
+                  class="create-input"
+                />
+              </div>
+              <div>
+                <label for="newCurrency" class="create-field-label"
+                  >Currency</label
+                ><select id="newCurrency" required class="create-input">
+                  <option value="KES" selected>KES — Kenyan Shilling</option>
+                  <option value="NGN">NGN — Nigerian Naira</option>
+                  <option value="GHS">GHS — Ghanaian Cedi</option>
+                  <option value="ZAR">ZAR — South African Rand</option>
+                  <option value="UGX">UGX — Ugandan Shilling</option>
+                  <option value="TZS">TZS — Tanzanian Shilling</option>
+                  <option value="RWF">RWF — Rwandan Franc</option>
+                  <option value="ETB">ETB — Ethiopian Birr</option>
+                  <option value="EGP">EGP — Egyptian Pound</option>
+                  <option value="MAD">MAD — Moroccan Dirham</option>
+                  <option value="XOF">XOF — West African CFA Franc</option>
+                  <option value="XAF">XAF — Central African CFA Franc</option>
+                  <option value="USD">USD — US Dollar</option>
+                  <option value="EUR">EUR — Euro</option>
+                  <option value="GBP">GBP — British Pound</option>
+                </select>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div class="mb-3">
+              <p class="create-section-title">Choose a category</p>
+              <p class="mt-1 text-xs text-gray-500">
+                Select the main category first, then choose the most relevant
+                subcategory.
+              </p>
+            </div>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <div id="categoryPickerCard" class="category-picker-card">
+                <label for="newCategory" class="create-field-label"
+                  ><span class="create-step">2</span> Main category</label
+                >
+                <select
+                  id="newCategory"
+                  class="sr-only"
+                  aria-label="Main category"
+                >
+                  <option value="">Choose a category</option>
+                </select>
+                <div
+                  id="categoryVisualGrid"
+                  class="category-visual-grid"
+                  aria-label="Choose a main category"
+                ></div>
+                <p class="category-helper">
+                  Tap one category. Its matching subcategories will appear on
+                  the right or below.
+                </p>
+              </div>
+              <div id="subcategoryPickerCard" class="category-picker-card">
+                <label for="newSubcategory" class="create-field-label"
+                  ><span class="create-step">3</span> Subcategory</label
+                >
+                <select
+                  id="newSubcategory"
+                  disabled
+                  class="sr-only"
+                  aria-label="Subcategory"
+                >
+                  <option value="">Choose a category first</option>
+                </select>
+                <div
+                  id="subcategoryVisualGrid"
+                  class="category-chip-list"
+                  aria-label="Choose a subcategory"
+                >
+                  <p class="text-xs text-gray-400">
+                    Choose a main category first.
+                  </p>
+                </div>
+                <p id="subcategoryHelper" class="category-helper">
+                  First select a main category. Then tap one subcategory to
+                  continue.
+                </p>
+              </div>
+            </div>
+            <div
+              id="selectedCategorySummary"
+              class="mt-3 hidden rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-xs text-red-800"
+            >
+              <span class="font-bold">Selected:</span>
+              <span id="selectedCategoryText"></span>
+            </div>
+          </section>
+          <section class="space-y-3">
+            <p class="create-section-title">Location</p>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label for="newLocation" class="create-field-label">City</label
+                ><input
+                  id="newLocation"
+                  required
+                  placeholder="e.g. Nairobi"
+                  class="create-input"
+                />
+              </div>
+              <div>
+                <label for="newCountryCode" class="create-field-label"
+                  >Country
+                  <span class="font-normal text-gray-400"
+                    >(country code)</span
+                  ></label
+                ><select id="newCountryCode" required class="create-select">
+                  <option value="">Choose your country</option>
+                  <option value="KE">Kenya (KE)</option>
+                  <option value="NG">Nigeria (NG)</option>
+                  <option value="GH">Ghana (GH)</option>
+                  <option value="ZA">South Africa (ZA)</option>
+                  <option value="UG">Uganda (UG)</option>
+                  <option value="TZ">Tanzania (TZ)</option>
+                  <option value="RW">Rwanda (RW)</option>
+                  <option value="ET">Ethiopia (ET)</option>
+                  <option value="EG">Egypt (EG)</option>
+                  <option value="MA">Morocco (MA)</option>
+                  <option value="DZ">Algeria (DZ)</option>
+                  <option value="AO">Angola (AO)</option>
+                  <option value="BJ">Benin (BJ)</option>
+                  <option value="BW">Botswana (BW)</option>
+                  <option value="BF">Burkina Faso (BF)</option>
+                  <option value="BI">Burundi (BI)</option>
+                  <option value="CV">Cabo Verde (CV)</option>
+                  <option value="CM">Cameroon (CM)</option>
+                  <option value="CF">Central African Republic (CF)</option>
+                  <option value="TD">Chad (TD)</option>
+                  <option value="KM">Comoros (KM)</option>
+                  <option value="CG">Congo (CG)</option>
+                  <option value="CD">DR Congo (CD)</option>
+                  <option value="CI">Côte d’Ivoire (CI)</option>
+                  <option value="DJ">Djibouti (DJ)</option>
+                  <option value="GQ">Equatorial Guinea (GQ)</option>
+                  <option value="ER">Eritrea (ER)</option>
+                  <option value="SZ">Eswatini (SZ)</option>
+                  <option value="GA">Gabon (GA)</option>
+                  <option value="GM">Gambia (GM)</option>
+                  <option value="GN">Guinea (GN)</option>
+                  <option value="GW">Guinea-Bissau (GW)</option>
+                  <option value="LS">Lesotho (LS)</option>
+                  <option value="LR">Liberia (LR)</option>
+                  <option value="LY">Libya (LY)</option>
+                  <option value="MG">Madagascar (MG)</option>
+                  <option value="MW">Malawi (MW)</option>
+                  <option value="ML">Mali (ML)</option>
+                  <option value="MR">Mauritania (MR)</option>
+                  <option value="MU">Mauritius (MU)</option>
+                  <option value="MZ">Mozambique (MZ)</option>
+                  <option value="NA">Namibia (NA)</option>
+                  <option value="NE">Niger (NE)</option>
+                  <option value="SN">Senegal (SN)</option>
+                  <option value="SC">Seychelles (SC)</option>
+                  <option value="SL">Sierra Leone (SL)</option>
+                  <option value="SO">Somalia (SO)</option>
+                  <option value="SS">South Sudan (SS)</option>
+                  <option value="SD">Sudan (SD)</option>
+                  <option value="TG">Togo (TG)</option>
+                  <option value="TN">Tunisia (TN)</option>
+                  <option value="ZM">Zambia (ZM)</option>
+                  <option value="ZW">Zimbabwe (ZW)</option>
+                  <option value="US">United States (US)</option>
+                  <option value="GB">United Kingdom (GB)</option>
+                  <option value="CA">Canada (CA)</option>
+                  <option value="AU">Australia (AU)</option>
+                  <option value="IN">India (IN)</option>
+                  <option value="AE">United Arab Emirates (AE)</option>
+                  <option value="SA">Saudi Arabia (SA)</option>
+                  <option value="FR">France (FR)</option>
+                  <option value="DE">Germany (DE)</option>
+                  <option value="IT">Italy (IT)</option>
+                  <option value="ES">Spain (ES)</option>
+                  <option value="PT">Portugal (PT)</option>
+                  <option value="NL">Netherlands (NL)</option>
+                  <option value="BE">Belgium (BE)</option>
+                  <option value="CH">Switzerland (CH)</option>
+                  <option value="SE">Sweden (SE)</option>
+                  <option value="NO">Norway (NO)</option>
+                  <option value="DK">Denmark (DK)</option>
+                  <option value="TR">Türkiye (TR)</option>
+                  <option value="CN">China (CN)</option>
+                  <option value="JP">Japan (JP)</option>
+                  <option value="KR">South Korea (KR)</option>
+                  <option value="SG">Singapore (SG)</option>
+                  <option value="MY">Malaysia (MY)</option>
+                  <option value="ID">Indonesia (ID)</option>
+                  <option value="PH">Philippines (PH)</option>
+                  <option value="TH">Thailand (TH)</option>
+                  <option value="PK">Pakistan (PK)</option>
+                  <option value="BD">Bangladesh (BD)</option>
+                  <option value="BR">Brazil (BR)</option>
+                  <option value="MX">Mexico (MX)</option>
+                  <option value="AR">Argentina (AR)</option>
+                  <option value="CL">Chile (CL)</option>
+                  <option value="CO">Colombia (CO)</option>
+                  <option value="NZ">New Zealand (NZ)</option>
+                </select>
+              </div>
+            </div>
+          </section>
+          <section>
+            <p class="create-section-title mb-3">Product or service photos</p>
+            <label
+              for="newImages"
+              class="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-red-200 bg-red-50/50 px-4 py-6 text-center transition hover:border-red-400 hover:bg-red-50"
+            >
+              <span
+                class="grid h-12 w-12 place-items-center rounded-2xl bg-white text-2xl shadow-sm"
+                aria-hidden="true"
+                >📷</span
+              >
+              <span class="mt-3 text-sm font-extrabold text-gray-900"
+                >Upload listing photos</span
+              >
+              <span class="mt-1 text-xs text-gray-500"
+                >JPG, PNG or WebP · Up to 5 images · 5 MB each</span
+              >
+              <span
+                class="mt-3 rounded-lg bg-white px-3 py-2 text-xs font-bold text-red-700 shadow-sm"
+                >Browse files</span
+              >
+            </label>
+            <input
+              id="newImages"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+              class="sr-only"
+            />
+            <p id="newImageHelp" class="mt-2 text-xs text-gray-500">
+              Add up to five photos. You can preview and remove them before
+              publishing.
+            </p>
+            <div
+              id="newImagePreview"
+              class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3"
+            ></div>
+          </section>
+          <section>
+            <label for="newDesc" class="create-field-label">Description</label>
+            <textarea
+              id="newDesc"
+              required
+              minlength="10"
+              rows="4"
+              maxlength="10000"
+              placeholder="Describe condition, features, size, availability or what your service includes…"
+              class="create-input resize-y"
+            ></textarea>
+            <p class="mt-1 text-[11px] text-gray-400">
+              Write at least 10 characters. Clear details help buyers make
+              decisions.
+            </p>
+          </section>
+          <div
+            class="flex flex-col-reverse justify-between gap-3 border-t border-gray-100 pt-5 sm:flex-row sm:items-center"
+          >
+            <p class="text-[11px] leading-5 text-gray-400">
+              Your listing will be submitted for review before publication.
+            </p>
+            <div class="flex gap-2">
+              <button
+                type="button"
+                data-close-dialog
+                class="rounded-xl border border-gray-200 px-4 py-3 text-xs font-bold text-gray-600 hover:bg-gray-50"
+              >
+                Cancel</button
+              ><button
+                id="publishListingButton"
+                type="submit"
+                class="create-publish-btn bg-brand-600 text-white hover:bg-brand-700"
+              >
+                Publish listing <span class="ml-1">→</span>
+              </button>
+            </div>
           </div>
         </div>
       </form>
+    </dialog>
+    <dialog
+      id="confirmDialog"
+      class="app-modal"
+      aria-labelledby="confirmHeading"
+      aria-describedby="confirmMessage"
+    >
+      <div class="p-6 sm:p-7">
+        <div class="flex items-start gap-4">
+          <div class="modal-icon" aria-hidden="true">
+            <svg
+              width="23"
+              height="23"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M12 9v4M12 17h.01" />
+              <path
+                d="M10.3 3.9 2.8 17a2 2 0 0 0 1.8 3h14.8a2 2 0 0 0 1.8-3l-7.5-13.1a2 2 0 0 0-3.4 0Z"
+              />
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <h2 id="confirmHeading" class="display text-lg font-bold">
+              Delete this listing?
+            </h2>
+            <p id="confirmMessage" class="mt-2 text-sm leading-6 text-gray-500">
+              This action cannot be undone.
+            </p>
+          </div>
+        </div>
+        <div
+          class="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end"
+        >
+          <button
+            id="confirmCancel"
+            type="button"
+            class="rounded-xl border border-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+          >
+            Keep listing</button
+          ><button
+            id="confirmAccept"
+            type="button"
+            class="rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-red-700"
+          >
+            Yes, delete
+          </button>
+        </div>
+      </div>
     </dialog>
     <dialog id="customerDialog" aria-labelledby="customerHeading">
       <div class="p-5 sm:p-6">
@@ -1157,95 +1948,8 @@
           );
         }
       })();
-      let listings = [
-        {
-          id: 1,
-          title: "Handmade Leather Sandals",
-          category: "Fashion & Accessories",
-          price: "KSh 3,500",
-          location: "Nairobi, Kenya",
-          status: "Active",
-          views: "1.2k",
-          chats: 28,
-          description:
-            "Handcrafted leather sandals made by local artisans. Available in multiple sizes.",
-          symbol: "👡",
-        },
-        {
-          id: 2,
-          title: "Maasai Beaded Necklace",
-          category: "Fashion & Accessories",
-          price: "KSh 2,800",
-          location: "Nairobi, Kenya",
-          status: "Promoting",
-          views: "3.5k",
-          chats: 64,
-          description:
-            "Traditional beaded necklace, handmade with colourful beads.",
-          symbol: "📿",
-        },
-        {
-          id: 3,
-          title: "Woven Storage Basket",
-          category: "Home & Living",
-          price: "KSh 1,200",
-          location: "Mombasa, Kenya",
-          status: "Active",
-          views: "840",
-          chats: 12,
-          description: "Handwoven basket for home storage and decor.",
-          symbol: "🧺",
-        },
-        {
-          id: 4,
-          title: "Small Business Branding",
-          category: "Services",
-          price: "KSh 5,000",
-          location: "Nairobi, Kenya",
-          status: "Paused",
-          views: "420",
-          chats: 6,
-          description: "Starter branding package for local businesses.",
-          symbol: "✦",
-        },
-      ];
-      const customers = [
-        {
-          id: 1,
-          name: "Amina Otieno",
-          initials: "AO",
-          email: "amina.otieno@example.com",
-          phone: "+254 712 345 678",
-          listing: "Handmade Leather Sandals",
-          message:
-            "Hello, are these sandals available in size 39? Could I arrange a pickup?",
-          time: "2 min ago",
-          status: "Awaiting reply",
-        },
-        {
-          id: 2,
-          name: "Kofi Mensah",
-          initials: "KM",
-          email: "kofi.mensah@example.com",
-          phone: "+233 24 555 0123",
-          listing: "Maasai Beaded Necklace",
-          message:
-            "I would like to order two necklaces. Do you offer delivery?",
-          time: "1 hour ago",
-          status: "Awaiting reply",
-        },
-        {
-          id: 3,
-          name: "Njeri Kamau",
-          initials: "NK",
-          email: "njeri.kamau@example.com",
-          phone: "+254 722 456 789",
-          listing: "Woven Storage Basket",
-          message: "Can you share the dimensions and available colours?",
-          time: "Yesterday",
-          status: "Replied",
-        },
-      ];
+      let listings = [];
+      const customers = [];
       const moneySafe = (s) =>
         String(s).replace(
           /[&<>"']/g,
@@ -1268,36 +1972,559 @@
           2600,
         );
       }
+      function askConfirm(
+        message,
+        title = "Are you sure?",
+        acceptLabel = "Continue",
+      ) {
+        return new Promise((resolve) => {
+          const dlg = $("#confirmDialog");
+          $("#confirmHeading").textContent = title;
+          $("#confirmMessage").textContent = message;
+          $("#confirmAccept").textContent = acceptLabel;
+          const finish = (value) => {
+            dlg.close();
+            $("#confirmAccept").removeEventListener("click", yes);
+            $("#confirmCancel").removeEventListener("click", no);
+            dlg.removeEventListener("cancel", onCancel);
+            resolve(value);
+          };
+          const yes = () => finish(true);
+          const no = () => finish(false);
+          const onCancel = (event) => {
+            event.preventDefault();
+            finish(false);
+          };
+          $("#confirmAccept").addEventListener("click", yes);
+          $("#confirmCancel").addEventListener("click", no);
+          dlg.addEventListener("cancel", onCancel);
+          dlg.showModal();
+        });
+      }
       function statusBadge(s) {
+        const label =
+          {
+            approved: "Approved",
+            pending: "Pending review",
+            rejected: "Rejected",
+            suspended: "Suspended",
+            archived: "Archived",
+            draft: "Draft",
+          }[String(s).toLowerCase()] || s;
         let c =
-          s === "Active"
+          String(s).toLowerCase() === "approved"
             ? "bg-green-50 text-green-700"
-            : s === "Promoting"
+            : String(s).toLowerCase() === "pending"
               ? "bg-amber-50 text-amber-700"
-              : "bg-gray-100 text-gray-600";
-        return `<span class="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-wide ${c}"><span class="h-1.5 w-1.5 rounded-full bg-current"></span>${s}</span>`;
+              : String(s).toLowerCase() === "rejected"
+                ? "bg-red-50 text-red-700"
+                : "bg-gray-100 text-gray-600";
+        return `<span class="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-wide ${c}"><span class="h-1.5 w-1.5 rounded-full bg-current"></span>${label}</span>`;
       }
       function listingRows(items, compact = false) {
         if (!items.length)
           return '<div class="p-10 text-center text-sm text-gray-500">No listings found. Try changing your search or create a listing.</div>';
-        return `<div class="table-wrap"><table class="w-full min-w-[680px] text-left"><thead class="bg-gray-50 text-[9px] uppercase tracking-[.13em] text-gray-400"><tr><th class="px-5 py-3 font-semibold">Item details</th><th class="px-4 py-3 font-semibold">Status</th><th class="px-4 py-3 font-semibold">Price</th><th class="px-4 py-3 font-semibold">Stats</th><th class="px-5 py-3 text-right font-semibold">Actions</th></tr></thead><tbody class="divide-y divide-gray-100">${items.map((x) => `<tr class="hover:bg-gray-50/70"><td class="px-5 py-4"><div class="flex items-center gap-3"><div class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-orange-100 to-rose-100 text-2xl">${x.symbol || "📦"}</div><div><p class="text-xs font-bold text-gray-900">${moneySafe(x.title)}</p><p class="mt-1 text-[10px] text-gray-400">ID: AMP-${String(x.id).padStart(4, "0")} · ${moneySafe(x.location)}</p></div></div></td><td class="px-4 py-4">${statusBadge(x.status)}</td><td class="px-4 py-4 text-xs font-bold">${moneySafe(x.price)}</td><td class="px-4 py-4"><div class="text-xs font-bold">${x.views} <span class="font-normal text-gray-400">views</span></div><div class="mt-1 text-[10px] text-gray-400">${x.chats} inquiries</div></td><td class="px-5 py-4"><div class="flex justify-end gap-1.5"><button data-edit="${x.id}" class="rounded-lg border border-gray-200 px-2.5 py-2 text-xs hover:border-brand-500 hover:text-brand-600" aria-label="Edit ${moneySafe(x.title)}" title="Edit listing">✎</button><button data-customer-for="${x.id}" class="rounded-lg border border-gray-200 px-2.5 py-2 text-xs hover:border-blue-400 hover:text-blue-600" title="View customer inquiries" aria-label="View inquiries for ${moneySafe(x.title)}">▣</button><button data-delete="${x.id}" class="rounded-lg border border-gray-200 px-2.5 py-2 text-xs hover:border-red-400 hover:bg-red-50 hover:text-red-600" title="Delete listing" aria-label="Delete ${moneySafe(x.title)}">⌫</button></div></td></tr>`).join("")}</tbody></table></div>`;
+        return `<div class="table-wrap"><table class="w-full min-w-[680px] text-left"><thead class="bg-gray-50 text-[9px] uppercase tracking-[.13em] text-gray-400"><tr><th class="px-5 py-3 font-semibold">Item details</th><th class="px-4 py-3 font-semibold">Status</th><th class="px-4 py-3 font-semibold">Price</th><th class="px-4 py-3 font-semibold">Stats</th><th class="px-5 py-3 text-right font-semibold">Actions</th></tr></thead><tbody class="divide-y divide-gray-100">${items.map((x) => `<tr class="hover:bg-gray-50/70"><td class="px-5 py-4"><div class="flex items-center gap-3"><div class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-orange-100 to-rose-100 text-2xl">${x.symbol || "📦"}</div><div><p class="text-xs font-bold text-gray-900">${moneySafe(x.title)}</p><p class="mt-1 text-[10px] text-gray-400">ID: AMP-${String(x.id).padStart(4, "0")} · ${moneySafe(x.location)}</p>${String(x.status).toLowerCase() === "approved" ? '<p class="mt-2 rounded-lg bg-emerald-50 px-2 py-1.5 text-[11px] font-semibold text-emerald-800">✓ Approved by Africa Market Place. Your listing is ready to be shown to customers.</p>' : String(x.status).toLowerCase() === "rejected" ? `<p class="mt-2 rounded-lg bg-red-50 px-2 py-1.5 text-[11px] text-red-800"><strong>Listing needs changes:</strong> ${moneySafe(x.raw?.rejection_reason || "Please review your listing and contact support if you need help.")}</p>` : String(x.status).toLowerCase() === "pending" ? '<p class="mt-2 text-[11px] text-amber-700">Your listing is awaiting review.</p>' : ""}</div></div></td><td class="px-4 py-4">${statusBadge(x.status)}</td><td class="px-4 py-4 text-xs font-bold">${moneySafe(x.price)}</td><td class="px-4 py-4"><div class="text-xs font-bold">${x.views} <span class="font-normal text-gray-400">views</span></div><div class="mt-1 text-[10px] text-gray-400">${x.chats} inquiries</div></td><td class="px-5 py-4"><div class="flex justify-end gap-2"><button type="button" data-edit="${x.id}" class="listing-action-btn listing-action-edit" aria-label="Edit ${moneySafe(x.title)}" title="Edit listing"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5 5 5M4 20l4.2-.8L19 8.4a2.1 2.1 0 0 0-3-3L5.2 16.2 4 20Z"/></svg></button><button type="button" data-customer-for="${x.id}" class="listing-action-btn listing-action-inquiries" title="View customer inquiries" aria-label="View inquiries for ${moneySafe(x.title)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v9a2.5 2.5 0 0 1-2.5 2.5H10l-5 4v-4.7a2.5 2.5 0 0 1-1-1.8Z"/><path d="M8 8h8M8 12h5"/></svg></button><button type="button" data-delete="${x.id}" class="listing-action-btn listing-action-delete" title="Delete listing" aria-label="Delete ${moneySafe(x.title)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 14h10l1-14M9 7V4h6v3"/></svg></button></div></td></tr>`).join("")}</tbody></table></div>`;
       }
       function renderListings() {
-        let q = ($("#listingSearch")?.value || "").toLowerCase(),
-          st = $("#statusFilter")?.value || "all";
-        let filtered = listings.filter(
+        const q = ($("#listingSearch")?.value || "").toLowerCase();
+        const st = ($("#statusFilter")?.value || "all").toLowerCase();
+        const filtered = listings.filter(
           (x) =>
-            (x.title + " " + x.category + " " + x.location)
+            (x.title + " " + (x.category || "") + " " + (x.location || ""))
               .toLowerCase()
               .includes(q) &&
-            (st === "all" || x.status === st),
+            (st === "all" || String(x.status).toLowerCase() === st),
         );
         $("#listingTable").innerHTML = listingRows(filtered);
         $("#overviewTable").innerHTML = listingRows(listings.slice(0, 3), true);
         $("#activeStat").textContent = listings.filter(
-          (x) => x.status !== "Paused",
+          (x) => x.status === "approved",
         ).length;
         $("#navListings").textContent = listings.length;
+      }
+      function fromDbItem(item) {
+        const category = item.category_id
+          ? categoryNames.get(item.category_id) || "Category"
+          : "Uncategorised";
+        const city = item.city || "";
+        const country = item.country_code || "";
+        return {
+          id: item.id,
+          title: item.title,
+          category,
+          price:
+            item.price == null
+              ? "Price on request"
+              : `${item.currency || "KES"} ${Number(item.price).toLocaleString()}`,
+          location:
+            [city, country].filter(Boolean).join(", ") ||
+            "Location not provided",
+          status: item.status,
+          views: "—",
+          chats: 0,
+          description: item.description,
+          symbol: "📦",
+          raw: item,
+        };
+      }
+      async function loadSellerListings() {
+        if (!ampCurrentUser) {
+          listings = [];
+          renderListings();
+          return;
+        }
+        const table = document.getElementById("listingTable");
+        if (table)
+          table.innerHTML =
+            '<div class="p-10 text-center text-sm text-gray-500"><span class="dashboard-action-spinner inline-block mr-2" aria-hidden="true"></span>Loading your listings…</div>';
+        try {
+          const { data, error } = await ampAuth
+            .from("items")
+            .select(
+              "id,user_id,category_id,title,description,price,currency,country_code,city,image_urls,status,rejection_reason,created_at,updated_at",
+            )
+            .eq("user_id", ampCurrentUser.id)
+            .order("created_at", { ascending: false });
+          if (error) throw error;
+          listings = (data || []).map(fromDbItem);
+          renderListings();
+        } catch (error) {
+          console.error("Could not load seller listings:", error);
+          listings = [];
+          renderListings();
+          notify(
+            "We couldn't load your listings. Please check your connection and try again.",
+          );
+          const target = document.getElementById("listingTable");
+          if (target)
+            target.innerHTML =
+              '<div class="p-8 text-center"><p class="font-semibold text-gray-800">Your listings could not be loaded</p><p class="mt-2 text-sm text-gray-500">Please refresh the page. If the problem continues, contact support.</p><button type="button" id="retryLoadListings" class="mt-4 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white">Try again</button></div>';
+          document
+            .getElementById("retryLoadListings")
+            ?.addEventListener("click", loadSellerListings, { once: true });
+        }
+      }
+      function showCreateFormError(
+        message,
+        title = "We couldn't publish your listing",
+      ) {
+        const box = document.getElementById("createFormMessage");
+        const heading = document.getElementById("createFormMessageTitle");
+        const text = document.getElementById("createFormMessageText");
+        if (heading) heading.textContent = title;
+        if (text) text.textContent = message;
+        if (box) {
+          box.classList.remove("hidden");
+          box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        } else notify(message);
+      }
+      function clearCreateFormError() {
+        const box = document.getElementById("createFormMessage");
+        if (box) box.classList.add("hidden");
+      }
+      const categoryNames = new Map();
+      const categoryRows = new Map();
+      const CATEGORY_OPTIONS = {
+        "For Sale": [
+          "Antiques",
+          "Appliances",
+          "Arts and Crafts",
+          "Baby and Kids",
+          "Barter",
+          "Beauty and Health",
+          "Bike Parts",
+          "Bikes",
+          "Books",
+          "Business",
+          "CDs, DVDs and Videos",
+          "Cell Phones",
+          "Clothes and Accessories",
+          "Collectibles",
+          "Computer Parts",
+          "Computers",
+          "Electronics",
+          "Farm and Garden",
+          "Free Items",
+          "Furniture",
+          "Garage Sales",
+          "General",
+          "Household",
+          "Jewelry",
+          "Materials",
+          "Musical Instruments",
+          "Photo and Video",
+          "Sporting Goods",
+          "Tickets",
+          "Tools",
+          "Toys and Games",
+          "Video Gaming",
+          "Wanted",
+        ],
+        Autos: [
+          "ATVs, UTVs and Snowmobiles",
+          "Auto Parts",
+          "Aviation",
+          "Boat Parts",
+          "Boats",
+          "Cars and Trucks",
+          "Heavy Equipment",
+          "Motorcycle Parts",
+          "Motorcycles",
+          "RVs and Camping",
+          "Trailers",
+          "Wheels and Tires",
+        ],
+        Services: [
+          "Automotive",
+          "Beauty",
+          "Cell and Mobile",
+          "Computer",
+          "Creative",
+          "Cycle",
+          "Event",
+          "Farm and Garden",
+          "Financial",
+          "Health and Wellness",
+          "Household",
+          "Labor and Moving",
+          "Legal",
+          "Lessons",
+          "Marine",
+          "Pet",
+          "Real Estate",
+          "Skilled Trade",
+          "Small Business Ads",
+          "Travel and Vacation",
+          "Writing and Editing",
+        ],
+        Housing: [
+          "Apartments and Housing",
+          "Housing Swap",
+          "Office and Commercial",
+          "Parking and Storage",
+          "Real Estate for Sale",
+          "Rooms and Shared",
+          "Rooms Wanted",
+          "Sublets and Temporary",
+          "Vacation Rentals",
+          "Wanted: Apartments",
+          "Wanted: Real Estate",
+          "Wanted: Sublet or Temporary",
+        ],
+        "Events and Community": [
+          "Activities",
+          "Artists",
+          "Childcare",
+          "Classes",
+          "Events",
+          "General",
+          "Groups",
+          "Local News",
+          "Lost and Found",
+          "Missed Connections",
+          "Musicians",
+          "Pets",
+          "Politics",
+          "Rants and Raves",
+          "Rideshare",
+          "Volunteers",
+        ],
+        Jobs: [
+          "Accounting and Finance",
+          "Admin and Office",
+          "Architecture and Engineering",
+          "Art, Media and Design",
+          "Customer Service",
+          "Education",
+          "Food and Hospitality",
+          "General Labor",
+          "Healthcare",
+          "IT and Software",
+          "Legal",
+          "Marketing",
+          "Sales",
+          "Skilled Trade",
+          "Transportation",
+          "Other Jobs",
+        ],
+      };
+      const selectedFiles = [];
+      function renderSubcategories(categoryName) {
+        const sub = $("#newSubcategory");
+        if (!sub) return;
+        const options = CATEGORY_OPTIONS[categoryName] || [];
+        sub.innerHTML =
+          '<option value="">Choose a subcategory</option>' +
+          options
+            .map(
+              (name) =>
+                `<option value="${moneySafe(name)}">${moneySafe(name)}</option>`,
+            )
+            .join("");
+        sub.disabled = !options.length;
+        renderVisualSubcategories(categoryName);
+        updateCategorySelectionUISafe();
+      }
+      function updateCategorySelectionUISafe() {
+        if (
+          typeof updateCategorySelectionUI === "function" &&
+          $("#newCategory")
+        )
+          updateCategorySelectionUI();
+      }
+      const CATEGORY_META = {
+        "For Sale": { icon: "🛍️", desc: "Everyday goods, new and pre-owned" },
+        Autos: { icon: "🚚", desc: "Vehicles, parts and equipment" },
+        Services: { icon: "🛠️", desc: "Skilled professionals and providers" },
+        Housing: { icon: "⌂", desc: "Rentals, sales and shared spaces" },
+        "Events and Community": {
+          icon: "▣",
+          desc: "Gatherings, groups and local life",
+        },
+        Jobs: { icon: "💼", desc: "Work, careers and opportunities" },
+      };
+      function renderVisualCategories() {
+        const grid = $("#categoryVisualGrid");
+        if (!grid) return;
+        const chosen = $("#newCategory").value;
+        grid.innerHTML = Array.from($("#newCategory").options)
+          .filter((o) => o.value)
+          .map((option) => {
+            const name = option.dataset.categoryName || option.textContent;
+            const meta = CATEGORY_META[name] || {
+              icon: "◈",
+              desc: "Explore listings in this category",
+            };
+            const count = (CATEGORY_OPTIONS[name] || ["General", "Other"])
+              .length;
+            return `<button type="button" class="category-visual-card" data-category-pick="${moneySafe(option.value)}" aria-pressed="${option.value === chosen}"><span class="category-visual-head"><span class="category-visual-icon" aria-hidden="true">${meta.icon}</span><span class="min-w-0"><span class="block text-sm font-extrabold">${moneySafe(name)}</span><span class="mt-1 block text-[11px] font-medium opacity-80">${moneySafe(meta.desc)}</span></span><span class="category-visual-count">${count}</span></span></button>`;
+          })
+          .join("");
+      }
+      function renderVisualSubcategories(categoryName) {
+        const grid = $("#subcategoryVisualGrid");
+        if (!grid) return;
+        const selected = $("#newSubcategory").value;
+        const options = CATEGORY_OPTIONS[categoryName] || [];
+        grid.innerHTML = options.length
+          ? options
+              .map(
+                (name) =>
+                  `<button type="button" class="category-chip" data-subcategory-pick="${moneySafe(name)}" aria-pressed="${name === selected}">${moneySafe(name)}</button>`,
+              )
+              .join("")
+          : '<p class="text-xs text-gray-400">No subcategories configured yet.</p>';
+      }
+      $("#categoryVisualGrid")?.addEventListener("click", (e) => {
+        const button = e.target.closest("[data-category-pick]");
+        if (!button) return;
+        $("#newCategory").value = button.dataset.categoryPick;
+        $("#newCategory").dispatchEvent(new Event("change", { bubbles: true }));
+      });
+      $("#subcategoryVisualGrid")?.addEventListener("click", (e) => {
+        const button = e.target.closest("[data-subcategory-pick]");
+        if (!button) return;
+        $("#newSubcategory").value = button.dataset.subcategoryPick;
+        $("#newSubcategory").dispatchEvent(
+          new Event("change", { bubbles: true }),
+        );
+      });
+
+      async function loadCategories() {
+        const select = $("#newCategory");
+        if (!select) return;
+        const displayNames = [
+          "For Sale",
+          "Autos",
+          "Services",
+          "Housing",
+          "Events and Community",
+          "Jobs",
+        ];
+        let active = [];
+        let loadError = null;
+        try {
+          const result = await ampAuth
+            .from("categories")
+            .select("id,name,slug,is_active")
+            .order("name");
+          if (result.error) throw result.error;
+          active = (result.data || []).filter((cat) => cat.is_active !== false);
+        } catch (err) {
+          loadError = err;
+          console.warn(
+            "Could not load categories from Supabase; showing built-in category choices:",
+            err?.message || err,
+          );
+        }
+        categoryRows.clear();
+        categoryNames.clear();
+        select.innerHTML = '<option value="">Choose a category</option>';
+
+        // Always render the six supplied main categories even when the DB query fails or the table is empty.
+        displayNames.forEach((name) => {
+          const match = active.find(
+            (cat) =>
+              (cat.name || "").toLowerCase() === name.toLowerCase() ||
+              (cat.slug || "").toLowerCase() ===
+                name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          );
+          const option = document.createElement("option");
+          option.value = match?.id || "local:" + name;
+          option.textContent = name;
+          option.dataset.categoryName = name;
+          if (match) {
+            categoryNames.set(match.id, name);
+            categoryRows.set(name.toLowerCase(), match);
+          }
+          select.appendChild(option);
+        });
+        // Preserve extra categories configured in the database.
+        active
+          .filter(
+            (cat) =>
+              !displayNames.some(
+                (n) => n.toLowerCase() === (cat.name || "").toLowerCase(),
+              ),
+          )
+          .forEach((cat) => {
+            const option = document.createElement("option");
+            option.value = cat.id;
+            option.textContent = cat.name;
+            option.dataset.categoryName = cat.name;
+            select.appendChild(option);
+            categoryNames.set(cat.id, cat.name);
+            categoryRows.set((cat.name || "").toLowerCase(), cat);
+            if (!CATEGORY_OPTIONS[cat.name])
+              CATEGORY_OPTIONS[cat.name] = ["General", "Other"];
+          });
+        renderSubcategories("");
+        renderVisualCategories();
+        if (loadError || !active.length) {
+          notify(
+            "Category options loaded. Run the category seed SQL to link listings to category records.",
+          );
+        }
+      }
+      function updateCategorySelectionUI() {
+        const catSelect = $("#newCategory");
+        const subSelect = $("#newSubcategory");
+        const categoryName =
+          catSelect.selectedOptions[0]?.dataset.categoryName ||
+          catSelect.selectedOptions[0]?.textContent ||
+          "";
+        const subcategoryName = subSelect.value;
+        renderVisualCategories();
+        renderVisualSubcategories(categoryName);
+        const summary = $("#selectedCategorySummary");
+        $("#categoryPickerCard").classList.toggle(
+          "selected",
+          Boolean(catSelect.value),
+        );
+        $("#subcategoryPickerCard").classList.toggle(
+          "selected",
+          Boolean(subcategoryName),
+        );
+        $("#subcategoryHelper").textContent = catSelect.value
+          ? subcategoryName
+            ? "Great choice — this helps buyers find your listing."
+            : "Now choose the closest matching subcategory."
+          : "Subcategories will appear after you select a main category.";
+        if (summary) {
+          summary.classList.toggle(
+            "hidden",
+            !(catSelect.value && subcategoryName),
+          );
+          $("#selectedCategoryText").textContent =
+            categoryName + "  ›  " + subcategoryName;
+        }
+      }
+      $("#createForm").addEventListener("input", clearCreateFormError);
+      $("#createForm").addEventListener("change", clearCreateFormError);
+      $("#newCategory").addEventListener("change", (e) => {
+        const option = e.target.selectedOptions[0];
+        const categoryName =
+          option?.dataset.categoryName || option?.textContent || "";
+        renderSubcategories(categoryName);
+        updateCategorySelectionUI();
+      });
+      $("#newSubcategory").addEventListener(
+        "change",
+        updateCategorySelectionUI,
+      );
+      function renderImagePreviews() {
+        const box = $("#newImagePreview");
+        const help = $("#newImageHelp");
+        if (!box) return;
+        box.innerHTML = "";
+        selectedFiles.forEach((file, index) => {
+          const url = URL.createObjectURL(file);
+          const card = document.createElement("div");
+          card.className =
+            "relative overflow-hidden rounded-xl border border-gray-200 bg-white";
+          card.innerHTML = `<img src="${url}" alt="Selected listing photo ${index + 1}" class="h-28 w-full object-cover"><button type="button" data-remove-image="${index}" class="absolute right-2 top-2 rounded-full bg-gray-900/80 px-2 py-1 text-xs font-bold text-white" aria-label="Remove image ${index + 1}">×</button><p class="truncate px-2 py-1 text-[11px] text-gray-600">${moneySafe(file.name)}</p>`;
+          box.appendChild(card);
+        });
+        if (help)
+          help.textContent = `${selectedFiles.length} of 5 images selected.`;
+      }
+      $("#newImages").addEventListener("change", (e) => {
+        const incoming = Array.from(e.target.files || []);
+        const combined = [...selectedFiles, ...incoming];
+        if (combined.length > 5) {
+          notify("You can upload a maximum of 5 images.");
+          e.target.value = "";
+          return;
+        }
+        for (const file of incoming) {
+          if (!/^image\/(jpeg|png|webp)$/.test(file.type)) {
+            notify("Use JPG, PNG or WebP images only.");
+            e.target.value = "";
+            return;
+          }
+          if (file.size > 5 * 1024 * 1024) {
+            notify("Each image must be 5 MB or smaller.");
+            e.target.value = "";
+            return;
+          }
+        }
+        selectedFiles.push(...incoming);
+        e.target.value = "";
+        renderImagePreviews();
+      });
+      $("#newImagePreview").addEventListener("click", (e) => {
+        const button = e.target.closest("[data-remove-image]");
+        if (!button) return;
+        selectedFiles.splice(Number(button.dataset.removeImage), 1);
+        renderImagePreviews();
+      });
+      async function uploadListingImages() {
+        const urls = [];
+        for (const file of selectedFiles) {
+          const safeName =
+            file.name
+              .normalize("NFKD")
+              .replace(/[^a-zA-Z0-9._-]+/g, "-")
+              .slice(-90) || "image";
+          const path = `${ampCurrentUser.id}/${crypto.randomUUID()}-${safeName}`;
+          const { data, error } = await ampAuth.storage
+            .from("africa-marketplace")
+            .upload(path, file, {
+              cacheControl: "3600",
+              upsert: false,
+              contentType: file.type,
+            });
+          if (error)
+            throw new Error(
+              `Image upload failed: ${error.message}. Check the Storage bucket name and policies.`,
+            );
+          const { data: publicData } = ampAuth.storage
+            .from("africa-marketplace")
+            .getPublicUrl(data.path);
+          urls.push(publicData.publicUrl);
+        }
+        return urls;
       }
       function renderCustomers() {
         let q = ($("#customerSearch")?.value || "").toLowerCase();
@@ -1308,7 +2535,7 @@
         );
         $("#customerTable").innerHTML = rows.length
           ? `<div class="table-wrap"><table class="w-full min-w-[720px] text-left"><thead class="bg-gray-50 text-[10px] uppercase tracking-wider text-gray-400"><tr><th class="px-5 py-3">Customer</th><th class="px-4 py-3">Listing</th><th class="px-4 py-3">Message</th><th class="px-4 py-3">Received</th><th class="px-5 py-3 text-right">Details</th></tr></thead><tbody class="divide-y divide-gray-100">${rows.map((c) => `<tr class="hover:bg-gray-50"><td class="px-5 py-4"><div class="flex items-center gap-3"><span class="grid h-9 w-9 place-items-center rounded-full bg-blue-50 text-xs font-bold text-blue-700">${c.initials}</span><div><p class="text-xs font-bold">${c.name}</p><p class="mt-1 text-[10px] text-gray-400">${c.email}</p></div></div></td><td class="px-4 py-4 text-xs">${c.listing}</td><td class="max-w-xs px-4 py-4 text-xs leading-5 text-gray-500">${c.message}</td><td class="px-4 py-4 text-xs text-gray-500">${c.time}</td><td class="px-5 py-4 text-right"><button data-customer="${c.id}" class="rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold hover:border-brand-500 hover:text-brand-600">View details</button></td></tr>`).join("")}</tbody></table></div>`
-          : '<div class="p-10 text-center text-sm text-gray-500">No customer inquiries match your search.</div>';
+          : '<div class="p-10 text-center text-sm text-gray-500">No customer inquiries yet. Messages from buyers will appear here when inquiry tracking is connected.</div>';
       }
       function go(page) {
         $$(".page").forEach((p) => p.classList.add("hidden"));
@@ -1337,15 +2564,80 @@
         });
       }
       function openEdit(id) {
-        let x = listings.find((a) => a.id === Number(id));
-        if (!x) return;
-        $("#editId").value = x.id;
-        $("#editTitle").value = x.title;
-        $("#editPrice").value = x.price;
-        $("#editStatus").value = x.status;
-        $("#editCategory").value = x.category;
-        $("#editLocation").value = x.location;
-        $("#editDesc").value = x.description;
+        const x = listings.find((a) => String(a.id) === String(id));
+        if (!x || !x.raw) {
+          notify(
+            "This listing could not be opened. Refresh your listings and try again.",
+          );
+          return;
+        }
+        const item = x.raw;
+        $("#editFormMessage").classList.add("hidden");
+        $("#editId").value = item.id;
+        $("#editTitle").value = item.title || "";
+        $("#editPrice").value = item.price == null ? "" : String(item.price);
+        $("#editCurrency").value = (item.currency || "KES").trim();
+        const categorySelect = $("#editCategory");
+        const selectedCategory = item.category_id
+          ? String(item.category_id)
+          : "";
+        // Prefer a real category UUID when available; built-in local categories remain visible as fallback choices.
+        categorySelect.value =
+          selectedCategory &&
+          Array.from(categorySelect.options).some(
+            (o) => o.value === selectedCategory,
+          )
+            ? selectedCategory
+            : x.category &&
+                Array.from(categorySelect.options).some(
+                  (o) => o.textContent === x.category,
+                )
+              ? Array.from(categorySelect.options).find(
+                  (o) => o.textContent === x.category,
+                ).value
+              : "";
+        if (
+          selectedCategory &&
+          !Array.from(categorySelect.options).some(
+            (o) => o.value === selectedCategory,
+          )
+        ) {
+          const opt = document.createElement("option");
+          opt.value = selectedCategory;
+          opt.textContent =
+            categoryNames.get(selectedCategory) ||
+            x.category ||
+            "Current category";
+          categorySelect.appendChild(opt);
+          categorySelect.value = selectedCategory;
+        }
+        $("#editCity").value = item.city || "";
+        $("#editCountryCode").value = (item.country_code || "")
+          .trim()
+          .toUpperCase();
+        $("#editDesc").value = item.description || "";
+        $("#editDescCount").textContent =
+          `${(item.description || "").length} / 10000`;
+        const statusLabels = {
+          approved: "Approved",
+          pending: "Pending review",
+          rejected: "Rejected",
+          suspended: "Suspended",
+          archived: "Archived",
+          draft: "Draft",
+        };
+        const badge = $("#editStatusBadge");
+        badge.textContent =
+          statusLabels[String(item.status || "pending").toLowerCase()] ||
+          item.status ||
+          "Pending review";
+        badge.className =
+          "rounded-full px-3 py-1.5 text-xs font-bold " +
+          (item.status === "approved"
+            ? "bg-green-100 text-green-800"
+            : item.status === "rejected"
+              ? "bg-red-100 text-red-800"
+              : "bg-amber-100 text-amber-800");
         $("#editDialog").showModal();
       }
       function openCustomer(id) {
@@ -1355,7 +2647,7 @@
           `<div class="flex items-center gap-3 rounded-xl bg-gray-50 p-4"><span class="grid h-12 w-12 place-items-center rounded-full bg-blue-100 font-bold text-blue-700">${c.initials}</span><div><h3 class="font-bold">${c.name}</h3><p class="text-xs text-gray-500">Customer inquiry</p></div></div><dl class="mt-4 space-y-3 text-sm"><div><dt class="text-xs text-gray-400">Email address</dt><dd class="mt-1 font-medium">${c.email}</dd></div><div><dt class="text-xs text-gray-400">Phone number</dt><dd class="mt-1 font-medium">${c.phone}</dd></div><div><dt class="text-xs text-gray-400">Interested in</dt><dd class="mt-1 font-medium">${c.listing}</dd></div><div><dt class="text-xs text-gray-400">Message</dt><dd class="mt-1 rounded-lg bg-gray-50 p-3 leading-6">${c.message}</dd></div><div><dt class="text-xs text-gray-400">Received</dt><dd class="mt-1">${c.time} · ${c.status}</dd></div></dl><a class="mt-4 inline-flex rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700" href="mailto:${c.email}?subject=${encodeURIComponent("Re: " + c.listing)}">Reply by email ↗</a>`;
         $("#customerDialog").showModal();
       }
-      document.addEventListener("click", (e) => {
+      document.addEventListener("click", async (e) => {
         let b = e.target.closest("button");
         if (!b) return;
         if (b.dataset.page) go(b.dataset.page);
@@ -1363,20 +2655,42 @@
         if (b.dataset.edit) openEdit(b.dataset.edit);
         if (b.dataset.customer) openCustomer(b.dataset.customer);
         if (b.dataset.customerFor) {
-          let x = listings.find((a) => a.id === Number(b.dataset.customerFor));
+          let x = listings.find(
+            (a) =>
+              a.id === b.dataset.customerFor ||
+              String(a.id) === String(b.dataset.customerFor),
+          );
           go("customers");
           $("#customerSearch").value = x ? x.title : "";
           renderCustomers();
         }
         if (b.dataset.delete) {
-          let x = listings.find((a) => a.id === Number(b.dataset.delete));
+          const x = listings.find(
+            (a) => String(a.id) === String(b.dataset.delete),
+          );
           if (
             x &&
-            confirm(`Delete “${x.title}”? This cannot be undone in this demo.`)
+            (await askConfirm(
+              `“${x.title}” will be permanently removed from your listings. This action cannot be undone.`,
+              "Delete listing?",
+              "Delete listing",
+            ))
           ) {
-            listings = listings.filter((a) => a.id !== x.id);
-            renderListings();
-            notify("Listing deleted.");
+            b.disabled = true;
+            b.innerHTML =
+              '<span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-red-300 border-t-red-600" aria-label="Deleting"></span>';
+            const { error } = await ampAuth
+              .from("items")
+              .delete()
+              .eq("id", x.id)
+              .eq("user_id", ampCurrentUser.id);
+            if (error) {
+              notify("Delete failed: " + error.message);
+              b.disabled = false;
+              return;
+            }
+            await loadSellerListings();
+            notify("Listing deleted successfully.");
           }
         }
         if (b.hasAttribute("data-close-dialog")) b.closest("dialog").close();
@@ -1393,60 +2707,276 @@
         $("#sidebar").classList.remove("open");
         $("#overlay").classList.add("hidden");
       };
-      $("#newListingTop").onclick = $("#newListing").onclick = () =>
+      $("#newListingTop").onclick = $("#newListing").onclick = () => {
+        clearCreateFormError();
+        if (!ampCurrentUser) {
+          window.location.replace("index.html?login=required");
+          return;
+        }
         $("#createDialog").showModal();
-      $("#editForm").addEventListener("submit", (e) => {
+      };
+      $("#editDesc").addEventListener("input", () => {
+        $("#editDescCount").textContent =
+          `${$("#editDesc").value.length} / 10000`;
+      });
+      $("#editForm").addEventListener("submit", async (e) => {
         e.preventDefault();
-        let x = listings.find((a) => a.id === Number($("#editId").value));
-        if (!x) return;
-        Object.assign(x, {
-          title: $("#editTitle").value.trim(),
-          price: $("#editPrice").value.trim(),
-          status: $("#editStatus").value,
-          category: $("#editCategory").value,
-          location: $("#editLocation").value.trim(),
-          description: $("#editDesc").value.trim(),
-        });
-        $("#editDialog").close();
-        renderListings();
-        notify("Listing updated successfully.");
+        const saveButton = $("#saveEdit");
+        const messageBox = $("#editFormMessage");
+        const messageText = $("#editFormMessageText");
+        const showEditError = (message) => {
+          messageText.textContent = message;
+          messageBox.classList.remove("hidden");
+          messageBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        };
+        messageBox.classList.add("hidden");
+        if (!ampCurrentUser) {
+          showEditError(
+            "Your session has expired. Please log in again, then reopen this listing.",
+          );
+          return;
+        }
+        const id = $("#editId").value;
+        const item = listings.find((a) => String(a.id) === String(id));
+        if (!item || !item.raw) {
+          showEditError(
+            "We couldn't find this listing in your account. Close this window and refresh your listings.",
+          );
+          return;
+        }
+        const title = $("#editTitle").value.trim();
+        const description = $("#editDesc").value.trim();
+        const priceText = $("#editPrice").value.trim();
+        const currency = $("#editCurrency").value;
+        const countryCode = $("#editCountryCode").value;
+        const city = $("#editCity").value.trim();
+        const categoryValue = $("#editCategory").value;
+        if (title.length < 3 || title.length > 160) {
+          showEditError("Enter a listing title between 3 and 160 characters.");
+          return;
+        }
+        if (description.length < 10 || description.length > 10000) {
+          showEditError(
+            "Enter a description between 10 and 10,000 characters.",
+          );
+          return;
+        }
+        if (
+          priceText &&
+          (!Number.isFinite(Number(priceText)) || Number(priceText) < 0)
+        ) {
+          showEditError(
+            "Enter a valid price of zero or more, or leave it blank if the price is negotiable.",
+          );
+          return;
+        }
+        if (!currency || !countryCode || !city) {
+          showEditError(
+            "Choose a currency and country, and enter the city or town.",
+          );
+          return;
+        }
+        let categoryId = null;
+        if (categoryValue && !categoryValue.startsWith("local:"))
+          categoryId = categoryValue;
+        if (categoryValue.startsWith("local:")) {
+          const categoryName = categoryValue.slice(6);
+          const found = Array.from(categoryNames.entries()).find(
+            ([uuid, name]) => name.toLowerCase() === categoryName.toLowerCase(),
+          );
+          if (found) categoryId = found[0];
+        }
+        if (!categoryId) {
+          showEditError(
+            "This category isn't linked to a category record yet. Run the category setup SQL, then refresh and try again.",
+          );
+          return;
+        }
+        saveButton.disabled = true;
+        saveButton.innerHTML =
+          '<span class="dashboard-action-spinner" aria-hidden="true"></span> Saving…';
+        try {
+          const updatePayload = {
+            title,
+            description,
+            price: priceText === "" ? null : Number(priceText),
+            currency,
+            country_code: countryCode,
+            city,
+            category_id: categoryId,
+            updated_at: new Date().toISOString(),
+          };
+          const { data, error } = await ampAuth
+            .from("items")
+            .update(updatePayload)
+            .eq("id", item.id)
+            .eq("user_id", ampCurrentUser.id)
+            .select(
+              "id,user_id,category_id,title,description,price,currency,country_code,city,image_urls,status,rejection_reason,created_at,updated_at",
+            )
+            .single();
+          if (error) throw error;
+          const index = listings.findIndex(
+            (a) => String(a.id) === String(item.id),
+          );
+          if (index >= 0) listings[index] = fromDbItem(data);
+          $("#editDialog").close();
+          renderListings();
+          notify("Your listing has been updated successfully.");
+        } catch (error) {
+          console.error("Listing update failed:", error);
+          let message =
+            "We couldn't save your changes. Please check your connection and try again.";
+          if (
+            /row-level security|permission denied/i.test(error?.message || "")
+          )
+            message =
+              "You don't have permission to update this listing. Make sure you're logged in with the account that created it and that your items UPDATE policy allows the owner to edit it.";
+          else if (/category_id|foreign key/i.test(error?.message || ""))
+            message =
+              "That category isn't available in the marketplace yet. Please choose another category or ask the site administrator to check the category setup.";
+          else if (/column .* does not exist/i.test(error?.message || ""))
+            message =
+              "The listing database schema needs updating before these fields can be saved. Please contact support.";
+          showEditError(message);
+        } finally {
+          saveButton.disabled = false;
+          saveButton.textContent = "Save changes";
+        }
       });
       $("#createForm").addEventListener("submit", async (e) => {
         e.preventDefault();
         const publishButton =
           e.submitter ||
           e.target.querySelector('button[type="submit"], button:not([type])');
-        const originalPublishText = publishButton
-          ? publishButton.textContent
+        const original = publishButton
+          ? publishButton.innerHTML
           : "Publish listing";
+        const overlay = document.getElementById("dashboardActionLoader");
+        const loaderTitle = document.getElementById("dashboardLoaderTitle");
+        const loaderMessage = document.getElementById("dashboardLoaderMessage");
+        clearCreateFormError();
+        if (!ampCurrentUser) {
+          showCreateFormError(
+            "Your session has ended. Please log in again, then reopen the listing form.",
+            "Please log in again",
+          );
+          return;
+        }
         if (publishButton) {
           publishButton.disabled = true;
-          publishButton.textContent = "Publishing…";
+          publishButton.innerHTML =
+            '<span class="dashboard-action-spinner" aria-hidden="true"></span>Publishing…';
         }
+        if (overlay) {
+          overlay.classList.add("active");
+          overlay.setAttribute("aria-hidden", "false");
+        }
+        if (loaderTitle) loaderTitle.textContent = "Publishing your listing";
+        if (loaderMessage)
+          loaderMessage.textContent =
+            "Saving your listing securely to Africa Market Place.";
         try {
-          listings.unshift({
-            id: Math.max(0, ...listings.map((x) => x.id)) + 1,
-            title: $("#newTitle").value.trim(),
-            price: $("#newPrice").value.trim(),
-            category: $("#newCategory").value,
-            location: $("#newLocation").value.trim(),
-            status: "Active",
-            views: "0",
-            chats: 0,
-            description: $("#newDesc").value.trim(),
-            symbol: "📦",
-          });
+          const title = $("#newTitle").value.trim();
+          const description = $("#newDesc").value.trim();
+          const priceText = $("#newPrice").value.trim();
+          const currency = (
+            $("#newCurrency").value.trim() || "KES"
+          ).toUpperCase();
+          const countryCode = $("#newCountryCode").value.trim().toUpperCase();
+          const city = $("#newLocation").value.trim();
+          const selectedCategoryValue = $("#newCategory").value;
+          const categoryId = selectedCategoryValue.startsWith("local:")
+            ? null
+            : selectedCategoryValue || null;
+          const categoryName =
+            $("#newCategory").selectedOptions[0]?.dataset.categoryName || "";
+          const subcategory = $("#newSubcategory").value;
+          if (title.length < 3 || title.length > 160)
+            throw new Error("Title must be between 3 and 160 characters.");
+          if (description.length < 10 || description.length > 10000)
+            throw new Error(
+              "Description must be between 10 and 10,000 characters.",
+            );
+          if (!selectedCategoryValue)
+            throw new Error("Please choose a main category.");
+          if (!subcategory) throw new Error("Please choose a subcategory.");
+          if (selectedFiles.length > 5)
+            throw new Error("You can upload up to 5 images.");
+          if (!/^[A-Z]{3}$/.test(currency))
+            throw new Error("Please choose a currency from the list.");
+          if (countryCode && !/^[A-Z]{2}$/.test(countryCode))
+            throw new Error("Country code must contain 2 letters, such as KE.");
+          const priceValue = priceText === "" ? null : Number(priceText);
+          if (
+            priceValue !== null &&
+            (!Number.isFinite(priceValue) || priceValue < 0)
+          )
+            throw new Error("Price must be zero or greater.");
+          const imageUrls = await uploadListingImages();
+          const payload = {
+            user_id: ampCurrentUser.id,
+            category_id: categoryId,
+            subcategory,
+            ...(categoryId ? {} : { category_name: categoryName }),
+            title,
+            description,
+            price: priceValue,
+            currency,
+            country_code: countryCode || null,
+            city,
+            image_urls: imageUrls,
+            status: "pending",
+          };
+          const { data, error } = await ampAuth
+            .from("items")
+            .insert(payload)
+            .select(
+              "id,user_id,category_id,title,description,price,currency,country_code,city,image_urls,status,rejection_reason,created_at,updated_at",
+            )
+            .single();
+          if (error) throw error;
+          listings.unshift(fromDbItem(data));
           e.target.reset();
+          $("#newCurrency").value = "KES";
+          selectedFiles.splice(0, selectedFiles.length);
+          renderImagePreviews();
           $("#createDialog").close();
           renderListings();
           go("listings");
-          notify(
-            "Listing added to this dashboard preview. Connect a listings table/API to persist it online.",
-          );
+          notify("Listing submitted for review.");
+        } catch (err) {
+          console.error("Create listing failed:", err);
+          const raw = String(err?.message || "");
+          let friendly =
+            "Something went wrong while saving your listing. Please try again.";
+          if (/row-level security|permission denied|not allowed/i.test(raw))
+            friendly =
+              "We couldn't save this listing because your account doesn't currently have permission. Please sign out and sign back in. If this continues, contact support.";
+          else if (/storage|upload|bucket/i.test(raw))
+            friendly =
+              "Your photos couldn't be uploaded. Please check that you are logged in, then try again with JPG, PNG or WebP images (up to 5 MB each).";
+          else if (/category_id_fkey|foreign key|category/i.test(raw))
+            friendly =
+              "This category isn't set up yet. Please choose another category or contact support.";
+          else if (/duplicate|unique/i.test(raw))
+            friendly =
+              "This listing appears to already exist. Please review your listings and try again.";
+          else if (/network|fetch|timeout/i.test(raw))
+            friendly =
+              "We couldn't connect to the server. Check your internet connection and try again.";
+          else if (/title|description|price|check constraint/i.test(raw))
+            friendly =
+              "Some listing details aren't valid. Please review the highlighted fields and try again.";
+          showCreateFormError(friendly);
         } finally {
+          if (overlay) {
+            overlay.classList.remove("active");
+            overlay.setAttribute("aria-hidden", "true");
+          }
           if (publishButton) {
             publishButton.disabled = false;
-            publishButton.textContent = originalPublishText;
+            publishButton.innerHTML = original;
           }
         }
       });
@@ -1542,6 +3072,12 @@
           try {
             const { error } = await ampAuth.auth.signOut();
             if (error) throw error;
+            listings = [];
+            customers.length = 0;
+            ampCurrentUser = null;
+            ampCurrentProfile = null;
+            renderListings();
+            renderCustomers();
             window.location.replace("index.html");
           } catch (err) {
             if (gate) gate.style.display = "none";
@@ -1555,8 +3091,19 @@
           }
         });
       }
+      listings = [];
       renderListings();
       renderCustomers();
+      (async () => {
+        await loadCategories();
+        // Wait for the auth gate to resolve before fetching user-owned rows.
+        const waitForUser = async () => {
+          for (let i = 0; i < 40 && !ampCurrentUser; i++)
+            await new Promise((r) => setTimeout(r, 100));
+          if (ampCurrentUser) await loadSellerListings();
+        };
+        await waitForUser();
+      })();
     </script>
   </body>
 </html>

@@ -198,6 +198,69 @@
     </style>
   </head>
   <body class="bg-[#f5f6f8]">
+    <div
+      id="adminAuthGate"
+      class="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-md"
+    >
+      <form
+        id="adminLoginForm"
+        class="w-full max-w-md rounded-3xl border border-white/60 bg-white p-7 shadow-2xl sm:p-9"
+      >
+        <div
+          class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-600 text-2xl font-extrabold text-white"
+        >
+          AMP
+        </div>
+        <p
+          class="text-xs font-extrabold uppercase tracking-[.18em] text-red-600"
+        >
+          Secure access
+        </p>
+        <h1 class="display mt-2 text-2xl font-extrabold">Admin sign in</h1>
+        <p class="mt-2 text-sm leading-6 text-gray-500">
+          Sign in with an active administrator account to review marketplace
+          listings.
+        </p>
+        <label class="mt-6 block text-sm font-semibold" for="adminEmail"
+          >Admin email</label
+        >
+        <input
+          id="adminEmail"
+          type="email"
+          autocomplete="username"
+          required
+          class="field mt-2"
+          placeholder="admin@africamarketplace.com"
+        />
+        <label class="mt-4 block text-sm font-semibold" for="adminPassword"
+          >Password</label
+        >
+        <input
+          id="adminPassword"
+          type="password"
+          autocomplete="current-password"
+          required
+          class="field mt-2"
+          placeholder="Enter your password"
+        />
+        <div
+          id="adminLoginError"
+          class="mt-4 hidden rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800"
+          role="alert"
+        ></div>
+        <button
+          id="adminLoginButton"
+          type="submit"
+          class="btn btn-red mt-5 w-full py-3 text-sm"
+        >
+          Sign in securely
+        </button>
+        <p class="mt-4 text-xs leading-5 text-gray-400">
+          Only accounts listed as active in the <code>public.admins</code> table
+          can access this console.
+        </p>
+      </form>
+    </div>
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:bg-white focus:p-3"
@@ -279,7 +342,7 @@
         <p
           class="mt-3 rounded-lg bg-white/10 px-2 py-1.5 text-[10px] text-gray-200"
         >
-          Prototype · Sample data only
+          Protected admin console
         </p>
       </div>
       <div
@@ -297,10 +360,10 @@
           </p>
         </div>
         <button
+          id="adminSignOut"
+          type="button"
           aria-label="Sign out"
-          onclick="
-            notify('Connect your authentication provider to enable sign out.')
-          "
+          title="Sign out"
           class="text-gray-400 hover:text-red-600"
         >
           ⇥
@@ -829,15 +892,15 @@ Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and 
           <div class="card mt-5 max-w-2xl border-amber-200 p-5">
             <h3 class="font-bold text-amber-800">Security reminder</h3>
             <p class="mt-2 text-sm leading-6 text-gray-600">
-              This front-end prototype has no login or role enforcement. Do not
-              publish it as a real admin console until authentication,
-              server-side authorization, audit logging, and protected APIs are
-              implemented.
+              Listing approval actions are protected by Supabase Auth and the
+              active administrator membership in public.admins. Other navigation
+              sections are currently prototype views; use the listing approval
+              and all listings pages for live item moderation.
             </p>
           </div>
         </section>
         <footer class="py-8 text-center text-xs text-gray-400">
-          © 2026 Africa Market Place · Admin console prototype
+          © 2026 Africa Market Place · Secure listing moderation
         </footer>
       </main>
     </div>
@@ -917,6 +980,7 @@ Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and 
       aria-live="polite"
       class="pointer-events-none fixed bottom-5 left-1/2 z-[100] -translate-x-1/2 translate-y-5 rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white opacity-0 shadow-xl transition duration-300"
     ></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       const $ = (s) => document.querySelector(s),
         $$ = (s) => [...document.querySelectorAll(s)];
@@ -1168,7 +1232,19 @@ Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and 
       function notify(msg) {
         let t = $("#toast");
         t.textContent = msg;
-        t.classList.remove("opacity-0", "translate-y-5");
+        t.classList.remove(
+          "opacity-0",
+          "translate-y-5",
+          "bg-red-700",
+          "bg-emerald-700",
+        );
+        if (/failed|error|blocked|not found|please enter/i.test(String(msg)))
+          t.classList.add("bg-red-700");
+        else if (
+          /approved|rejected|saved|signed out|success/i.test(String(msg))
+        )
+          t.classList.add("bg-emerald-700");
+        else t.classList.add("bg-gray-900");
         clearTimeout(window.toastTimer);
         window.toastTimer = setTimeout(
           () => t.classList.add("opacity-0", "translate-y-5"),
@@ -1621,6 +1697,523 @@ Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and 
         }),
       );
       refresh();
+    </script>
+    <script>
+      // Production listing moderation: Supabase Auth + active public.admins membership.
+      const AMP_ADMIN_URL = "https://zbflylizwpvvpayepwgx.supabase.co";
+      const AMP_ADMIN_KEY = "sb_publishable_9jTj9baoA67fBanhR2V8AA_t9m_mWBg";
+      const ampAdminDb = window.supabase.createClient(
+        AMP_ADMIN_URL,
+        AMP_ADMIN_KEY,
+        {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true,
+          },
+        },
+      );
+      let ampAdminUser = null;
+      let ampAdminItems = [];
+      let ampAdminProfiles = new Map();
+      let ampAdminCategories = new Map();
+      let ampAdminApprovedThis = 0;
+      let ampAdminRejectedThis = 0;
+      const ampAdminStatus = (s) =>
+        ({
+          pending: "Pending",
+          approved: "Approved",
+          rejected: "Rejected",
+          suspended: "Suspended",
+          archived: "Archived",
+          draft: "Draft",
+        })[String(s || "").toLowerCase()] || String(s || "Pending");
+      const ampAdminDate = (s) =>
+        s
+          ? new Date(s).toLocaleDateString(undefined, {
+              year: "numeric",
+              month: "short",
+              day: "2-digit",
+            })
+          : "—";
+      const ampAdminMoney = (x) =>
+        x.price == null
+          ? "Price on request"
+          : `${x.currency || "KES"} ${Number(x.price).toLocaleString()}`;
+      function ampAdminMapItem(row) {
+        const p = ampAdminProfiles.get(row.user_id) || {};
+        const cat = ampAdminCategories.get(row.category_id) || "Uncategorised";
+        return {
+          ...row,
+          seller:
+            p.full_name ||
+            p.email ||
+            `Seller ${String(row.user_id || "").slice(0, 8)}`,
+          email: p.email || "—",
+          category: cat,
+          price: ampAdminMoney(row),
+          location:
+            [row.city, row.country_code].filter(Boolean).join(", ") ||
+            "Location not provided",
+          status: ampAdminStatus(row.status),
+          date: ampAdminDate(row.created_at),
+          symbol: "📦",
+        };
+      }
+      function ampAdminErrorText(error) {
+        const m = String(error?.message || error || "Unknown error");
+        if (/row-level security|permission denied|not allowed/i.test(m))
+          return "Supabase blocked this action. Check the admin policies in the SQL setup file and confirm this account is active in public.admins.";
+        if (/JWT|token|session|auth/i.test(m))
+          return "Your session may have expired. Sign in again and retry.";
+        return m;
+      }
+      function ampAdminLoginError(message) {
+        const el = $("#adminLoginError");
+        el.textContent = message;
+        el.classList.remove("hidden");
+      }
+      function ampAdminSetBusy(button, busy, label) {
+        if (!button) return;
+        if (busy) {
+          button.dataset.originalText = button.textContent;
+          button.disabled = true;
+          button.innerHTML = `<span class="amp-button-spinner"></span>${esc(label || "Please wait…")}`;
+        } else {
+          button.disabled = false;
+          button.textContent =
+            button.dataset.originalText || "Sign in securely";
+        }
+      }
+      async function ampAdminVerify(user) {
+        if (!user)
+          throw new Error("Please sign in with your administrator account.");
+        const { data, error } = await ampAdminDb
+          .from("admins")
+          .select("user_id,role,is_active")
+          .eq("user_id", user.id)
+          .maybeSingle();
+        if (error) throw error;
+        if (!data || !data.is_active)
+          throw new Error(
+            "This account is not an active administrator. Ask the system owner to add your Auth user UUID to public.admins.",
+          );
+        ampAdminUser = user;
+        const gate = $("#adminAuthGate");
+        if (gate) gate.classList.add("hidden");
+        const name = $("#sidebar .mt-4 .min-w-0 p");
+        if (name) name.textContent = user.email || "Administrator";
+        const role = $("#sidebar .mt-4 .min-w-0 p + p");
+        if (role)
+          role.textContent = String(data.role || "moderator")
+            .replaceAll("_", " ")
+            .toUpperCase();
+        await ampAdminLoadItems();
+      }
+      async function ampAdminLoadItems() {
+        $("#moderationTable").innerHTML =
+          '<div class="p-10 text-center text-sm text-gray-500"><span class="amp-button-spinner"></span>Loading marketplace listings…</div>';
+        const { data: rows, error } = await ampAdminDb
+          .from("items")
+          .select(
+            "id,user_id,category_id,title,description,price,currency,country_code,city,image_urls,status,rejection_reason,reviewed_by,reviewed_at,published_at,created_at,updated_at",
+          )
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        const ids = [
+          ...new Set((rows || []).map((r) => r.user_id).filter(Boolean)),
+        ];
+        const cats = [
+          ...new Set((rows || []).map((r) => r.category_id).filter(Boolean)),
+        ];
+        ampAdminProfiles = new Map();
+        ampAdminCategories = new Map();
+        if (ids.length) {
+          const { data: profiles, error: profileError } = await ampAdminDb
+            .from("profiles")
+            .select("id,full_name,email")
+            .in("id", ids);
+          if (profileError)
+            console.warn(
+              "Seller names could not be loaded:",
+              profileError.message,
+            );
+          (profiles || []).forEach((p) => ampAdminProfiles.set(p.id, p));
+        }
+        if (cats.length) {
+          const { data: categoriesData, error: categoryError } =
+            await ampAdminDb
+              .from("categories")
+              .select("id,name")
+              .in("id", cats);
+          if (categoryError)
+            console.warn(
+              "Category names could not be loaded:",
+              categoryError.message,
+            );
+          (categoriesData || []).forEach((c) =>
+            ampAdminCategories.set(c.id, c.name),
+          );
+        }
+        ampAdminItems = (rows || []).map(ampAdminMapItem);
+        listings = ampAdminItems;
+        const categoryFilter = $("#moderationCategory");
+        if (categoryFilter) {
+          const selected = categoryFilter.value || "all";
+          const names = [
+            ...new Set(ampAdminItems.map((x) => x.category).filter(Boolean)),
+          ].sort();
+          categoryFilter.innerHTML =
+            '<option value="all">All categories</option>' +
+            names
+              .map((n) => `<option value="${esc(n)}">${esc(n)}</option>`)
+              .join("");
+          categoryFilter.value = names.includes(selected) ? selected : "all";
+        }
+        renderModeration();
+        renderAll();
+        renderOverview();
+        $("#statListings").textContent = ampAdminItems.length.toLocaleString();
+        $("#statPending").textContent = ampAdminItems.filter(
+          (x) => x.status === "Pending",
+        ).length;
+        $("#statReports").textContent = "—";
+      }
+      function ampAdminRow(x, moderation = false) {
+        const id = String(x.id);
+        const thumb =
+          Array.isArray(x.image_urls) && x.image_urls[0]
+            ? `<img src="${esc(x.image_urls[0])}" alt="" class="h-11 w-11 rounded-xl object-cover">`
+            : `<div class="grid h-11 w-11 place-items-center rounded-xl bg-orange-50 text-xl">📦</div>`;
+        const actions =
+          moderation && x.status === "Pending"
+            ? `<button class="btn btn-gray" data-details="${esc(id)}">View details</button><button class="btn btn-green" data-approve="${esc(id)}">✓ Approve</button><button class="btn btn-gray" data-reject="${esc(id)}">Reject</button>`
+            : `<button class="btn btn-gray" data-details="${esc(id)}">View details</button>`;
+        return `<tr class="hover:bg-gray-50/70"><td class="px-4 py-4"><div class="flex items-center gap-3">${thumb}<div><p class="text-xs font-bold">${esc(x.title)}</p><p class="mt-1 text-[10px] text-gray-400">${esc(id)} · ${esc(x.location)}</p><p class="mt-1 text-[10px] text-gray-500">Seller: ${esc(x.seller)} · ${esc(x.email)}</p></div></div></td><td class="px-4 py-4 text-xs">${esc(x.category)}</td><td class="px-4 py-4 text-xs font-bold">${esc(x.price)}</td><td class="px-4 py-4">${pill(x.status)}${x.status === "Rejected" && x.rejection_reason ? `<p class="mt-1 max-w-[220px] text-[10px] text-red-700">${esc(x.rejection_reason)}</p>` : ""}</td><td class="px-4 py-4 text-xs text-gray-500">${esc(x.date)}</td><td class="px-4 py-4"><div class="flex flex-wrap gap-1.5">${actions}</div></td></tr>`;
+      }
+      function renderModeration() {
+        const q = ($("#moderationSearch")?.value || "").toLowerCase();
+        const cat = $("#moderationCategory")?.value || "all";
+        const pending = ampAdminItems.filter(
+          (x) =>
+            x.status === "Pending" &&
+            `${x.title} ${x.seller} ${x.category}`.toLowerCase().includes(q) &&
+            (cat === "all" || x.category === cat),
+        );
+        $("#moderationTable").innerHTML = table(
+          [
+            "Submission / seller",
+            "Category",
+            "Price",
+            "Status",
+            "Submitted",
+            "Actions",
+          ],
+          pending.map((x) => ampAdminRow(x, true)).join(""),
+          "No pending listings need review.",
+        );
+        const n = ampAdminItems.filter((x) => x.status === "Pending").length;
+        [
+          "moderationCount",
+          "pendingBadge",
+          "quickPending",
+          "queuePending",
+          "statPending",
+        ].forEach((id) => {
+          const el = $("#" + id);
+          if (el) el.textContent = n;
+        });
+        $("#approvedCount").textContent = ampAdminApprovedThis;
+        $("#rejectedCount").textContent = ampAdminRejectedThis;
+      }
+      function renderAll() {
+        const q = ($("#allSearch")?.value || "").toLowerCase();
+        const st = $("#allStatus")?.value || "all";
+        const rows = ampAdminItems.filter(
+          (x) =>
+            `${x.title} ${x.seller} ${x.category}`.toLowerCase().includes(q) &&
+            (st === "all" || x.status.toLowerCase() === st.toLowerCase()),
+        );
+        $("#allListingsTable").innerHTML = table(
+          [
+            "Listing / seller",
+            "Category",
+            "Price",
+            "Status",
+            "Submitted",
+            "Actions",
+          ],
+          rows.map((x) => ampAdminRow(x, false)).join(""),
+          "No listings found.",
+        );
+      }
+      function renderOverview() {
+        const pending = ampAdminItems.filter((x) => x.status === "Pending");
+        $("#overviewQueue").innerHTML = table(
+          [
+            "Submission / seller",
+            "Category",
+            "Price",
+            "Status",
+            "Submitted",
+            "Actions",
+          ],
+          pending
+            .slice(0, 4)
+            .map((x) => ampAdminRow(x, true))
+            .join(""),
+          "Approval queue is clear.",
+        );
+        $("#statListings").textContent = ampAdminItems.length.toLocaleString();
+        $("#statPending").textContent = pending.length;
+        $("#statReports").textContent = "—";
+        renderModeration();
+      }
+      function refresh() {
+        renderModeration();
+        renderAll();
+        renderOverview();
+      }
+      function decision(id, type) {
+        const x = ampAdminItems.find((a) => String(a.id) === String(id));
+        if (!x)
+          return notify(
+            "This listing could not be found. Refresh and try again.",
+          );
+        if (type === "approve") {
+          $("#decisionId").value = String(x.id);
+          $("#decisionType").value = "approve";
+          $("#decisionTitle").textContent = "Approve listing";
+          $("#decisionSub").textContent =
+            "Approving makes this listing eligible to appear in the marketplace.";
+          $("#decisionSubmit").textContent = "Approve listing";
+          $("#decisionReason").value = "";
+          $("#decisionReason").required = false;
+          $("#decisionReason").placeholder =
+            "Optional note (not shown as a rejection reason)";
+          $("#decisionDialog").showModal();
+        } else {
+          $("#decisionId").value = String(x.id);
+          $("#decisionType").value = "reject";
+          $("#decisionTitle").textContent = "Reject listing";
+          $("#decisionSub").textContent =
+            "Explain clearly what the seller must fix before submitting again.";
+          $("#decisionSubmit").textContent = "Reject listing";
+          $("#decisionReason").value = "";
+          $("#decisionReason").required = true;
+          $("#decisionReason").placeholder =
+            "Example: Add clear product photos and a more accurate description.";
+          $("#decisionDialog").showModal();
+        }
+      }
+      async function ampAdminSubmitDecision(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        const id = $("#decisionId").value;
+        const type = $("#decisionType").value;
+        const reason = $("#decisionReason").value.trim();
+        if (type === "reject" && reason.length < 5) {
+          notify(
+            "Please enter a clear rejection reason (at least 5 characters).",
+          );
+          $("#decisionReason").focus();
+          return;
+        }
+        const item = ampAdminItems.find((x) => String(x.id) === String(id));
+        if (!item) return notify("Listing not found. Refresh and try again.");
+        const button = $("#decisionSubmit");
+        ampAdminSetBusy(
+          button,
+          true,
+          type === "approve" ? "Approving…" : "Rejecting…",
+        );
+        const payload =
+          type === "approve"
+            ? {
+                status: "approved",
+                rejection_reason: null,
+                reviewed_by: ampAdminUser.id,
+                reviewed_at: new Date().toISOString(),
+                published_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              }
+            : {
+                status: "rejected",
+                rejection_reason: reason,
+                reviewed_by: ampAdminUser.id,
+                reviewed_at: new Date().toISOString(),
+                published_at: null,
+                updated_at: new Date().toISOString(),
+              };
+        try {
+          const { error } = await ampAdminDb
+            .from("items")
+            .update(payload)
+            .eq("id", id);
+          if (error) throw error;
+          if (type === "approve") ampAdminApprovedThis++;
+          else ampAdminRejectedThis++;
+          $("#decisionDialog").close();
+          notify(
+            type === "approve"
+              ? "Listing approved. The seller will see the approved status in their dashboard."
+              : "Listing rejected. The seller will see your reason in their dashboard.",
+          );
+          await ampAdminLoadItems();
+        } catch (err) {
+          notify(ampAdminErrorText(err));
+        } finally {
+          ampAdminSetBusy(button, false);
+        }
+      }
+      function details(id) {
+        const x = ampAdminItems.find((a) => String(a.id) === String(id));
+        if (!x)
+          return notify(
+            "This listing could not be found. Refresh and try again.",
+          );
+        const images = Array.isArray(x.image_urls)
+          ? x.image_urls.filter(Boolean).slice(0, 5)
+          : [];
+        const gallery = images.length
+          ? `<div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">${images.map((src, i) => `<a href="${esc(src)}" target="_blank" rel="noopener noreferrer" class="block overflow-hidden rounded-xl border border-gray-200 bg-gray-50"><img src="${esc(src)}" alt="${esc(x.title)} photo ${i + 1}" loading="lazy" class="h-36 w-full object-cover"><span class="block px-2 py-1 text-[10px] text-gray-500">Photo ${i + 1} · Open image</span></a>`).join("")}</div>`
+          : `<div class="mt-4 rounded-xl border border-dashed border-gray-300 bg-gray-50 p-6 text-center text-sm text-gray-500">No images were uploaded for this listing.</div>`;
+        const safe = (v) =>
+          esc(v == null || v === "" ? "Not provided" : String(v));
+        $("#detailsBody").innerHTML = `
+          <div class="flex items-start gap-4 rounded-xl bg-gray-50 p-4">
+            <div class="min-w-0 flex-1"><h3 class="text-lg font-bold">${safe(x.title)}</h3><p class="mt-1 break-all text-xs text-gray-500">Listing ID: ${safe(x.id)}</p><div class="mt-2">${pill(x.status)}</div><p class="mt-2 text-base font-bold">${safe(x.price)}</p></div>
+          </div>
+          ${gallery}
+          <dl class="mt-5 grid gap-4 sm:grid-cols-2">
+            <div><dt class="text-xs font-semibold uppercase tracking-wide text-gray-400">Seller name</dt><dd class="mt-1 break-words text-sm font-medium">${safe(x.seller)}</dd></div>
+            <div><dt class="text-xs font-semibold uppercase tracking-wide text-gray-400">Seller email</dt><dd class="mt-1 break-words text-sm font-medium">${safe(x.email)}</dd></div>
+            <div><dt class="text-xs font-semibold uppercase tracking-wide text-gray-400">Seller user ID</dt><dd class="mt-1 break-all text-xs">${safe(x.user_id)}</dd></div>
+            <div><dt class="text-xs font-semibold uppercase tracking-wide text-gray-400">Category</dt><dd class="mt-1 text-sm">${safe(x.category)}</dd></div>
+            <div><dt class="text-xs font-semibold uppercase tracking-wide text-gray-400">City</dt><dd class="mt-1 text-sm">${safe(x.city)}</dd></div>
+            <div><dt class="text-xs font-semibold uppercase tracking-wide text-gray-400">Country code</dt><dd class="mt-1 text-sm">${safe(x.country_code)}</dd></div>
+            <div><dt class="text-xs font-semibold uppercase tracking-wide text-gray-400">Submitted</dt><dd class="mt-1 text-sm">${safe(x.date)}</dd></div>
+            <div><dt class="text-xs font-semibold uppercase tracking-wide text-gray-400">Last updated</dt><dd class="mt-1 text-sm">${safe(ampAdminDate(x.updated_at))}</dd></div>
+            <div class="sm:col-span-2"><dt class="text-xs font-semibold uppercase tracking-wide text-gray-400">Full description</dt><dd class="mt-1 whitespace-pre-wrap break-words rounded-xl bg-gray-50 p-3 text-sm leading-6">${safe(x.description)}</dd></div>
+            ${x.rejection_reason ? `<div class="sm:col-span-2"><dt class="text-xs font-semibold uppercase tracking-wide text-red-600">Rejection reason</dt><dd class="mt-1 whitespace-pre-wrap rounded-xl bg-red-50 p-3 text-sm text-red-800">${safe(x.rejection_reason)}</dd></div>` : ""}
+          </dl>`;
+        $("#detailsDialog").showModal();
+      }
+      async function ampAdminSignOut() {
+        const button = $("#adminSignOut");
+        ampAdminSetBusy(button, true, "Signing out…");
+        try {
+          const { error } = await ampAdminDb.auth.signOut();
+          if (error) throw error;
+          ampAdminUser = null;
+          ampAdminItems = [];
+          ampAdminProfiles.clear();
+          ampAdminCategories.clear();
+          listings = [];
+          $("#adminAuthGate").classList.remove("hidden");
+          $("#adminPassword").value = "";
+          $("#adminLoginError").classList.add("hidden");
+          notify("You have been securely signed out.");
+        } catch (e) {
+          notify("Sign out failed. Please try again.");
+        } finally {
+          ampAdminSetBusy(button, false, "Sign out");
+        }
+      }
+      $("#adminSignOut")?.addEventListener("click", ampAdminSignOut);
+      $("#adminLoginForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const button = $("#adminLoginButton");
+        const email = $("#adminEmail").value.trim();
+        const password = $("#adminPassword").value;
+        $("#adminLoginError").classList.add("hidden");
+        ampAdminSetBusy(button, true, "Checking account…");
+        try {
+          const { data, error } = await ampAdminDb.auth.signInWithPassword({
+            email,
+            password,
+          });
+          if (error) throw error;
+          try {
+            await ampAdminVerify(data.user);
+          } catch (err) {
+            await ampAdminDb.auth.signOut();
+            throw err;
+          }
+        } catch (err) {
+          ampAdminLoginError(ampAdminErrorText(err));
+        } finally {
+          ampAdminSetBusy(button, false);
+        }
+      });
+      document.addEventListener(
+        "submit",
+        (e) => {
+          if (e.target && e.target.id === "decisionForm")
+            ampAdminSubmitDecision(e);
+        },
+        true,
+      );
+      // Intercept decision clicks before the prototype handler can mutate sample data.
+      document.addEventListener(
+        "click",
+        (e) => {
+          const b = e.target.closest("button");
+          if (!b) return;
+          if (b.dataset.approve) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            decision(b.dataset.approve, "approve");
+          }
+          if (b.dataset.reject) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            decision(b.dataset.reject, "reject");
+          }
+          if (b.dataset.details) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            const old = b.innerHTML;
+            b.disabled = true;
+            b.innerHTML = '<span class="amp-button-spinner"></span>Loading…';
+            try {
+              details(b.dataset.details);
+            } finally {
+              b.disabled = false;
+              b.innerHTML = old;
+            }
+          }
+        },
+        true,
+      );
+      $("#moderationSearch")?.addEventListener("input", renderModeration);
+      $("#moderationCategory")?.addEventListener("change", renderModeration);
+      $("#allSearch")?.addEventListener("input", renderAll);
+      $("#allStatus")?.addEventListener("change", renderAll);
+      ampAdminDb.auth.getSession().then(async ({ data, error }) => {
+        if (error) {
+          ampAdminLoginError(
+            "Unable to restore your session. Please sign in again.",
+          );
+          return;
+        }
+        if (!data.session) return;
+        try {
+          await ampAdminVerify(data.session.user);
+        } catch (err) {
+          await ampAdminDb.auth.signOut();
+          $("#adminAuthGate").classList.remove("hidden");
+          ampAdminLoginError(ampAdminErrorText(err));
+        }
+      });
+      ampAdminDb.auth.onAuthStateChange((event, session) => {
+        if (event === "SIGNED_OUT") {
+          ampAdminUser = null;
+          ampAdminItems = [];
+          listings = [];
+          $("#adminAuthGate")?.classList.remove("hidden");
+        }
+      });
     </script>
   </body>
 </html>

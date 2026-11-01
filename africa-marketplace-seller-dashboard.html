@@ -678,8 +678,9 @@
         <button class="side-link w-full" data-page="customers">
           <span class="navicon">▣</span>Customer Inquiries
           <span
+            id="inquiryNavCount"
             class="ml-auto rounded-full bg-brand-600 px-2 py-0.5 text-[10px] text-white"
-            >3</span
+            >0</span
           >
         </button>
         <button class="side-link w-full" data-page="analytics">
@@ -1083,17 +1084,17 @@
           <div class="grid gap-4 sm:grid-cols-3">
             <div class="card p-4">
               <p class="text-xs text-gray-500">Total inquiries</p>
-              <p class="display mt-2 text-2xl font-extrabold">42</p>
+              <p class="display mt-2 text-2xl font-extrabold">0</p>
             </div>
             <div class="card p-4">
               <p class="text-xs text-gray-500">Awaiting reply</p>
               <p class="display mt-2 text-2xl font-extrabold text-brand-600">
-                3
+                0
               </p>
             </div>
             <div class="card p-4">
               <p class="text-xs text-gray-500">Replied this week</p>
-              <p class="display mt-2 text-2xl font-extrabold">18</p>
+              <p class="display mt-2 text-2xl font-extrabold">0</p>
             </div>
           </div>
           <div class="card mt-5 overflow-hidden">
@@ -1112,8 +1113,8 @@
             <div id="customerTable"></div>
           </div>
           <p class="mt-3 text-xs text-gray-400">
-            Demo customer records are illustrative. Connect your marketplace API
-            to show real customer data.
+            Buyer inquiries are loaded from your marketplace account. Open a
+            conversation to reply to the buyer.
           </p>
         </section>
         <section id="page-analytics" class="page hidden fade">
@@ -1843,14 +1844,20 @@
         </div>
       </div>
     </dialog>
-    <dialog id="customerDialog" aria-labelledby="customerHeading">
-      <div class="p-5 sm:p-6">
+    <dialog
+      id="customerDialog"
+      aria-labelledby="customerHeading"
+      class="w-full max-w-[620px]"
+    >
+      <div class="max-h-[88dvh] overflow-y-auto p-5 sm:p-6">
         <div class="flex items-start justify-between">
           <div>
             <h2 id="customerHeading" class="display text-xl font-bold">
               Customer details
             </h2>
-            <p class="mt-1 text-sm text-gray-500">Inquiry information</p>
+            <p class="mt-1 text-sm text-gray-500">
+              Read buyer inquiries associated with your seller account.
+            </p>
           </div>
           <button
             data-close-dialog
@@ -1949,7 +1956,8 @@
         }
       })();
       let listings = [];
-      const customers = [];
+      let customers = [],
+        activeInquiry = null;
       const moneySafe = (s) =>
         String(s).replace(
           /[&<>"']/g,
@@ -2527,15 +2535,81 @@
         return urls;
       }
       function renderCustomers() {
-        let q = ($("#customerSearch")?.value || "").toLowerCase();
-        let rows = customers.filter((c) =>
+        const q = ($("#customerSearch")?.value || "").toLowerCase();
+        const rows = customers.filter((c) =>
           (c.name + " " + c.listing + " " + c.email + " " + c.message)
             .toLowerCase()
             .includes(q),
         );
         $("#customerTable").innerHTML = rows.length
-          ? `<div class="table-wrap"><table class="w-full min-w-[720px] text-left"><thead class="bg-gray-50 text-[10px] uppercase tracking-wider text-gray-400"><tr><th class="px-5 py-3">Customer</th><th class="px-4 py-3">Listing</th><th class="px-4 py-3">Message</th><th class="px-4 py-3">Received</th><th class="px-5 py-3 text-right">Details</th></tr></thead><tbody class="divide-y divide-gray-100">${rows.map((c) => `<tr class="hover:bg-gray-50"><td class="px-5 py-4"><div class="flex items-center gap-3"><span class="grid h-9 w-9 place-items-center rounded-full bg-blue-50 text-xs font-bold text-blue-700">${c.initials}</span><div><p class="text-xs font-bold">${c.name}</p><p class="mt-1 text-[10px] text-gray-400">${c.email}</p></div></div></td><td class="px-4 py-4 text-xs">${c.listing}</td><td class="max-w-xs px-4 py-4 text-xs leading-5 text-gray-500">${c.message}</td><td class="px-4 py-4 text-xs text-gray-500">${c.time}</td><td class="px-5 py-4 text-right"><button data-customer="${c.id}" class="rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold hover:border-brand-500 hover:text-brand-600">View details</button></td></tr>`).join("")}</tbody></table></div>`
-          : '<div class="p-10 text-center text-sm text-gray-500">No customer inquiries yet. Messages from buyers will appear here when inquiry tracking is connected.</div>';
+          ? `<div class="table-wrap"><table class="w-full min-w-[760px] text-left"><thead class="bg-gray-50 text-[10px] uppercase tracking-wider text-gray-400"><tr><th class="px-5 py-3">Customer</th><th class="px-4 py-3">Listing</th><th class="px-4 py-3">Message</th><th class="px-4 py-3">Received</th><th class="px-5 py-3 text-right">Conversation</th></tr></thead><tbody class="divide-y divide-gray-100">${rows.map((c) => `<tr class="hover:bg-gray-50"><td class="px-5 py-4"><div class="flex items-center gap-3"><span class="grid h-9 w-9 place-items-center rounded-full bg-blue-50 text-xs font-bold text-blue-700">${moneySafe(c.initials)}</span><div><p class="text-xs font-bold">${moneySafe(c.name)}</p><p class="mt-1 text-[10px] text-gray-400">${moneySafe(c.email || "No email provided")}</p></div></div></td><td class="px-4 py-4 text-xs">${moneySafe(c.listing)}</td><td class="max-w-xs px-4 py-4 text-xs leading-5 text-gray-500">${moneySafe(c.message)}</td><td class="px-4 py-4 text-xs text-gray-500">${moneySafe(c.time)}</td><td class="px-5 py-4 text-right"><button data-customer="${moneySafe(c.id)}" class="rounded-lg bg-brand-600 px-3 py-2 text-xs font-semibold text-white hover:bg-brand-700">View messages</button></td></tr>`).join("")}</tbody></table></div>`
+          : '<div class="p-10 text-center text-sm text-gray-500">No customer inquiries found. New buyer inquiries will appear here.</div>';
+        const badge = $("#inquiryNavCount");
+        if (badge) badge.textContent = String(customers.length);
+        const stats =
+          $("#page-customers .grid")?.querySelectorAll(".display") || [];
+        if (stats[0]) stats[0].textContent = customers.length;
+        if (stats[1])
+          stats[1].textContent = customers.filter((c) =>
+            ["new", "read"].includes(
+              String(c.raw?.status || "new").toLowerCase(),
+            ),
+          ).length;
+        if (stats[2])
+          stats[2].textContent = customers.filter((c) =>
+            ["replied", "closed"].includes(
+              String(c.raw?.status || "").toLowerCase(),
+            ),
+          ).length;
+      }
+      async function loadCustomers() {
+        if (!ampCurrentUser) return;
+        $("#customerTable").innerHTML =
+          '<div class="p-10 text-center text-sm text-gray-500"><span class="dashboard-action-spinner" aria-hidden="true"></span> Loading buyer inquiries…</div>';
+        try {
+          const { data, error } = await ampAuth
+            .from("inquiries")
+            .select(
+              "id,item_id,seller_id,customer_id,customer_name,customer_email,customer_phone,message,status,created_at",
+            )
+            .eq("seller_id", ampCurrentUser.id)
+            .order("created_at", { ascending: false });
+          if (error) throw error;
+          customers = (data || []).map((row) => {
+            const listing = listings.find(
+              (x) => String(x.id) === String(row.item_id),
+            );
+            const name = row.customer_name || "Marketplace buyer";
+            return {
+              id: row.id,
+              name,
+              email: row.customer_email || "",
+              phone: row.customer_phone || "",
+              listing: listing?.title || "Listing",
+              message: row.message || "",
+              time: row.created_at
+                ? new Date(row.created_at).toLocaleString()
+                : "Recently",
+              initials: name
+                .split(/\s+/)
+                .slice(0, 2)
+                .map((x) => x[0])
+                .join("")
+                .toUpperCase(),
+              raw: row,
+            };
+          });
+          renderCustomers();
+        } catch (error) {
+          console.error("Could not load buyer inquiries:", error);
+          customers = [];
+          $("#customerTable").innerHTML =
+            `<div class="p-8 text-center"><p class="font-semibold text-gray-800">Messages could not be loaded</p><p class="mt-2 text-sm text-gray-500">${moneySafe(error.message || "Check inquiries table and seller SELECT policy.")}</p><button id="retryCustomers" class="mt-4 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white">Try again</button></div>`;
+          $("#retryCustomers")?.addEventListener("click", loadCustomers, {
+            once: true,
+          });
+          renderCustomers();
+        }
       }
       function go(page) {
         $$(".page").forEach((p) => p.classList.add("hidden"));
@@ -2562,6 +2636,7 @@
             ? "auto"
             : "smooth",
         });
+        if (page === "customers") loadCustomers();
       }
       function openEdit(id) {
         const x = listings.find((a) => String(a.id) === String(id));
@@ -2640,12 +2715,52 @@
               : "bg-amber-100 text-amber-800");
         $("#editDialog").showModal();
       }
-      function openCustomer(id) {
-        let c = customers.find((a) => a.id === Number(id));
-        if (!c) return;
+      async function openCustomer(id) {
+        const c = customers.find((a) => String(a.id) === String(id));
+        if (
+          !c ||
+          !ampCurrentUser ||
+          String(c.raw?.seller_id) !== String(ampCurrentUser.id)
+        )
+          return;
+        activeInquiry = c;
+        $("#customerHeading").textContent = "Buyer messages · " + c.name;
         $("#customerDetail").innerHTML =
-          `<div class="flex items-center gap-3 rounded-xl bg-gray-50 p-4"><span class="grid h-12 w-12 place-items-center rounded-full bg-blue-100 font-bold text-blue-700">${c.initials}</span><div><h3 class="font-bold">${c.name}</h3><p class="text-xs text-gray-500">Customer inquiry</p></div></div><dl class="mt-4 space-y-3 text-sm"><div><dt class="text-xs text-gray-400">Email address</dt><dd class="mt-1 font-medium">${c.email}</dd></div><div><dt class="text-xs text-gray-400">Phone number</dt><dd class="mt-1 font-medium">${c.phone}</dd></div><div><dt class="text-xs text-gray-400">Interested in</dt><dd class="mt-1 font-medium">${c.listing}</dd></div><div><dt class="text-xs text-gray-400">Message</dt><dd class="mt-1 rounded-lg bg-gray-50 p-3 leading-6">${c.message}</dd></div><div><dt class="text-xs text-gray-400">Received</dt><dd class="mt-1">${c.time} · ${c.status}</dd></div></dl><a class="mt-4 inline-flex rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700" href="mailto:${c.email}?subject=${encodeURIComponent("Re: " + c.listing)}">Reply by email ↗</a>`;
+          `<div class="rounded-xl bg-gray-50 p-4"><div class="flex flex-wrap items-start justify-between gap-3"><div><p class="text-sm font-bold text-gray-900">${moneySafe(c.name)}</p><p class="mt-1 text-xs text-gray-500">${moneySafe(c.email || "No email")} · ${moneySafe(c.phone || "No phone")}</p></div><span class="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold uppercase text-blue-700">Buyer inquiry</span></div><p class="mt-3 text-xs font-semibold text-gray-500">Listing: ${moneySafe(c.listing)}</p><p class="mt-1 text-[11px] text-gray-400">Received: ${moneySafe(c.time)}</p></div><div class="mt-5"><div class="mb-3 flex items-center justify-between"><h3 class="text-sm font-bold text-gray-900">Complete message history</h3><span class="text-[11px] text-gray-400">View only</span></div><div id="conversationThread" class="max-h-[55dvh] min-h-[180px] space-y-3 overflow-y-auto rounded-xl border border-gray-100 bg-gray-50 p-3"><div class="py-8 text-center text-xs text-gray-500">Loading messages…</div></div></div>`;
         $("#customerDialog").showModal();
+        await loadConversation(c);
+      }
+      async function loadConversation(c) {
+        const thread = $("#conversationThread");
+        if (!thread) return;
+        try {
+          const { data, error } = await ampAuth
+            .from("inquiry_messages")
+            .select("id,inquiry_id,sender_id,body,created_at")
+            .eq("inquiry_id", c.id)
+            .order("created_at", { ascending: true });
+          if (error) throw error;
+          const all = [
+            {
+              id: "original",
+              sender_id: c.raw.customer_id,
+              body: c.message,
+              created_at: c.raw.created_at,
+              original: true,
+            },
+            ...(data || []),
+          ];
+          thread.innerHTML = all
+            .map((msg) => {
+              const mine = msg.sender_id === ampCurrentUser.id;
+              return `<div class="flex ${mine ? "justify-end" : "justify-start"}"><div class="max-w-[88%] rounded-2xl ${mine ? "bg-red-600 text-white rounded-br-md" : "bg-white border border-gray-200 text-gray-800 rounded-bl-md"} px-3 py-2.5 shadow-sm"><p class="mb-1 text-[10px] font-bold ${mine ? "text-red-100" : "text-gray-400"}">${mine ? "You · Seller" : msg.original ? moneySafe(c.name) + " · Original inquiry" : "Buyer"}</p><p class="whitespace-pre-wrap break-words text-sm leading-6">${moneySafe(msg.body || "")}</p><p class="mt-1 text-right text-[10px] ${mine ? "text-red-100" : "text-gray-400"}">${msg.created_at ? new Date(msg.created_at).toLocaleString() : ""}</p></div></div>`;
+            })
+            .join("");
+          thread.scrollTop = thread.scrollHeight;
+        } catch (error) {
+          console.error("Could not load conversation:", error);
+          thread.innerHTML = `<p class="p-4 text-sm text-red-700">Conversation unavailable: ${moneySafe(error.message)}. Check inquiry_messages table and RLS policies.</p>`;
+        }
       }
       document.addEventListener("click", async (e) => {
         let b = e.target.closest("button");

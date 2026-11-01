@@ -695,7 +695,7 @@
       >
         Marketplace
       </div>
-      <a class="side-link" href="#listings"
+      <a class="side-link" href="/marketplace"
         ><span class="navicon">↗</span>View Public Marketplace</a
       >
       <div class="mt-auto rounded-xl bg-red-50 p-3">
@@ -718,7 +718,7 @@
         <div
           class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-orange-200 to-rose-300 font-bold text-gray-700"
         >
-          JM
+          <span id="sellerAvatarInitials">—</span>
         </div>
         <div class="min-w-0 flex-1">
           <p class="truncate text-xs font-bold">Account Member</p>
@@ -813,7 +813,13 @@
                 >
               </div>
               <p class="mt-4 text-xs text-gray-500">Total Listing Views</p>
-              <p class="display mt-1 text-2xl font-extrabold">2,480</p>
+              <p
+                class="display mt-1 text-2xl font-extrabold"
+                id="totalViewsStat"
+                class="display mt-1 text-2xl font-extrabold"
+              >
+                Not tracked
+              </p>
             </div>
             <div class="card p-4 sm:p-5">
               <div class="flex items-center justify-between">
@@ -826,7 +832,13 @@
                 >
               </div>
               <p class="mt-4 text-xs text-gray-500">New Inquiries</p>
-              <p class="display mt-1 text-2xl font-extrabold">42</p>
+              <p
+                class="display mt-1 text-2xl font-extrabold"
+                id="newInquiriesStat"
+                class="display mt-1 text-2xl font-extrabold"
+              >
+                0
+              </p>
             </div>
             <div class="card p-4 sm:p-5">
               <div class="flex items-center justify-between">
@@ -840,7 +852,7 @@
               </div>
               <p class="mt-4 text-xs text-gray-500">Active Listings</p>
               <p id="activeStat" class="display mt-1 text-2xl font-extrabold">
-                4
+                0
               </p>
             </div>
             <div class="card p-4 sm:p-5">
@@ -854,8 +866,11 @@
                 >
               </div>
               <p class="mt-4 text-xs text-gray-500">Seller Rating</p>
-              <p class="display mt-1 text-2xl font-extrabold">
-                4.8<span class="text-base text-gray-400">/5</span>
+              <p
+                id="sellerRatingStat"
+                class="display mt-1 text-2xl font-extrabold"
+              >
+                Not rated
               </p>
             </div>
           </div>
@@ -879,61 +894,19 @@
                   <option>Last 30 Days</option>
                 </select>
               </div>
-              <div class="mt-4 h-[210px]">
-                <svg
-                  viewBox="0 0 620 220"
-                  class="h-full w-full"
-                  role="img"
-                  aria-label="Line chart showing views rising overall throughout the week"
-                >
-                  <defs>
-                    <linearGradient id="fill" x1="0" x2="0" y1="0" y2="1">
-                      <stop
-                        offset="0"
-                        stop-color="#dc2626"
-                        stop-opacity=".15"
-                      />
-                      <stop offset="1" stop-color="#dc2626" stop-opacity="0" />
-                    </linearGradient>
-                  </defs>
-                  <g stroke="#eef0f3" stroke-width="1">
-                    <path d="M45 35H600M45 80H600M45 125H600M45 170H600" />
-                    <path
-                      d="M45 20V190M137 20V190M229 20V190M321 20V190M413 20V190M505 20V190M600 20V190"
-                    />
-                  </g>
-                  <path
-                    d="M45 160 C80 125 103 95 137 112 S200 160 229 132 S290 55 321 64 S384 120 413 95 S476 20 505 32 S570 48 600 70 L600 190 L45 190Z"
-                    fill="url(#fill)"
-                  />
-                  <path
-                    d="M45 160 C80 125 103 95 137 112 S200 160 229 132 S290 55 321 64 S384 120 413 95 S476 20 505 32 S570 48 600 70"
-                    fill="none"
-                    stroke="#dc2626"
-                    stroke-width="3.5"
-                    stroke-linecap="round"
-                  />
-                  <g fill="#dc2626">
-                    <circle cx="137" cy="112" r="4" />
-                    <circle cx="229" cy="132" r="4" />
-                    <circle cx="321" cy="64" r="4" />
-                    <circle cx="413" cy="95" r="4" />
-                    <circle cx="505" cy="32" r="4" />
-                  </g>
-                  <g fill="#9ca3af" font-size="10">
-                    <text x="14" y="38">800</text>
-                    <text x="14" y="83">600</text>
-                    <text x="14" y="128">400</text>
-                    <text x="14" y="173">200</text>
-                    <text x="39" y="208">Mon</text>
-                    <text x="130" y="208">Tue</text>
-                    <text x="222" y="208">Wed</text>
-                    <text x="314" y="208">Thu</text>
-                    <text x="406" y="208">Fri</text>
-                    <text x="498" y="208">Sat</text>
-                    <text x="590" y="208">Sun</text>
-                  </g>
-                </svg>
+              <div
+                id="viewsChartEmpty"
+                class="mt-4 flex h-[210px] items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50 px-6 text-center"
+              >
+                <div>
+                  <p class="text-sm font-semibold text-gray-700">
+                    View tracking is not enabled
+                  </p>
+                  <p class="mt-1 text-xs leading-5 text-gray-500">
+                    Real listing-view analytics will appear here once view
+                    events are recorded.
+                  </p>
+                </div>
               </div>
             </section>
             <section class="card p-4 sm:p-5">
@@ -946,55 +919,10 @@
                   View all
                 </button>
               </div>
-              <div class="mt-4 space-y-4">
-                <div class="flex gap-3">
-                  <span
-                    class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-red-50 text-brand-600"
-                    >▣</span
-                  >
-                  <div>
-                    <p class="text-xs font-semibold">
-                      New inquiry for Leather Sandals
-                    </p>
-                    <p class="mt-1 text-[11px] text-gray-400">2 minutes ago</p>
-                  </div>
-                </div>
-                <div class="flex gap-3">
-                  <span
-                    class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-green-50 text-green-600"
-                    >✓</span
-                  >
-                  <div>
-                    <p class="text-xs font-semibold">
-                      Ad #4920 approved by admin
-                    </p>
-                    <p class="mt-1 text-[11px] text-gray-400">1 hour ago</p>
-                  </div>
-                </div>
-                <div class="flex gap-3">
-                  <span
-                    class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-blue-50 text-blue-600"
-                    >★</span
-                  >
-                  <div>
-                    <p class="text-xs font-semibold">
-                      Received a 5-star rating from Kofi
-                    </p>
-                    <p class="mt-1 text-[11px] text-gray-400">4 hours ago</p>
-                  </div>
-                </div>
-                <div class="flex gap-3">
-                  <span
-                    class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-purple-50 text-purple-600"
-                    >♧</span
-                  >
-                  <div>
-                    <p class="text-xs font-semibold">
-                      Promo started on social campaign
-                    </p>
-                    <p class="mt-1 text-[11px] text-gray-400">Yesterday</p>
-                  </div>
-                </div>
+              <div id="recentActivity" class="mt-4 space-y-4">
+                <p class="py-8 text-center text-xs text-gray-500">
+                  Your latest marketplace activity will appear here.
+                </p>
               </div>
               <button
                 data-goto="customers"
@@ -1084,17 +1012,30 @@
           <div class="grid gap-4 sm:grid-cols-3">
             <div class="card p-4">
               <p class="text-xs text-gray-500">Total inquiries</p>
-              <p class="display mt-2 text-2xl font-extrabold">0</p>
+              <p
+                id="customerTotalStat"
+                class="display mt-2 text-2xl font-extrabold"
+              >
+                0
+              </p>
             </div>
             <div class="card p-4">
               <p class="text-xs text-gray-500">Awaiting reply</p>
-              <p class="display mt-2 text-2xl font-extrabold text-brand-600">
+              <p
+                id="customerAwaitingStat"
+                class="display mt-2 text-2xl font-extrabold text-brand-600"
+              >
                 0
               </p>
             </div>
             <div class="card p-4">
               <p class="text-xs text-gray-500">Replied this week</p>
-              <p class="display mt-2 text-2xl font-extrabold">0</p>
+              <p
+                id="customerRepliedStat"
+                class="display mt-2 text-2xl font-extrabold"
+              >
+                0
+              </p>
             </div>
           </div>
           <div class="card mt-5 overflow-hidden">
@@ -1126,29 +1067,47 @@
           </div>
           <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <div class="card p-5">
-              <p class="text-xs text-gray-500">Listing views</p>
-              <p class="display mt-2 text-3xl font-extrabold">2,480</p>
-              <p class="mt-2 text-xs text-green-600">
-                ↑ 12% vs previous period
+              <p class="text-xs text-gray-500">Your listings</p>
+              <p
+                id="analyticsListings"
+                class="display mt-2 text-3xl font-extrabold"
+              >
+                0
+              </p>
+              <p class="mt-2 text-xs text-gray-400">
+                Loaded from your seller account
               </p>
             </div>
             <div class="card p-5">
               <p class="text-xs text-gray-500">Customer inquiries</p>
-              <p class="display mt-2 text-3xl font-extrabold">42</p>
-              <p class="mt-2 text-xs text-green-600">↑ 5% vs previous period</p>
+              <p
+                id="analyticsInquiries"
+                class="display mt-2 text-3xl font-extrabold"
+              >
+                0
+              </p>
+              <p class="mt-2 text-xs text-gray-400">
+                Received on your listings
+              </p>
             </div>
             <div class="card p-5">
-              <p class="text-xs text-gray-500">Inquiry conversion</p>
-              <p class="display mt-2 text-3xl font-extrabold">1.7%</p>
-              <p class="mt-2 text-xs text-gray-400">Views to inquiries</p>
+              <p class="text-xs text-gray-500">Approved listings</p>
+              <p
+                id="analyticsApproved"
+                class="display mt-2 text-3xl font-extrabold"
+              >
+                0
+              </p>
+              <p class="mt-2 text-xs text-gray-400">Currently approved</p>
             </div>
           </div>
           <div class="card mt-5 p-5">
             <h3 class="display text-sm font-bold">Performance overview</h3>
             <p class="mt-2 text-sm leading-6 text-gray-500">
-              The chart on your dashboard visualizes sample daily listing views.
-              Replace the demo values with event tracking from your production
-              analytics pipeline before making business decisions.
+              Only information available in your marketplace database is shown.
+              Listing views and seller ratings are not estimated or generated.
+              They will be displayed when the corresponding tracking data is
+              connected.
             </p>
           </div>
         </section>
@@ -1166,7 +1125,7 @@
                   >Name or business name</label
                 ><input
                   id="sellerName"
-                  value="Account Member"
+                  value=""
                   class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
                 />
               </div>
@@ -1178,7 +1137,7 @@
                 ><input
                   id="sellerEmail"
                   type="email"
-                  value="jane@example.com"
+                  value=""
                   class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
                 />
               </div>
@@ -1208,6 +1167,48 @@
         </footer>
       </main>
     </div>
+
+    <dialog
+      id="productPreviewDialog"
+      class="app-modal"
+      aria-labelledby="productPreviewTitle"
+    >
+      <div class="overflow-hidden rounded-[22px] bg-white">
+        <div
+          class="flex items-start justify-between gap-4 border-b border-gray-100 px-5 py-4 sm:px-6"
+        >
+          <div>
+            <p
+              class="text-[10px] font-extrabold uppercase tracking-[.15em] text-red-600"
+            >
+              Marketplace listing
+            </p>
+            <h2
+              id="productPreviewTitle"
+              class="display mt-1 text-xl font-extrabold text-gray-900"
+            >
+              Product details
+            </h2>
+            <p
+              id="productPreviewId"
+              class="mt-1 break-all font-mono text-[10px] text-gray-400"
+            ></p>
+          </div>
+          <button
+            type="button"
+            data-close-dialog
+            class="rounded-xl border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-500 hover:bg-gray-50"
+            aria-label="Close product preview"
+          >
+            ✕
+          </button>
+        </div>
+        <div
+          id="productPreviewContent"
+          class="max-h-[72dvh] overflow-y-auto p-5 sm:p-6"
+        ></div>
+      </div>
+    </dialog>
     <dialog
       id="editDialog"
       aria-labelledby="editHeading"
@@ -1927,6 +1928,17 @@
           );
           const welcome = document.querySelector("#page-overview h2");
           if (sideName) sideName.textContent = displayName;
+          const avatarInitials = document.getElementById(
+            "sellerAvatarInitials",
+          );
+          if (avatarInitials)
+            avatarInitials.textContent =
+              displayName
+                .split(/\\s+/)
+                .slice(0, 2)
+                .map((x) => x[0] || "")
+                .join("")
+                .toUpperCase() || "S";
           if (sideRole) {
             sideRole.textContent = emailText;
             sideRole.className = "truncate text-[10px] text-gray-500";
@@ -1936,7 +1948,7 @@
               "Welcome back, " + displayName.split(/\\s+/)[0] + "! 👋";
           const map = {
             sellerName: ampCurrentProfile.full_name || displayName,
-            sellerEmail: emailText,
+            sellerEmail: ampCurrentUser.email || emailText,
             sellerPhone: ampCurrentProfile.phone || "",
             sellerCity: ampCurrentProfile.city || "",
             sellerBio: ampCurrentProfile.bio || "",
@@ -1970,15 +1982,44 @@
               "'": "&#39;",
             })[c],
         );
-      function notify(msg) {
-        let t = $("#toast");
-        t.textContent = msg;
+      function notify(msg, type = "success") {
+        const t = $("#toast");
+        if (!t) return;
+        t.textContent = String(
+          msg || "Something went wrong. Please try again.",
+        );
+        t.setAttribute("role", "status");
+        t.setAttribute("aria-live", "polite");
+        t.className =
+          "fixed bottom-5 right-5 z-[10000] max-w-[min(92vw,420px)] rounded-xl px-4 py-3 text-sm font-semibold shadow-xl transition-all " +
+          (type === "error"
+            ? "bg-red-700 text-white"
+            : type === "info"
+              ? "bg-gray-900 text-white"
+              : "bg-emerald-700 text-white");
         t.classList.remove("opacity-0", "translate-y-5");
         clearTimeout(window.toastTimer);
         window.toastTimer = setTimeout(
           () => t.classList.add("opacity-0", "translate-y-5"),
-          2600,
+          3600,
         );
+      }
+      function friendlyError(
+        error,
+        fallback = "We couldn't complete that action. Please try again.",
+      ) {
+        const raw = String(error?.message || error || "").toLowerCase();
+        if (/row.level security|permission denied|not allowed/.test(raw))
+          return "Your account doesn't currently have permission to complete this action. Please sign in again or contact support.";
+        if (/jwt|token|session|unauthori[sz]ed/.test(raw))
+          return "Your secure session may have expired. Please sign in again.";
+        if (/network|fetch|timeout|offline/.test(raw))
+          return "We couldn't connect to the marketplace. Check your internet connection and try again.";
+        if (/does not exist|schema cache|could not find the table/.test(raw))
+          return "The marketplace database is missing a required table or field. Please contact the site administrator.";
+        if (/foreign key|constraint/.test(raw))
+          return "Some selected information is no longer available. Refresh the page and try again.";
+        return fallback;
       }
       function askConfirm(
         message,
@@ -2032,7 +2073,7 @@
       function listingRows(items, compact = false) {
         if (!items.length)
           return '<div class="p-10 text-center text-sm text-gray-500">No listings found. Try changing your search or create a listing.</div>';
-        return `<div class="table-wrap"><table class="w-full min-w-[680px] text-left"><thead class="bg-gray-50 text-[9px] uppercase tracking-[.13em] text-gray-400"><tr><th class="px-5 py-3 font-semibold">Item details</th><th class="px-4 py-3 font-semibold">Status</th><th class="px-4 py-3 font-semibold">Price</th><th class="px-4 py-3 font-semibold">Stats</th><th class="px-5 py-3 text-right font-semibold">Actions</th></tr></thead><tbody class="divide-y divide-gray-100">${items.map((x) => `<tr class="hover:bg-gray-50/70"><td class="px-5 py-4"><div class="flex items-center gap-3"><div class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-orange-100 to-rose-100 text-2xl">${x.symbol || "📦"}</div><div><p class="text-xs font-bold text-gray-900">${moneySafe(x.title)}</p><p class="mt-1 text-[10px] text-gray-400">ID: AMP-${String(x.id).padStart(4, "0")} · ${moneySafe(x.location)}</p>${String(x.status).toLowerCase() === "approved" ? '<p class="mt-2 rounded-lg bg-emerald-50 px-2 py-1.5 text-[11px] font-semibold text-emerald-800">✓ Approved by Africa Market Place. Your listing is ready to be shown to customers.</p>' : String(x.status).toLowerCase() === "rejected" ? `<p class="mt-2 rounded-lg bg-red-50 px-2 py-1.5 text-[11px] text-red-800"><strong>Listing needs changes:</strong> ${moneySafe(x.raw?.rejection_reason || "Please review your listing and contact support if you need help.")}</p>` : String(x.status).toLowerCase() === "pending" ? '<p class="mt-2 text-[11px] text-amber-700">Your listing is awaiting review.</p>' : ""}</div></div></td><td class="px-4 py-4">${statusBadge(x.status)}</td><td class="px-4 py-4 text-xs font-bold">${moneySafe(x.price)}</td><td class="px-4 py-4"><div class="text-xs font-bold">${x.views} <span class="font-normal text-gray-400">views</span></div><div class="mt-1 text-[10px] text-gray-400">${x.chats} inquiries</div></td><td class="px-5 py-4"><div class="flex justify-end gap-2"><button type="button" data-edit="${x.id}" class="listing-action-btn listing-action-edit" aria-label="Edit ${moneySafe(x.title)}" title="Edit listing"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5 5 5M4 20l4.2-.8L19 8.4a2.1 2.1 0 0 0-3-3L5.2 16.2 4 20Z"/></svg></button><button type="button" data-customer-for="${x.id}" class="listing-action-btn listing-action-inquiries" title="View customer inquiries" aria-label="View inquiries for ${moneySafe(x.title)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v9a2.5 2.5 0 0 1-2.5 2.5H10l-5 4v-4.7a2.5 2.5 0 0 1-1-1.8Z"/><path d="M8 8h8M8 12h5"/></svg></button><button type="button" data-delete="${x.id}" class="listing-action-btn listing-action-delete" title="Delete listing" aria-label="Delete ${moneySafe(x.title)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 14h10l1-14M9 7V4h6v3"/></svg></button></div></td></tr>`).join("")}</tbody></table></div>`;
+        return `<div class="table-wrap"><table class="w-full min-w-[680px] text-left"><thead class="bg-gray-50 text-[9px] uppercase tracking-[.13em] text-gray-400"><tr><th class="px-5 py-3 font-semibold">Item details</th><th class="px-4 py-3 font-semibold">Status</th><th class="px-4 py-3 font-semibold">Price</th><th class="px-4 py-3 font-semibold">Stats</th><th class="px-5 py-3 text-right font-semibold">Actions</th></tr></thead><tbody class="divide-y divide-gray-100">${items.map((x) => `<tr class="hover:bg-gray-50/70"><td class="px-5 py-4"><div class="flex items-center gap-3"><div class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-orange-100 to-rose-100 text-2xl">${x.symbol || "📦"}</div><div><p class="text-xs font-bold text-gray-900">${moneySafe(x.title)}</p><p class="mt-1 text-[10px] text-gray-400">Listing ID: ${moneySafe(x.id)} · ${moneySafe(x.location)}</p>${String(x.status).toLowerCase() === "approved" ? '<p class="mt-2 rounded-lg bg-emerald-50 px-2 py-1.5 text-[11px] font-semibold text-emerald-800">✓ Approved by Africa Market Place. Your listing is ready to be shown to customers.</p>' : String(x.status).toLowerCase() === "rejected" ? `<p class="mt-2 rounded-lg bg-red-50 px-2 py-1.5 text-[11px] text-red-800"><strong>Listing needs changes:</strong> ${moneySafe(x.raw?.rejection_reason || "Please review your listing and contact support if you need help.")}</p>` : String(x.status).toLowerCase() === "pending" ? '<p class="mt-2 text-[11px] text-amber-700">Your listing is awaiting review.</p>' : ""}</div></div></td><td class="px-4 py-4">${statusBadge(x.status)}</td><td class="px-4 py-4 text-xs font-bold">${moneySafe(x.price)}</td><td class="px-4 py-4"><div class="text-xs font-bold">${x.views} <span class="font-normal text-gray-400">views</span></div><div class="mt-1 text-[10px] text-gray-400">${x.chats} inquiries</div></td><td class="px-5 py-4"><div class="flex justify-end gap-2"><button type="button" data-edit="${x.id}" class="listing-action-btn listing-action-edit" aria-label="Edit ${moneySafe(x.title)}" title="Edit listing"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5 5 5M4 20l4.2-.8L19 8.4a2.1 2.1 0 0 0-3-3L5.2 16.2 4 20Z"/></svg></button><button type="button" data-customer-for="${x.id}" class="listing-action-btn listing-action-inquiries" title="View customer inquiries" aria-label="View inquiries for ${moneySafe(x.title)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v9a2.5 2.5 0 0 1-2.5 2.5H10l-5 4v-4.7a2.5 2.5 0 0 1-1-1.8Z"/><path d="M8 8h8M8 12h5"/></svg></button><button type="button" data-delete="${x.id}" class="listing-action-btn listing-action-delete" title="Delete listing" aria-label="Delete ${moneySafe(x.title)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 14h10l1-14M9 7V4h6v3"/></svg></button></div></td></tr>`).join("")}</tbody></table></div>`;
       }
       function renderListings() {
         const q = ($("#listingSearch")?.value || "").toLowerCase();
@@ -2050,6 +2091,76 @@
           (x) => x.status === "approved",
         ).length;
         $("#navListings").textContent = listings.length;
+        renderDashboardMetrics();
+      }
+      function renderDashboardMetrics() {
+        const approved = listings.filter(
+          (x) => String(x.status).toLowerCase() === "approved",
+        ).length;
+        const total = listings.length;
+        const inquiries = customers.length;
+        const awaiting = customers.filter((c) =>
+          ["new", "read"].includes(
+            String(c.raw?.status || "new").toLowerCase(),
+          ),
+        ).length;
+        const replied = customers.filter((c) =>
+          ["replied", "closed"].includes(
+            String(c.raw?.status || "").toLowerCase(),
+          ),
+        ).length;
+        const set = (id, value) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = String(value);
+        };
+        set("activeStat", approved);
+        set("newInquiriesStat", inquiries);
+        set("customerTotalStat", inquiries);
+        set("customerAwaitingStat", awaiting);
+        set("customerRepliedStat", replied);
+        set("analyticsListings", total);
+        set("analyticsInquiries", inquiries);
+        set("analyticsApproved", approved);
+        set("navListings", total);
+        const activity = document.getElementById("recentActivity");
+        if (activity) {
+          const events = [
+            ...customers.slice(0, 5).map((c) => ({
+              icon: "▣",
+              title: "New buyer inquiry for " + c.listing,
+              time: c.time,
+              tone: "bg-red-50 text-brand-600",
+            })),
+            ...listings.slice(0, 5).map((x) => ({
+              icon: "▤",
+              title:
+                "Listing " +
+                String(x.status || "updated").toLowerCase() +
+                ": " +
+                x.title,
+              time: x.raw?.created_at
+                ? new Date(x.raw.created_at).toLocaleString()
+                : "Date unavailable",
+              tone: "bg-blue-50 text-blue-600",
+            })),
+          ]
+            .sort((a, b) => {
+              const da = Date.parse(a.time),
+                db = Date.parse(b.time);
+              return (
+                (Number.isFinite(db) ? db : 0) - (Number.isFinite(da) ? da : 0)
+              );
+            })
+            .slice(0, 5);
+          activity.innerHTML = events.length
+            ? events
+                .map(
+                  (x) =>
+                    `<div class="flex gap-3"><span class="grid h-9 w-9 shrink-0 place-items-center rounded-full ${x.tone}">${x.icon}</span><div class="min-w-0"><p class="text-xs font-semibold">${moneySafe(x.title)}</p><p class="mt-1 text-[11px] text-gray-400">${moneySafe(x.time)}</p></div></div>`,
+                )
+                .join("")
+            : '<p class="py-8 text-center text-xs text-gray-500">No marketplace activity yet. Your real listings and buyer inquiries will appear here.</p>';
+        }
       }
       function fromDbItem(item) {
         const category = item.category_id
@@ -2069,8 +2180,10 @@
             [city, country].filter(Boolean).join(", ") ||
             "Location not provided",
           status: item.status,
-          views: "—",
-          chats: 0,
+          views: "Not tracked",
+          chats: customers.filter(
+            (c) => String(c.raw?.item_id) === String(item.id),
+          ).length,
           description: item.description,
           symbol: "📦",
           raw: item,
@@ -2097,12 +2210,17 @@
           if (error) throw error;
           listings = (data || []).map(fromDbItem);
           renderListings();
+          await loadCustomers();
         } catch (error) {
           console.error("Could not load seller listings:", error);
           listings = [];
           renderListings();
           notify(
-            "We couldn't load your listings. Please check your connection and try again.",
+            friendlyError(
+              error,
+              "We couldn't load your listings. Please try again.",
+            ),
+            "error",
           );
           const target = document.getElementById("listingTable");
           if (target)
@@ -2534,15 +2652,84 @@
         }
         return urls;
       }
+      function openProductPreview(id) {
+        const item = listings.find((x) => String(x.id) === String(id));
+        if (!item || !item.raw) {
+          notify(
+            "The product could not be found in your listings. Refresh and try again.",
+            "error",
+          );
+          return;
+        }
+        const raw = item.raw;
+        const imageUrls = Array.isArray(raw.image_urls)
+          ? raw.image_urls
+          : typeof raw.image_urls === "string"
+            ? (() => {
+                try {
+                  const parsed = JSON.parse(raw.image_urls);
+                  return Array.isArray(parsed) ? parsed : [raw.image_urls];
+                } catch {
+                  return [raw.image_urls];
+                }
+              })()
+            : [];
+        const safeImages = imageUrls.filter((url) =>
+          /^https?:\/\//i.test(String(url)),
+        );
+        const images = safeImages.length
+          ? `<div class="grid grid-cols-2 gap-3 sm:grid-cols-3">${safeImages.map((url) => `<img src="${moneySafe(url)}" alt="${moneySafe(raw.title || "Product image")}" class="h-36 w-full rounded-xl border border-gray-100 object-cover sm:h-40" loading="lazy" onerror="this.style.display='none'">`).join("")}</div>`
+          : '<div class="flex h-36 items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50 text-sm text-gray-400">No product images available</div>';
+        const price =
+          raw.price == null || raw.price === ""
+            ? "Price on request"
+            : `${moneySafe(raw.currency || "KES")} ${Number(raw.price).toLocaleString()}`;
+        const fields = [
+          ["Category", item.category || "Not provided"],
+          ["Location", item.location || "Not provided"],
+          ["Status", raw.status || "Not available"],
+          [
+            "Created",
+            raw.created_at
+              ? new Date(raw.created_at).toLocaleString()
+              : "Not available",
+          ],
+        ];
+        $("#productPreviewTitle").textContent = raw.title || "Product details";
+        $("#productPreviewId").textContent = `Product ID: ${raw.id}`;
+        $("#productPreviewContent").innerHTML = `
+          ${images}
+          <div class="mt-5">
+            <p class="text-2xl font-extrabold text-gray-900">${price}</p>
+            <p class="mt-3 whitespace-pre-wrap text-sm leading-6 text-gray-600">${moneySafe(raw.description || "No description provided.")}</p>
+          </div>
+          <div class="mt-5 grid grid-cols-1 gap-3 rounded-xl bg-gray-50 p-4 sm:grid-cols-2">
+            ${fields.map(([label, value]) => `<div><p class="text-[10px] font-bold uppercase tracking-wider text-gray-400">${moneySafe(label)}</p><p class="mt-1 break-words text-sm font-semibold text-gray-800">${moneySafe(value)}</p></div>`).join("")}
+          </div>`;
+        $("#productPreviewDialog").showModal();
+      }
+
       function renderCustomers() {
         const q = ($("#customerSearch")?.value || "").toLowerCase();
         const rows = customers.filter((c) =>
-          (c.name + " " + c.listing + " " + c.email + " " + c.message)
+          (
+            c.name +
+            " " +
+            c.listing +
+            " " +
+            c.email +
+            " " +
+            c.message +
+            " " +
+            (c.raw?.customer_id || "") +
+            " " +
+            (c.raw?.item_id || "")
+          )
             .toLowerCase()
             .includes(q),
         );
         $("#customerTable").innerHTML = rows.length
-          ? `<div class="table-wrap"><table class="w-full min-w-[760px] text-left"><thead class="bg-gray-50 text-[10px] uppercase tracking-wider text-gray-400"><tr><th class="px-5 py-3">Customer</th><th class="px-4 py-3">Listing</th><th class="px-4 py-3">Message</th><th class="px-4 py-3">Received</th><th class="px-5 py-3 text-right">Conversation</th></tr></thead><tbody class="divide-y divide-gray-100">${rows.map((c) => `<tr class="hover:bg-gray-50"><td class="px-5 py-4"><div class="flex items-center gap-3"><span class="grid h-9 w-9 place-items-center rounded-full bg-blue-50 text-xs font-bold text-blue-700">${moneySafe(c.initials)}</span><div><p class="text-xs font-bold">${moneySafe(c.name)}</p><p class="mt-1 text-[10px] text-gray-400">${moneySafe(c.email || "No email provided")}</p></div></div></td><td class="px-4 py-4 text-xs">${moneySafe(c.listing)}</td><td class="max-w-xs px-4 py-4 text-xs leading-5 text-gray-500">${moneySafe(c.message)}</td><td class="px-4 py-4 text-xs text-gray-500">${moneySafe(c.time)}</td><td class="px-5 py-4 text-right"><button data-customer="${moneySafe(c.id)}" class="rounded-lg bg-brand-600 px-3 py-2 text-xs font-semibold text-white hover:bg-brand-700">View messages</button></td></tr>`).join("")}</tbody></table></div>`
+          ? `<div class="table-wrap"><table class="w-full min-w-[760px] text-left"><thead class="bg-gray-50 text-[10px] uppercase tracking-wider text-gray-400"><tr><th class="px-5 py-3">Customer</th><th class="px-4 py-3">Listing / Product ID</th><th class="px-4 py-3">Message</th><th class="px-4 py-3">Received</th><th class="px-5 py-3 text-right">Conversation</th></tr></thead><tbody class="divide-y divide-gray-100">${rows.map((c) => `<tr class="hover:bg-gray-50"><td class="px-5 py-4"><div class="flex items-center gap-3"><span class="grid h-9 w-9 place-items-center rounded-full bg-blue-50 text-xs font-bold text-blue-700">${moneySafe(c.initials)}</span><div><p class="text-xs font-bold">${moneySafe(c.name)}</p><p class="mt-1 text-[10px] text-gray-400">${moneySafe(c.email || "No email provided")}</p></div></div></td><td class="px-4 py-4 text-xs"><p>${moneySafe(c.listing)}</p><p class="mt-1 break-all font-mono text-[10px] text-gray-400">Customer: ${moneySafe(c.raw?.customer_id || "Unavailable")}<br>Product: ${moneySafe(c.raw?.item_id || "Unavailable")}</p><button type="button" data-view-product="${moneySafe(c.raw?.item_id || "")}" class="mt-2 inline-flex items-center rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-[11px] font-bold text-red-700 hover:bg-red-100" ${c.raw?.item_id ? "" : "disabled"}>Show product</button></td><td class="max-w-xs px-4 py-4 text-xs leading-5 text-gray-500">${moneySafe(c.message)}</td><td class="px-4 py-4 text-xs text-gray-500">${moneySafe(c.time)}</td><td class="px-5 py-4 text-right"><button data-customer="${moneySafe(c.id)}" class="rounded-lg bg-brand-600 px-3 py-2 text-xs font-semibold text-white hover:bg-brand-700">View messages</button></td></tr>`).join("")}</tbody></table></div>`
           : '<div class="p-10 text-center text-sm text-gray-500">No customer inquiries found. New buyer inquiries will appear here.</div>';
         const badge = $("#inquiryNavCount");
         if (badge) badge.textContent = String(customers.length);
@@ -2600,15 +2787,24 @@
             };
           });
           renderCustomers();
+          renderDashboardMetrics();
         } catch (error) {
           console.error("Could not load buyer inquiries:", error);
           customers = [];
           $("#customerTable").innerHTML =
-            `<div class="p-8 text-center"><p class="font-semibold text-gray-800">Messages could not be loaded</p><p class="mt-2 text-sm text-gray-500">${moneySafe(error.message || "Check inquiries table and seller SELECT policy.")}</p><button id="retryCustomers" class="mt-4 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white">Try again</button></div>`;
+            `<div class="p-8 text-center"><p class="font-semibold text-gray-800">Buyer inquiries are temporarily unavailable</p><p class="mt-2 text-sm text-gray-500">${moneySafe(friendlyError(error, "Please refresh and try again. If the problem continues, contact support."))}</p><button id="retryCustomers" class="mt-4 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white">Try again</button></div>`;
           $("#retryCustomers")?.addEventListener("click", loadCustomers, {
             once: true,
           });
           renderCustomers();
+          renderDashboardMetrics();
+          notify(
+            friendlyError(
+              error,
+              "Buyer inquiries are temporarily unavailable. Please try again.",
+            ),
+            "error",
+          );
         }
       }
       function go(page) {
@@ -2726,7 +2922,7 @@
         activeInquiry = c;
         $("#customerHeading").textContent = "Buyer messages · " + c.name;
         $("#customerDetail").innerHTML =
-          `<div class="rounded-xl bg-gray-50 p-4"><div class="flex flex-wrap items-start justify-between gap-3"><div><p class="text-sm font-bold text-gray-900">${moneySafe(c.name)}</p><p class="mt-1 text-xs text-gray-500">${moneySafe(c.email || "No email")} · ${moneySafe(c.phone || "No phone")}</p></div><span class="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold uppercase text-blue-700">Buyer inquiry</span></div><p class="mt-3 text-xs font-semibold text-gray-500">Listing: ${moneySafe(c.listing)}</p><p class="mt-1 text-[11px] text-gray-400">Received: ${moneySafe(c.time)}</p></div><div class="mt-5"><div class="mb-3 flex items-center justify-between"><h3 class="text-sm font-bold text-gray-900">Complete message history</h3><span class="text-[11px] text-gray-400">View only</span></div><div id="conversationThread" class="max-h-[55dvh] min-h-[180px] space-y-3 overflow-y-auto rounded-xl border border-gray-100 bg-gray-50 p-3"><div class="py-8 text-center text-xs text-gray-500">Loading messages…</div></div></div>`;
+          `<div class="rounded-xl bg-gray-50 p-4"><div class="flex flex-wrap items-start justify-between gap-3"><div><p class="text-sm font-bold text-gray-900">${moneySafe(c.name)}</p><p class="mt-1 text-xs text-gray-500">${moneySafe(c.email || "No email")} · ${moneySafe(c.phone || "No phone")}</p></div><span class="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold uppercase text-blue-700">Buyer inquiry</span></div><p class="mt-3 text-xs font-semibold text-gray-700">Listing: ${moneySafe(c.listing)}</p><p class="mt-1 break-all font-mono text-[10px] text-gray-400">Customer ID: ${moneySafe(c.raw?.customer_id || "Unavailable")}<br>Product ID: ${moneySafe(c.raw?.item_id || "Unavailable")}</p><p class="mt-1 text-[11px] text-gray-400">Received: ${moneySafe(c.time)}</p></div><div class="mt-5"><div class="mb-3 flex items-center justify-between"><h3 class="text-sm font-bold text-gray-900">Complete message history</h3><span class="text-[11px] text-gray-400">View only</span></div><div id="conversationThread" class="max-h-[55dvh] min-h-[180px] space-y-3 overflow-y-auto rounded-xl border border-gray-100 bg-gray-50 p-3"><div class="py-8 text-center text-xs text-gray-500">Loading messages…</div></div></div>`;
         $("#customerDialog").showModal();
         await loadConversation(c);
       }
@@ -2759,7 +2955,7 @@
           thread.scrollTop = thread.scrollHeight;
         } catch (error) {
           console.error("Could not load conversation:", error);
-          thread.innerHTML = `<p class="p-4 text-sm text-red-700">Conversation unavailable: ${moneySafe(error.message)}. Check inquiry_messages table and RLS policies.</p>`;
+          thread.innerHTML = `<div class="p-5 text-center"><p class="text-sm font-semibold text-gray-800">This conversation couldn't be loaded</p><p class="mt-2 text-xs leading-5 text-gray-500">${moneySafe(friendlyError(error, "Please try again in a moment."))}</p></div>`;
         }
       }
       document.addEventListener("click", async (e) => {
@@ -2769,6 +2965,7 @@
         if (b.dataset.goto) go(b.dataset.goto);
         if (b.dataset.edit) openEdit(b.dataset.edit);
         if (b.dataset.customer) openCustomer(b.dataset.customer);
+        if (b.dataset.viewProduct) openProductPreview(b.dataset.viewProduct);
         if (b.dataset.customerFor) {
           let x = listings.find(
             (a) =>
@@ -2800,12 +2997,18 @@
               .eq("id", x.id)
               .eq("user_id", ampCurrentUser.id);
             if (error) {
-              notify("Delete failed: " + error.message);
+              notify(
+                friendlyError(
+                  error,
+                  "We couldn't delete this listing. Please try again.",
+                ),
+                "error",
+              );
               b.disabled = false;
               return;
             }
             await loadSellerListings();
-            notify("Listing deleted successfully.");
+            notify("Listing deleted successfully.", "success");
           }
         }
         if (b.hasAttribute("data-close-dialog")) b.closest("dialog").close();
@@ -2937,7 +3140,10 @@
           if (index >= 0) listings[index] = fromDbItem(data);
           $("#editDialog").close();
           renderListings();
-          notify("Your listing has been updated successfully.");
+          notify(
+            "Your listing changes have been saved successfully.",
+            "success",
+          );
         } catch (error) {
           console.error("Listing update failed:", error);
           let message =
@@ -3059,7 +3265,10 @@
           $("#createDialog").close();
           renderListings();
           go("listings");
-          notify("Listing submitted for review.");
+          notify(
+            "Your listing has been submitted successfully and is awaiting review.",
+            "success",
+          );
         } catch (err) {
           console.error("Create listing failed:", err);
           const raw = String(err?.message || "");
@@ -3139,11 +3348,14 @@
           );
           if (sideName)
             sideName.textContent = patch.full_name || ampCurrentUser.email;
-          notify("Profile saved successfully.");
+          notify("Your profile has been updated successfully.", "success");
         } catch (err) {
           notify(
-            err.message ||
-              "Unable to save profile. Check your profiles table RLS policy.",
+            friendlyError(
+              err,
+              "We couldn't save your profile. Please review your details and try again.",
+            ),
+            "error",
           );
         } finally {
           if (overlay) {
@@ -3215,7 +3427,10 @@
         const waitForUser = async () => {
           for (let i = 0; i < 40 && !ampCurrentUser; i++)
             await new Promise((r) => setTimeout(r, 100));
-          if (ampCurrentUser) await loadSellerListings();
+          if (ampCurrentUser) {
+            await loadSellerListings();
+            if (!customers.length) await loadCustomers();
+          }
         };
         await waitForUser();
       })();

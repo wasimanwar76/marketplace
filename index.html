@@ -370,6 +370,213 @@
         }
       }
     </style>
+
+    <style id="amp-professional-redesign">
+      :root {
+        --brand: #b91c1c;
+        --brand-dark: #991b1b;
+        --ink: #111827;
+        --surface: #fff;
+        --muted: #64748b;
+        --line: #e5e7eb;
+      }
+      body {
+        background: #fff;
+        color: #172033;
+        letter-spacing: -0.008em;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        letter-spacing: -0.035em;
+      }
+      p {
+        line-height: 1.75;
+      }
+      header#header {
+        border-bottom-color: #e8edf3;
+        box-shadow: 0 5px 24px rgba(15, 23, 42, 0.045);
+      }
+      header nav {
+        min-height: 72px;
+      }
+      .nav-link {
+        position: relative;
+        padding: 8px 0;
+      }
+      .nav-link:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 100%;
+        bottom: 0;
+        height: 2px;
+        background: var(--brand);
+        transition: right 0.2s ease;
+      }
+      .nav-link:hover:after {
+        right: 0;
+      }
+      .hero-bg {
+        background:
+          radial-gradient(
+            ellipse at 85% 10%,
+            rgba(185, 28, 28, 0.34),
+            transparent 42%
+          ),
+          radial-gradient(
+            ellipse at 0 100%,
+            rgba(180, 83, 9, 0.12),
+            transparent 38%
+          ),
+          linear-gradient(120deg, #101827 0%, #1f2937 58%, #451616 100%);
+      }
+      .hero-bg h1 {
+        max-width: 850px;
+        line-height: 1.04;
+        letter-spacing: -0.055em;
+      }
+      .hero-bg p {
+        max-width: 690px;
+      }
+      .hero-bg button,
+      .hero-bg a {
+        border-radius: 12px;
+      }
+      section {
+        scroll-margin-top: 88px;
+      }
+      section[id]:not(#top) {
+        position: relative;
+      }
+      section h2 {
+        line-height: 1.15;
+      }
+      #categories > div > div:first-child p,
+      #countries .text-center p,
+      #faq .text-center p {
+        font-size: 15px;
+      }
+      .shadow-card {
+        box-shadow:
+          0 3px 8px rgba(15, 23, 42, 0.035),
+          0 16px 40px -28px rgba(15, 23, 42, 0.24);
+      }
+      article.rounded-2xl,
+      .reveal.rounded-2xl {
+        border-color: #e7ebf0;
+      }
+      button,
+      a {
+        transition:
+          background-color 0.18s ease,
+          color 0.18s ease,
+          border-color 0.18s ease,
+          box-shadow 0.18s ease,
+          transform 0.18s ease;
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      textarea:focus-visible {
+        outline: 3px solid rgba(185, 28, 28, 0.28);
+        outline-offset: 3px;
+      }
+      input,
+      select,
+      textarea {
+        border-color: #d8dee8;
+      }
+      #searchForm {
+        border: 1px solid #e7ebf0;
+        box-shadow: 0 18px 45px -28px rgba(15, 23, 42, 0.36);
+      }
+      #listings,
+      #events,
+      #faq {
+        background: #f7f8fa;
+      }
+      #listingGrid > article {
+        border: 1px solid #e7ebf0;
+        border-radius: 18px;
+        overflow: hidden;
+        background: #fff;
+      }
+      .loc-btn {
+        min-height: 138px;
+        border-color: #e5eaf0;
+      }
+      .country-mark {
+        display: inline-grid;
+        width: 46px;
+        height: 46px;
+        place-items: center;
+        border-radius: 14px;
+        background: #fef2f2;
+        color: #991b1b;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        border: 1px solid #fee2e2;
+      }
+      .cta-pattern {
+        background-color: #991b1b;
+        background-image:
+          radial-gradient(
+            circle at 12% 15%,
+            rgba(255, 255, 255, 0.12),
+            transparent 26%
+          ),
+          linear-gradient(125deg, #b91c1c, #7f1d1d);
+      }
+      #faq details {
+        border: 1px solid #e7ebf0;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      #faq details[open] {
+        border-color: #fecaca;
+        box-shadow: 0 10px 30px -24px rgba(127, 29, 29, 0.5);
+      }
+      footer {
+        background: #111827;
+      }
+      footer a:hover {
+        color: #fff;
+      }
+      dialog {
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 30px 100px rgba(15, 23, 42, 0.28);
+      }
+      #loader {
+        background: rgba(255, 255, 255, 0.97);
+      }
+      .reveal {
+        will-change: opacity, transform;
+      }
+      @media (max-width: 640px) {
+        header nav {
+          min-height: 64px;
+        }
+        .hero-bg h1 {
+          font-size: clamp(2.25rem, 10vw, 3.5rem);
+        }
+        #searchForm {
+          border-radius: 18px;
+        }
+        .loc-btn {
+          min-height: 120px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .reveal {
+          will-change: auto;
+        }
+      }
+    </style>
   </head>
 
   <body class="bg-white antialiased">
@@ -416,7 +623,7 @@
           <li>
             <a
               class="nav-link hover:text-brand-600 transition-colors"
-              href="#listings"
+              href="/marketplace"
               >Marketplace</a
             >
           </li>
@@ -521,7 +728,7 @@
           <li>
             <a
               class="block rounded-lg px-3 py-2.5 hover:bg-gray-50"
-              href="#listings"
+              href="/marketplace"
               >Marketplace</a
             >
           </li>
@@ -2571,7 +2778,14 @@
                 Featured Listings
               </h2>
               <p class="mt-1 text-sm text-ink-600">
-                Trending products and services right now
+                Discover products and services shared by marketplace sellers.
+              </p>
+              <p class="mt-3 max-w-2xl text-sm leading-7 text-ink-600">
+                Review listing photographs, descriptions, prices, and seller
+                details before making contact. Use the search and location
+                filters to find relevant offers. Listing availability and
+                details are provided by the respective sellers and should be
+                confirmed with them directly.
               </p>
             </div>
             <button
@@ -2639,7 +2853,7 @@
                 data-loc="Lagos"
                 class="loc-btn reveal w-full rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:-translate-y-1 hover:border-brand-600 hover:shadow-card"
               >
-                <span class="text-3xl" aria-hidden="true">🇳🇬</span
+                <span class="country-mark" aria-hidden="true">NG</span
                 ><span class="mt-2 block font-semibold">Nigeria</span
                 ><span class="text-xs text-ink-500">Lagos</span>
               </button>
@@ -2651,7 +2865,7 @@
                 class="loc-btn reveal w-full rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:-translate-y-1 hover:border-brand-600 hover:shadow-card"
                 style="--d: 60ms"
               >
-                <span class="text-3xl" aria-hidden="true">🇬🇭</span
+                <span class="country-mark" aria-hidden="true">GH</span
                 ><span class="mt-2 block font-semibold">Ghana</span
                 ><span class="text-xs text-ink-500">Accra</span>
               </button>
@@ -2663,7 +2877,7 @@
                 class="loc-btn reveal w-full rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:-translate-y-1 hover:border-brand-600 hover:shadow-card"
                 style="--d: 120ms"
               >
-                <span class="text-3xl" aria-hidden="true">🇰🇪</span
+                <span class="country-mark" aria-hidden="true">KE</span
                 ><span class="mt-2 block font-semibold">Kenya</span
                 ><span class="text-xs text-ink-500">Nairobi</span>
               </button>
@@ -2675,7 +2889,7 @@
                 class="loc-btn reveal w-full rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:-translate-y-1 hover:border-brand-600 hover:shadow-card"
                 style="--d: 180ms"
               >
-                <span class="text-3xl" aria-hidden="true">🇿🇦</span
+                <span class="country-mark" aria-hidden="true">ZA</span
                 ><span class="mt-2 block font-semibold">South Africa</span
                 ><span class="text-xs text-ink-500">Cape Town</span>
               </button>
@@ -2699,7 +2913,7 @@
                 class="loc-btn reveal w-full rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:-translate-y-1 hover:border-brand-600 hover:shadow-card"
                 style="--d: 300ms"
               >
-                <span class="text-3xl" aria-hidden="true">🇷🇼</span
+                <span class="country-mark" aria-hidden="true">RW</span
                 ><span class="mt-2 block font-semibold">Rwanda</span
                 ><span class="text-xs text-ink-500">Kigali</span>
               </button>
@@ -2724,7 +2938,15 @@
                 Upcoming Events
               </h2>
               <p class="mt-1 text-sm text-ink-600">
-                Meet sellers, learn new skills, and grow your network
+                Find opportunities to connect, learn, and build business
+                relationships.
+              </p>
+              <p class="mt-3 max-w-2xl text-sm leading-7 text-ink-600">
+                Events can help entrepreneurs exchange practical knowledge, meet
+                potential partners, and learn new ways to reach customers.
+                Review the event information and confirm dates, availability,
+                and participation details with the organiser before making
+                plans.
               </p>
             </div>
             <button
@@ -2934,7 +3156,13 @@
               Frequently Asked Questions
             </h2>
             <p class="mt-2 text-sm text-ink-500">
-              Quick answers before you get started
+              Guidance on accounts, listings, advertising, and getting started.
+            </p>
+            <p class="mx-auto mt-4 max-w-2xl text-sm leading-7 text-ink-600">
+              The answers below explain the main ways buyers and sellers can use
+              the platform. If your question relates to a particular listing,
+              payment, event, or seller, contact the relevant party to confirm
+              the latest information.
             </p>
           </div>
           <div class="mt-10 space-y-3 reveal">
@@ -3102,8 +3330,11 @@
             <h2 id="news-h" class="font-display text-xl sm:text-2xl font-bold">
               Get deals and growth tips in your inbox
             </h2>
-            <p class="mt-1 text-sm text-ink-600">
-              New listings, selling advice, and local events. No spam.
+            <p class="mt-1 max-w-xl text-sm leading-6 text-ink-600">
+              Receive occasional marketplace updates, practical selling
+              guidance, and information about local business events. Subscribe
+              with an email address you can access; you can decide whether these
+              updates are useful to you.
             </p>
           </div>
           <form
@@ -3743,7 +3974,8 @@
               )
               .eq("status", "approved")
               .order("published_at", { ascending: false, nullsFirst: false })
-              .order("created_at", { ascending: false }).limit(4);
+              .order("created_at", { ascending: false })
+              .limit(4);
 
             // If the optional category relationship is not configured, load items without the join.
             if (result.error) {

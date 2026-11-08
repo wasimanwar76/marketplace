@@ -4063,6 +4063,8 @@
             target.append(item);
           }
         }
+        // Get membership from the authenticated server, not browser-visible RLS rows.
+        // This guarantees that the purchase panel is hidden for a server-confirmed active plan.
         async function refresh(options = {}) {
           if (checking) return;
           const account = user();
@@ -4071,29 +4073,71 @@
           const details = el("subscriptionDetails");
           if (details) details.textContent = "Checking membership status…";
           try {
-            const { data, error } = await ampAuth
-              .from("membership_subscriptions")
-              .select(
-                "subscription_name,amount,currency,status,current_period_start,current_period_end,paypal_subscription_id,created_at",
-              )
-              .eq("user_id", account.id)
-              .order("status", { ascending: true })
-              .order("created_at", { ascending: false })
-              .limit(8);
-            if (error) throw error;
-            current = (data || []).find(isActive) || (data || [])[0] || null;
+            const { data: sessionData, error: sessionError } =
+              await ampAuth.auth.getSession();
+            if (sessionError) throw sessionError;
+            const token = sessionData?.session?.access_token;
+            if (!token)
+              throw new Error("Sign in required. Your session has expired.");
+            let savedId = "";
+            try {
+              savedId =
+                localStorage.getItem(
+                  `amp_last_paypal_subscription_${account.id}`,
+                ) || "";
+            } catch (_) {}
+            const pendingId =
+              sessionStorage.getItem("amp_pending_paypal_subscription") || "";
+            const candidate = /^I-[A-Za-z0-9]+$/.test(pendingId)
+              ? pendingId
+              : savedId;
+            const response = await fetch(config.verifyEndpoint, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+                apikey: AMP_SUPABASE_KEY,
+              },
+              body: JSON.stringify({
+                action: "get_membership",
+                subscription_id: candidate,
+              }),
+            });
+            const payload = await response.json().catch(() => ({}));
+            if (
+              !response.ok ||
+              payload.ok !== true ||
+              !("membership" in payload)
+            ) {
+              throw new Error(
+                payload.error ||
+                  `Membership status endpoint unavailable (HTTP ${response.status}). Deploy the updated swift-function-membership-fixed.ts.`,
+              );
+            }
+            current = payload.membership;
             renderDetails(current);
-            membershipState = isActive(current) ? "active" : "inactive";
+            membershipState =
+              payload.active === true && isActive(current)
+                ? "active"
+                : "inactive";
             updateMembershipUI(membershipState === "active", current);
             if (membershipState === "active") {
               message(
                 "Your annual membership is active. Welcome to your seller dashboard!",
                 "success",
               );
+              if (current.paypal_subscription_id) {
+                try {
+                  localStorage.setItem(
+                    `amp_last_paypal_subscription_${account.id}`,
+                    current.paypal_subscription_id,
+                  );
+                } catch (_) {}
+              }
               showWelcomeForActive(current);
             } else if (current?.status === "pending") {
               message(
-                "Your PayPal subscription is pending activation. If you approved payment, check back shortly or contact support with the PayPal subscription ID.",
+                "PayPal approval or membership activation is still pending. Check membership again if you have just completed checkout.",
                 "warning",
               );
               if (!options.silent && !busyCheckout) showDialog();
@@ -4101,20 +4145,20 @@
               message(
                 current
                   ? `Membership status: ${current.status || "inactive"}. Choose a plan to subscribe.`
-                  : "No membership found. Choose a $20 or $60 annual plan to subscribe.",
+                  : "No active membership found. Choose a $20 or $60 annual plan to subscribe.",
                 "warning",
               );
               if (!options.silent && !busyCheckout) showDialog();
             }
             lastError = "";
           } catch (error) {
+            // Never unlock dashboard based on localStorage or the PayPal return URL.
             current = null;
             membershipState = "error";
             updateMembershipUI(false);
             renderDetails(null, true);
             lastError = humanError(error, "Could not check membership status.");
             message("Subscription check failed: " + lastError, "error");
-            // Verification failure is not proof of nonpayment: keep actions locked and show error.
             if (!options.silent && !busyCheckout) showDialog();
           } finally {
             checking = false;
@@ -4359,6 +4403,14 @@
             "amp_pending_paypal_subscription",
             payload.subscription_id,
           );
+          try {
+            const account = user();
+            if (account)
+              localStorage.setItem(
+                `amp_last_paypal_subscription_${account.id}`,
+                payload.subscription_id,
+              );
+          } catch (_) {}
           sessionStorage.setItem("amp_pending_paypal_plan", code);
           sessionStorage.setItem(
             "amp_pending_paypal_approval_url",
@@ -4624,7 +4676,16 @@
               b.addEventListener("click", () => selectPlan(b.dataset.subPlan)),
             );
           updatePendingApprovalUI();
-          refresh().then(() => resumePayPalCheckout());
+          const checkoutResult = new URL(window.location.href).searchParams.get(
+            "amp_checkout",
+          );
+          if (checkoutResult) {
+            resumePayPalCheckout().finally(() => {
+              if (membershipState === "unknown") refresh();
+            });
+          } else {
+            refresh();
+          }
         }
         window.ampMembership = { init, refresh };
       })();

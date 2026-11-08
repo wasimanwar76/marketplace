@@ -2007,6 +2007,13 @@
               >Manage Sandbox test accounts</a
             >
             <button
+              id="paypalResumeApproval"
+              type="button"
+              class="hidden font-bold text-blue-700 underline"
+            >
+              Reopen pending PayPal approval
+            </button>
+            <button
               id="paypalRetrySelected"
               type="button"
               class="font-bold text-blue-700 underline"
@@ -2014,6 +2021,18 @@
               Retry PayPal checkout
             </button>
           </div>
+          <p
+            id="paypalPendingNote"
+            class="mt-2 text-blue-800"
+            aria-live="polite"
+          ></p>
+          <p class="mt-2 text-blue-800">
+            If PayPal shows a generic error <strong>after buyer login</strong>,
+            the subscription is still pending. Check the Sandbox Personal
+            buyer's funding source and the Business merchant's subscription
+            eligibility. This is a PayPal-hosted approval failure, not evidence
+            of a JWT error in your dashboard.
+          </p>
           <p
             id="paypalDiagnosticHint"
             class="mt-2 break-words text-blue-800"
@@ -4130,11 +4149,56 @@
             payload.subscription_id,
           );
           sessionStorage.setItem("amp_pending_paypal_plan", code);
+          sessionStorage.setItem(
+            "amp_pending_paypal_approval_url",
+            approval.href,
+          );
+          updatePendingApprovalUI();
           message(
             "Redirecting to PayPal Sandbox to approve your annual subscription…",
             "info",
           );
           window.location.assign(approval.href);
+        }
+        function readPendingApproval() {
+          const id =
+            sessionStorage.getItem("amp_pending_paypal_subscription") || "";
+          const plan = sessionStorage.getItem("amp_pending_paypal_plan") || "";
+          const href =
+            sessionStorage.getItem("amp_pending_paypal_approval_url") || "";
+          try {
+            const url = new URL(href);
+            if (
+              !/^I-[A-Za-z0-9]+$/.test(id) ||
+              !["20", "60"].includes(plan) ||
+              url.protocol !== "https:" ||
+              url.hostname !== "www.sandbox.paypal.com" ||
+              !url.pathname.startsWith("/webapps/billing/subscriptions")
+            )
+              return null;
+            return { id, plan, href: url.href };
+          } catch {
+            return null;
+          }
+        }
+        function clearPendingApproval() {
+          for (const k of [
+            "amp_pending_paypal_subscription",
+            "amp_pending_paypal_plan",
+            "amp_pending_paypal_approval_url",
+          ])
+            sessionStorage.removeItem(k);
+          updatePendingApprovalUI();
+        }
+        function updatePendingApprovalUI() {
+          const pending = readPendingApproval();
+          const button = el("paypalResumeApproval");
+          if (button) button.classList.toggle("hidden", !pending);
+          const note = el("paypalPendingNote");
+          if (note)
+            note.textContent = pending
+              ? `Existing $${pending.plan} approval is pending (subscription ${pending.id}). You can reopen it instead of creating another subscription. Only PayPal can complete approval.`
+              : "";
         }
         async function selectPlan(code) {
           if (busyCheckout) return;
@@ -4163,6 +4227,13 @@
             "w-full rounded-xl bg-[#0070ba] px-5 py-3 font-bold text-white hover:bg-[#005ea6] disabled:opacity-60";
           button.textContent = `Continue to PayPal Sandbox — $${code}/year`;
           container.append(button);
+          const pending = readPendingApproval();
+          if (pending && pending.plan === code) {
+            message(
+              `A $${code} checkout is already pending (ID ${pending.id}). Reopen its approval link below, or use Retry checkout to start a new session if the old link has expired.`,
+              "warning",
+            );
+          }
           const planId = config.paypalPlans?.[code];
           if (!planId || !/^P-[A-Za-z0-9]+$/.test(planId)) {
             button.disabled = true;
@@ -4225,8 +4296,7 @@
             url.pathname + url.search + url.hash,
           );
           if (result === "cancelled") {
-            sessionStorage.removeItem("amp_pending_paypal_subscription");
-            sessionStorage.removeItem("amp_pending_paypal_plan");
+            clearPendingApproval();
             showDialog();
             message(
               "PayPal approval was cancelled. You have not been charged by this checkout. Choose a plan to try again.",
@@ -4270,8 +4340,7 @@
             );
           } finally {
             busyCheckout = false;
-            sessionStorage.removeItem("amp_pending_paypal_subscription");
-            sessionStorage.removeItem("amp_pending_paypal_plan");
+            clearPendingApproval();
           }
         }
         function init() {
@@ -4285,9 +4354,29 @@
             if (lastSelected) selectPlan(lastSelected);
           });
           el("subscriptionRetry")?.addEventListener("click", () => refresh());
+          el("paypalResumeApproval")?.addEventListener("click", () => {
+            const pending = readPendingApproval();
+            if (!pending) {
+              message(
+                "No valid pending PayPal approval link is stored in this browser tab.",
+                "warning",
+              );
+              return;
+            }
+            window.location.assign(pending.href);
+          });
+          updatePendingApprovalUI();
           el("paypalRetrySelected")?.addEventListener("click", () => {
-            if (lastSelected && !busyCheckout) selectPlan(lastSelected);
-            else message("Choose the $20 or $60 plan first.", "info");
+            if (!lastSelected || busyCheckout) {
+              message("Choose the $20 or $60 plan first.", "info");
+              return;
+            }
+            clearPendingApproval();
+            selectPlan(lastSelected);
+            message(
+              "Previous checkout link cleared. Continue to PayPal to create a fresh Sandbox approval session.",
+              "info",
+            );
           });
           el("subscriptionClose")?.addEventListener("click", () =>
             el("subscriptionDialog")?.close(),
@@ -4297,6 +4386,7 @@
             .forEach((b) =>
               b.addEventListener("click", () => selectPlan(b.dataset.subPlan)),
             );
+          updatePendingApprovalUI();
           refresh().then(() => resumePayPalCheckout());
         }
         window.ampMembership = { init, refresh };

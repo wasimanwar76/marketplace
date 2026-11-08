@@ -799,8 +799,11 @@
           role="status"
           class="mb-4 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900"
         >
-          🧪 PayPal Sandbox test mode — test subscriptions only; no real
-          payments. Use a Sandbox buyer account at checkout.
+          🧪 PayPal Sandbox test mode — no real payments. Use a separate Sandbox
+          Personal buyer account with an eligible test payment method. If PayPal
+          displays “Things don’t appear to be working” after login, the
+          subscription is not approved. Check the buyer and merchant Sandbox
+          account settings; do not retry repeatedly.
         </div>
         <section id="page-overview" class="page fade">
           <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
@@ -4229,8 +4232,9 @@
           container.append(button);
           const pending = readPendingApproval();
           if (pending && pending.plan === code) {
+            button.textContent = `Reopen existing PayPal approval — $${code}/year`;
             message(
-              `A $${code} checkout is already pending (ID ${pending.id}). Reopen its approval link below, or use Retry checkout to start a new session if the old link has expired.`,
+              `Subscription ${pending.id} is awaiting PayPal approval. Reopen the existing approval page rather than creating another subscription. If PayPal reports the link has expired, select Retry checkout to create a fresh session.`,
               "warning",
             );
           }
@@ -4254,6 +4258,12 @@
             button.textContent = "Connecting to PayPal Sandbox…";
             try {
               if (!user()) throw new Error("Sign in again before subscribing.");
+              const existingPending = readPendingApproval();
+              if (existingPending && existingPending.plan === code) {
+                message("Reopening the existing PayPal approval page…", "info");
+                window.location.assign(existingPending.href);
+                return;
+              }
               message(
                 "Creating a secure PayPal Sandbox approval session…",
                 "info",
@@ -4320,14 +4330,19 @@
           );
           try {
             const verified = await verifyWithServer(subscriptionId);
+            console.info("[AMP PayPal verified subscription]", {
+              subscription_id: subscriptionId,
+              status: verified.status,
+            });
             if (verified.status === "active") {
+              clearPendingApproval();
               message(
                 "PayPal membership verified and activated successfully.",
                 "success",
               );
             } else {
               message(
-                `PayPal returned subscription status: ${verified.status}. Your membership is not yet active. Subscription ID: ${subscriptionId}. Check again shortly.`,
+                `PayPal reports ${verified.status} for subscription ${subscriptionId}. Approval is not complete, so membership remains locked. If PayPal shows an error after login, check the Sandbox Personal buyer's funding method and the Business merchant's recurring-payment eligibility.`,
                 "warning",
               );
             }
@@ -4340,7 +4355,7 @@
             );
           } finally {
             busyCheckout = false;
-            clearPendingApproval();
+            updatePendingApprovalUI();
           }
         }
         function init() {

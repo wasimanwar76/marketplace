@@ -835,6 +835,13 @@
           </div>
         </div>
         <div class="flex items-center gap-2 sm:gap-4">
+          <span
+            id="activeMembershipPill"
+            class="hidden items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-extrabold text-emerald-800"
+            role="status"
+            aria-label="Active marketplace membership"
+            >✓ Active Member</span
+          >
           <button
             class="relative rounded-lg p-2 text-gray-500 hover:bg-gray-100"
             aria-label="Notifications"
@@ -3735,14 +3742,17 @@
       renderListings();
       renderCustomers();
       (async () => {
-        await loadCategories();
+        // Category metadata can load independently; don't delay seller dashboard data.
+        loadCategories().catch((error) =>
+          console.warn("Category loading failed", error),
+        );
         // Wait for the auth gate to resolve before fetching user-owned rows.
         const waitForUser = async () => {
           for (let i = 0; i < 40 && !ampCurrentUser; i++)
             await new Promise((r) => setTimeout(r, 100));
           if (ampCurrentUser) {
+            // loadSellerListings already loads inquiries when listing titles are ready.
             await loadSellerListings();
-            if (!customers.length) await loadCustomers();
           }
         };
         await waitForUser();
@@ -3768,11 +3778,17 @@
         let membershipState = "unknown"; // unknown, active, inactive, error
         const validDate = (value) =>
           value && Number.isFinite(new Date(value).getTime());
+        // The PayPal API may return ACTIVE before next_billing_time is populated.
+        // Treat only a server-written ACTIVE record with a matching plan and PayPal
+        // subscription ID as active; if an end date exists, it must be in the future.
         const isActive = (row) =>
           !!row &&
           row.status === "active" &&
-          validDate(row.current_period_end) &&
-          new Date(row.current_period_end) > new Date();
+          ["20", "60"].includes(String(row.subscription_name)) &&
+          /^I-[A-Za-z0-9]+$/.test(String(row.paypal_subscription_id || "")) &&
+          (!row.current_period_end ||
+            (validDate(row.current_period_end) &&
+              new Date(row.current_period_end) > new Date()));
         const friendlyDate = (value) =>
           validDate(value)
             ? new Date(value).toLocaleDateString(undefined, {
@@ -3884,7 +3900,41 @@
           if (dialog?.open) dialog.close();
           else dialog?.removeAttribute("open");
         }
+        // Never show pricing to an already verified member. Membership remains
+        // enforced by Supabase on every fresh page load, not localStorage.
+        function updateMembershipUI(active, row = null) {
+          const dialog = el("subscriptionDialog");
+          const nav = document.querySelector('[data-page="subscription"]');
+          const section = el("page-subscription");
+          const pill = el("activeMembershipPill");
+          if (nav) nav.classList.toggle("hidden", active);
+          if (section) section.classList.toggle("hidden", active);
+          if (pill) {
+            pill.classList.toggle("hidden", !active);
+            pill.classList.toggle("inline-flex", active);
+            if (active)
+              pill.title = `${plans[row?.subscription_name]?.title || "Marketplace membership"} — $${row?.amount ?? row?.subscription_name}/year${row?.current_period_end ? `, renews ${friendlyDate(row.current_period_end)}` : ""}`;
+          }
+          if (active) {
+            if (dialog?.open) dialog.close();
+            if (
+              el("page-subscription") &&
+              !el("page-subscription").classList.contains("hidden")
+            ) {
+              el("page-subscription").classList.add("hidden");
+            }
+            const visibleSubscription = document.querySelector(
+              '[data-page="subscription"].active',
+            );
+            if (visibleSubscription) {
+              visibleSubscription.classList.remove("active");
+              document.querySelector('[data-page="overview"]')?.click();
+            }
+            clearPendingApproval();
+          }
+        }
         function showDialog() {
+          if (membershipState === "active") return;
           const d = el("subscriptionDialog");
           if (!d || d.open) return;
           try {
@@ -4027,16 +4077,19 @@
                 "subscription_name,amount,currency,status,current_period_start,current_period_end,paypal_subscription_id,created_at",
               )
               .eq("user_id", account.id)
+              .order("status", { ascending: true })
               .order("created_at", { ascending: false })
-              .limit(20);
+              .limit(8);
             if (error) throw error;
             current = (data || []).find(isActive) || (data || [])[0] || null;
             renderDetails(current);
             membershipState = isActive(current) ? "active" : "inactive";
-            if (isActive(current)) {
-              message("Your annual membership is active.", "success");
-              if (el("subscriptionDialog")?.open)
-                el("subscriptionDialog").close();
+            updateMembershipUI(membershipState === "active", current);
+            if (membershipState === "active") {
+              message(
+                "Your annual membership is active. Welcome to your seller dashboard!",
+                "success",
+              );
               showWelcomeForActive(current);
             } else if (current?.status === "pending") {
               message(
@@ -4057,6 +4110,7 @@
           } catch (error) {
             current = null;
             membershipState = "error";
+            updateMembershipUI(false);
             renderDetails(null, true);
             lastError = humanError(error, "Could not check membership status.");
             message("Subscription check failed: " + lastError, "error");
@@ -4358,6 +4412,10 @@
               : "";
         }
         async function selectPlan(code) {
+          if (membershipState === "active") {
+            updateMembershipUI(true, current);
+            return;
+          }
           if (busyCheckout) return;
           if (!Object.hasOwn(plans, code)) {
             message("Unknown subscription plan.", "error");
@@ -4490,6 +4548,10 @@
             });
             if (verified.status === "active") {
               clearPendingApproval();
+              // The trusted Edge Function has verified PayPal's ACTIVE status.
+              // Refresh from Supabase to display the membership and CEO welcome.
+              if (el("subscriptionDialog")?.open)
+                el("subscriptionDialog").close();
               message(
                 "PayPal membership verified and activated successfully.",
                 "success",
@@ -4519,6 +4581,7 @@
           document.addEventListener("submit", guardSellerSubmit, true);
           document.addEventListener("keydown", guardSellerKeys, true);
           el("subscriptionChange")?.addEventListener("click", () => {
+            if (membershipState === "active") return;
             showDialog();
             if (lastSelected) selectPlan(lastSelected);
           });

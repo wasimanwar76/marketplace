@@ -108,6 +108,11 @@
           linear-gradient(135deg, #dc2626, #b91c1c);
       }
 
+      .mn-amp-tab { background: linear-gradient(110deg,#991b1b,#dc2626,#991b1b); color: white; border-radius: .75rem; box-shadow: 0 4px 16px rgba(220,38,38,.22); animation: mnAmpPulse 2.5s ease-in-out infinite; }
+      .mn-amp-tab:hover, .mn-amp-tab[aria-current="true"] { background: #7f1d1d; color: white; }
+      .mn-amp-tab .ico { background: rgba(255,255,255,.2); color: white; }
+      @keyframes mnAmpPulse { 0%,100% {box-shadow:0 0 0 0 rgba(220,38,38,.35);opacity:1} 50% {box-shadow:0 0 0 6px rgba(220,38,38,0);opacity:.88} }
+      @media (prefers-reduced-motion: reduce) { .mn-amp-tab {animation:none} }
       .side-item {
         display: flex;
         width: 100%;
@@ -513,6 +518,13 @@
           </button>
         </li>
         <li>
+          <button type="button" class="side-item mn-amp-tab" id="minnesotaAmpTab" data-view="minnesota" aria-current="false" aria-label="Minnesota Africa Market Place — browse Minnesota listings">
+            <span class="ico" aria-hidden="true">★</span>
+            <span class="flex-1">Minnesota AMP <span class="block text-xs font-medium opacity-90">Minnesota Africa Market Place</span></span>
+            <span class="text-xs font-bold">NEW</span>
+          </button>
+        </li>
+        <li>
           <button
             type="button"
             class="side-item"
@@ -555,7 +567,7 @@
                 <path
                   d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
                 /></svg></span
-            >Inbox
+            >My Enquiries
           </button>
         </li>
         <li>
@@ -645,7 +657,7 @@
           data-open="loc"
           class="mt-1 text-sm font-semibold text-brand-600 hover:text-brand-800"
         >
-          <span id="locLabelSide">All Africa</span> · Within 60 km
+          <span id="locLabelSide">All Africa</span> · Change location
         </button>
       </div>
 
@@ -692,6 +704,10 @@
       ></div>
 
       <div class="mx-auto max-w-[1200px] px-3 py-5 sm:px-6 sm:py-6 lg:px-8">
+        <button type="button" id="minnesotaAmpBanner" class="mn-amp-tab mb-5 flex w-full items-center justify-between gap-3 px-4 py-3 text-left font-bold sm:px-5" aria-label="Explore Minnesota Africa Market Place">
+          <span>★ Minnesota Africa Market Place <span class="block text-xs font-normal opacity-90">Explore African businesses and community listings in Minnesota, USA</span></span>
+          <span aria-hidden="true">→</span>
+        </button>
         <!-- Heading row -->
         <div class="flex flex-wrap items-end justify-between gap-3">
           <div>
@@ -723,7 +739,7 @@
                 d="M12 21s-7-6.2-7-11a7 7 0 1114 0c0 4.8-7 11-7 11zm0-8.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
               />
             </svg>
-            <span id="locLabelMain">All Africa</span> · 60 km
+            <span id="locLabelMain">All Africa</span> · Change
           </button>
         </div>
 
@@ -1122,7 +1138,21 @@
             </svg>
           </button>
         </div>
-        <ul id="locList" class="mt-5 grid grid-cols-2 gap-3"></ul>
+        <div class="mt-5 rounded-xl border border-red-100 bg-red-50 p-4">
+          <p class="text-sm font-semibold text-gray-900">Find listings near you</p>
+          <p class="mt-1 text-xs text-gray-600">Allow location access to detect your country, state and city. You can change these anytime.</p>
+          <button id="detectLocation" type="button" class="mt-3 w-full rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white hover:bg-brand-700">📍 Use my current location</button>
+          <p id="locationFeedback" class="mt-2 text-xs text-gray-600" role="status" aria-live="polite"></p>
+        </div>
+        <div class="mt-4 space-y-3">
+          <div><label for="locationCountry" class="block text-xs font-semibold text-gray-700">Country</label><input id="locationCountry" type="text" autocomplete="country-name" placeholder="e.g. Kenya" class="mt-1 w-full rounded-lg border border-gray-300 p-3 text-sm" /></div>
+          <div><label for="locationState" class="block text-xs font-semibold text-gray-700">State / Province / Region</label><input id="locationState" type="text" autocomplete="address-level1" placeholder="e.g. Nairobi County" class="mt-1 w-full rounded-lg border border-gray-300 p-3 text-sm" /></div>
+          <div><label for="locationCity" class="block text-xs font-semibold text-gray-700">City / Town</label><input id="locationCity" type="text" autocomplete="address-level2" placeholder="e.g. Nairobi" class="mt-1 w-full rounded-lg border border-gray-300 p-3 text-sm" /></div>
+          <button id="saveLocation" type="button" class="w-full rounded-lg border border-gray-300 bg-gray-900 px-4 py-3 text-sm font-semibold text-white">Save location &amp; browse</button>
+          <button id="browseEverywhere" type="button" class="w-full rounded-lg px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100">Browse all countries instead</button>
+        </div>
+        <p class="mt-5 mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">Or choose a popular city</p>
+        <ul id="locList" class="grid grid-cols-2 gap-3"></ul>
       </div>
     </dialog>
 
@@ -1189,15 +1219,7 @@
               <input id="mName" type="text" required autocomplete="name" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100" />
               <p class="mt-1 hidden text-xs text-brand-700" id="mNameErr">Please enter your name.</p>
             </div>
-            <label for="mRole" class="text-sm font-medium">How do you plan to use the marketplace?</label>
-            <select
-              id="mRole"
-              class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-100"
-            >
-              <option value="visitor_browse" selected>Browse products and services</option>
-              <option value="visitor_save">Save favourite listings</option>
-              <option value="visitor_contact">Contact sellers about listings</option>
-            </select>
+            <p class="rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-700">Account type: Visitor (free buyer account)</p>
           </div>
           <button id="mSubmit" type="submit" class="w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 active:scale-[.98]">
             <span id="mSubmitText">Create my profile</span>
@@ -1611,6 +1633,46 @@
         var ampUser = null;
         var authMode = "signup";
 
+var VISITOR_DASHBOARD =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1" ||
+  window.location.protocol === "file:"
+    ? "marketplace.html"
+    : "/marketplace";        
+    async function getVerifiedRole(user) {
+          if (!user || !ampPublicClient) throw new Error("Unable to verify your account. Please try again.");
+          var result = await ampPublicClient.from("profiles").select("role").eq("id", user.id).maybeSingle();
+          if (result.error) throw new Error("Could not verify your account role. Please contact support or try again.");
+          if (!result.data || !result.data.role) {
+            if (!result.data && user.user_metadata && user.user_metadata.role === "visitor") {
+              var created = await ampPublicClient.from("profiles").insert({ id: user.id, full_name: user.user_metadata.full_name || null, role: "visitor" });
+              if (!created.error) return "visitor";
+            }
+            throw new Error("Your account profile is missing a role. Please contact support.");
+          }
+          return String(result.data.role).trim().toLowerCase();
+        }
+        async function requireVisitorRole(user) {
+          var role = await getVerifiedRole(user);
+          if (role !== "visitor") {
+            updateAuthHeader(null);
+            throw new Error(role === "seller"
+              ? "This is a seller account. Please log in from the seller page, not the visitor marketplace."
+              : "This account is not registered as a visitor. Please use the correct login page.");
+          }
+          return true;
+        }
+        async function saveNewVisitorProfile(user, name) {
+          // Only create a missing profile. Never change an existing seller's role.
+          var existing = await ampPublicClient.from("profiles").select("role").eq("id", user.id).maybeSingle();
+          if (existing.error) throw new Error("Could not check the account profile: " + existing.error.message);
+          if (existing.data) return requireVisitorRole(user);
+          var saved = await ampPublicClient.from("profiles").insert({ id: user.id, full_name: name, role: "visitor" });
+          if (saved.error) throw new Error("Visitor profile could not be saved: " + saved.error.message);
+          return requireVisitorRole(user);
+        }
+        function goToVisitorDashboard() { window.location.href = VISITOR_DASHBOARD; }
+
         function setAuthMode(mode) {
           authMode = mode;
           var signup = mode === "signup";
@@ -1620,7 +1682,6 @@
           $("#mModeToggle").textContent = signup ? "Log in" : "Create an account";
           $("#mSignupOnly").classList.toggle("hidden", !signup);
           $("#mName").required = signup;
-          $("#mRole").required = signup;
           $("#mPassword").autocomplete = signup ? "new-password" : "current-password";
           $("#mPasswordHelp").textContent = signup ? "Use at least 8 characters." : "Enter your account password.";
           $("#mAuthErr").classList.add("hidden");
@@ -1677,9 +1738,14 @@
           if (!ampPublicClient) return;
           try {
             var res = await ampPublicClient.auth.getSession();
-            updateAuthHeader(res.data && res.data.session ? res.data.session.user : null);
+            var sessionUser = res.data && res.data.session ? res.data.session.user : null;
+            if (sessionUser) {
+              try { await requireVisitorRole(sessionUser); updateAuthHeader(sessionUser); }
+              catch (err) { updateAuthHeader(null); console.warn(err.message); }
+            } else updateAuthHeader(null);
             ampPublicClient.auth.onAuthStateChange(function (_event, session) {
-              updateAuthHeader(session ? session.user : null);
+              if (!session) updateAuthHeader(null);
+              // Do not trust an auth event alone as proof of a visitor role.
             });
           } catch (_) { /* keep public browsing available if auth is temporarily unavailable */ }
         }
@@ -1711,6 +1777,8 @@
             sub: subName || "General",
             title: row.title || "Untitled listing",
             price: priceText,
+            countryCode: String(row.country_code || "").toUpperCase(),
+            city: String(row.city || ""),
             loc:
               [row.city, row.country_code].filter(Boolean).join(", ") ||
               "Location not specified",
@@ -1825,14 +1893,34 @@
 
         var state = {
           view: "all",
+          minnesotaMode: false,
           cat: null,
           sub: null,
           q: "",
           loc: "",
+          geo: null,
           saved: {},
           page: 1,
           pageSize: 20,
         };
+        function openMinnesotaAMP() {
+          state.minnesotaMode = true;
+          state.view = "all";
+          state.cat = null;
+          state.sub = null;
+          state.q = "";
+          state.page = 1;
+          var topInput = document.getElementById("topQ");
+          var sideInput = document.getElementById("sideQ");
+          if (topInput) topInput.value = "";
+          if (sideInput) sideInput.value = "";
+          document.getElementById("minnesotaAmpTab").setAttribute("aria-current", "true");
+          update(true);
+          document.getElementById("main").scrollIntoView({behavior: reduced() ? "auto" : "smooth"});
+        }
+        ["minnesotaAmpTab", "minnesotaAmpBanner"].forEach(function(id) {
+          document.getElementById(id).addEventListener("click", function(e) { e.stopPropagation(); openMinnesotaAMP(); });
+        });
         var totalApprovedListings = 0;
         var totalListingPages = 1;
 
@@ -1843,25 +1931,41 @@
           $("#subChips").classList.add("hidden");
           $("#empty").classList.add("hidden");
           grid.classList.remove("hidden");
-          grid.innerHTML = '<div class="col-span-full"><div class="mb-4"><h3 class="font-display text-xl font-bold">Messages from buyers</h3><p class="mt-1 text-sm text-ink-600">Inquiries sent to your listings appear here.</p></div>' +
+          grid.innerHTML = '<div class="col-span-full"><div class="mb-5 rounded-2xl border border-red-100 bg-gradient-to-r from-red-50 to-white p-5"><p class="text-xs font-bold uppercase tracking-widest text-brand-700">Visitor message centre</p><h3 class="mt-1 font-display text-2xl font-extrabold">My enquiries</h3><p class="mt-2 text-sm text-ink-600">See the questions you sent to sellers, which product each question is about, and your conversation history.</p></div>' +
             (inboxRows.length ? inboxRows.map(function (row) {
               var when = row.created_at ? new Date(row.created_at).toLocaleString() : "";
-              return '<article class="mb-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-card sm:p-5">' +
-                '<div class="flex flex-wrap items-start justify-between gap-2"><div><p class="font-semibold text-ink-900">' + esc(row.customer_name || "Marketplace visitor") + '</p><p class="mt-0.5 text-xs text-ink-500">' + esc(row.customer_email || row.customer_phone || "No contact details") + '</p></div>' +
-                '<span class="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">' + esc(row.status || "new") + '</span></div>' +
-                '<p class="mt-3 whitespace-pre-wrap text-sm leading-6 text-ink-800">' + esc(row.message || "") + '</p>' +
-                '<div class="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-gray-100 pt-3 text-xs text-ink-500"><span>Customer ID: <strong class="font-mono font-medium text-ink-700">' + esc(row.customer_id || "Guest customer") + '</strong></span><span>' + esc(when) + '</span></div>' +
-                '<div class="mt-3 flex flex-wrap items-center justify-between gap-3"><span class="min-w-0 truncate text-xs text-ink-500">Product ID: ' + esc(row.item_id || "Not available") + '</span>' +
-                (row.item_id ? '<button type="button" data-inquiry-product="' + esc(row.item_id) + '" class="shrink-0 rounded-lg border border-brand-200 bg-brand-50 px-3 py-2 text-xs font-semibold text-brand-700 hover:border-brand-600 hover:bg-brand-100">View referenced product</button>' : '') +
-                '</div></article>';
-            }).join("") : '<div class="rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center"><p class="font-semibold text-ink-900">Your inbox is empty</p><p class="mt-1 text-sm text-ink-600">When a buyer messages one of your listings, the inquiry will appear here.</p></div>') +
-            '</div>';
-          $("#mainTitle").textContent = "Inbox";
-          $("#filterStatus").textContent = inboxRows.length + " message" + (inboxRows.length === 1 ? "" : "s");
-          $$("#navList .side-item[data-view]").forEach(function (b) {
-            b.setAttribute("aria-current", String(b.dataset.view === "inbox"));
-          });
+              var ref = String(row.id || "").slice(0, 8).toUpperCase();
+              return '<article class="mb-4 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">' +
+                '<div class="flex flex-wrap items-start justify-between gap-3 border-b border-gray-100 bg-gray-50/70 p-4 sm:px-5"><div><p class="text-[11px] font-bold uppercase tracking-wide text-brand-700">Enquiry #' + esc(ref) + '</p><p class="mt-1 text-sm font-bold text-ink-900">Your message to the seller</p><p class="mt-1 text-xs text-ink-500">Sent ' + esc(when) + '</p></div><span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">' + esc(row.status || "Sent") + '</span></div>' +
+                '<div class="p-4 sm:p-5"><p class="mb-2 text-[11px] font-bold uppercase tracking-wide text-ink-500">Your question</p><p class="whitespace-pre-wrap rounded-xl bg-gray-50 p-4 text-sm leading-6 text-ink-800">' + esc(row.message || "") + '</p>' +
+                '<div class="mt-4 flex flex-wrap items-center justify-between gap-3"><span class="text-xs text-ink-500">Product reference: ' + esc(String(row.item_id || "Not available").slice(0, 12)) + '</span><div class="flex flex-wrap gap-2">' +
+                (row.item_id ? '<button type="button" data-inquiry-product="' + esc(row.item_id) + '" class="rounded-lg border border-gray-300 px-3 py-2 text-xs font-semibold hover:border-brand-600">View product</button>' : '') +
+                '<button type="button" data-visitor-thread="' + esc(row.id) + '" class="rounded-lg bg-brand-600 px-3 py-2 text-xs font-semibold text-white hover:bg-brand-700">View conversation</button></div></div><div id="visitor-thread-' + esc(row.id) + '" class="mt-4 hidden rounded-xl border border-gray-200 bg-gray-50 p-3"></div></div></article>';
+            }).join("") : '<div class="rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center"><div class="mb-3 text-3xl">✉</div><p class="font-bold text-ink-900">No enquiries sent yet</p><p class="mt-2 text-sm text-ink-600">Open a product and choose “Message seller” to ask a question. Your enquiry will appear here.</p></div>') + '</div>';
+          $("#mainTitle").textContent = "My Enquiries";
+          $("#filterStatus").textContent = inboxRows.length + " sent enquiry" + (inboxRows.length === 1 ? "" : "ies");
+          $$("#navList .side-item[data-view]").forEach(function (b) { b.setAttribute("aria-current", String(b.dataset.view === "inbox")); });
         }
+        $("#grid").addEventListener("click", async function (event) {
+          var button = event.target.closest("[data-visitor-thread]");
+          if (!button || !ampUser) return;
+          var id = button.getAttribute("data-visitor-thread");
+          var row = inboxRows.find(function (r) { return String(r.id) === id; });
+          if (!row) return;
+          var panel = document.getElementById("visitor-thread-" + id);
+          if (!panel) return;
+          if (!panel.classList.contains("hidden")) { panel.classList.add("hidden"); button.textContent = "View conversation"; return; }
+          panel.classList.remove("hidden"); button.textContent = "Hide conversation";
+          panel.innerHTML = '<p class="text-sm text-ink-500">Loading conversation…</p>';
+          var messages = [{ sender_id: row.customer_id, body: row.message, created_at: row.created_at, original: true }];
+          var response = await ampPublicClient.from("inquiry_messages").select("sender_id,body,created_at").eq("inquiry_id", id).order("created_at", { ascending: true });
+          if (response.error) { panel.innerHTML = '<p class="text-sm text-red-700">Conversation could not be loaded: ' + esc(response.error.message) + '</p>'; return; }
+          messages = messages.concat(response.data || []);
+          panel.innerHTML = '<p class="mb-3 text-xs font-bold uppercase tracking-wide text-ink-500">Conversation history</p>' + messages.map(function (msg) {
+            var mine = msg.sender_id === ampUser.id || (msg.original && row.customer_id === ampUser.id);
+            return '<div class="mb-3 flex ' + (mine ? 'justify-end' : 'justify-start') + '"><div class="max-w-[90%] rounded-2xl px-4 py-3 ' + (mine ? 'bg-brand-600 text-white' : 'border border-gray-200 bg-white text-ink-900') + '"><p class="mb-1 text-[11px] font-bold">' + (mine ? 'You · Visitor' : 'Seller') + '</p><p class="whitespace-pre-wrap break-words text-sm">' + esc(msg.body || '') + '</p><p class="mt-2 text-[10px] opacity-75">' + esc(msg.created_at ? new Date(msg.created_at).toLocaleString() : '') + '</p></div></div>';
+          }).join('');
+        });
         // Open the exact product attached to a buyer inquiry using inquiries.item_id.
         $("#grid").addEventListener("click", async function (event) {
           var button = event.target.closest("[data-inquiry-product]");
@@ -1911,14 +2015,14 @@
           try {
             var result = await ampPublicClient.from("inquiries")
               .select("id,item_id,seller_id,customer_id,customer_name,customer_email,customer_phone,message,status,created_at")
-              .eq("seller_id", ampUser.id)
+              .eq("customer_id", ampUser.id)
               .order("created_at", { ascending: false });
             if (result.error) throw result.error;
             inboxRows = result.data || [];
             renderInbox();
           } catch (error) {
             console.error("Inbox load failed:", error);
-            $("#grid").innerHTML = '<div class="col-span-full rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">Could not load your inbox. Check that the inquiries table has a SELECT RLS policy allowing sellers to read rows where seller_id equals their user ID. ' + esc(error.message || "") + '</div>';
+            $("#grid").innerHTML = '<div class="col-span-full rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">Could not load your inbox. Please check the database SELECT policy for enquiries sent by your visitor account (customer_id). ' + esc(error.message || "") + '</div>';
             $("#filterStatus").textContent = "Inbox unavailable";
           }
         }
@@ -1959,7 +2063,7 @@
           var authButton = e.target.closest("[data-auth-mode]");
           if (authButton) {
             var mode = authButton.dataset.authMode;
-            if (mode === "account") { toast("You are signed in as " + (ampUser && ampUser.email || "this account") + ". Use Log out to end your session."); return; }
+            if (mode === "account") { requireVisitorRole(ampUser).then(goToVisitorDashboard).catch(function(error){ toast(error.message); }); return; }
             if (mode === "logout") {
               authButton.disabled = true;
               var oldText = authButton.textContent;
@@ -2120,6 +2224,7 @@
         $("#navList").addEventListener("click", function (e) {
           var b = e.target.closest("[data-view]");
           if (!b) return;
+          state.minnesotaMode = false;
           state.view = b.dataset.view;
           if (state.view === "inbox") {
             state.cat = null;
@@ -2175,12 +2280,96 @@
           state.sub = null;
           state.q = "";
           state.loc = "";
+          state.geo = null;
           $("#topQ").value = "";
           $("#sideQ").value = "";
           update(true);
         }
         $("#resetBtn").addEventListener("click", resetAll);
 
+        /* ---------- First-visit location preferences ---------- */
+        var LOCATION_STORAGE_KEY = "amp_marketplace_location_v1";
+        function countryCodeForName(name) {
+          var known = {"nigeria":"NG","ghana":"GH","kenya":"KE","south africa":"ZA","togo":"TG","rwanda":"RW","tanzania":"TZ","india":"IN","uganda":"UG","ethiopia":"ET","egypt":"EG","morocco":"MA","united states":"US","united kingdom":"GB"};
+          var key = String(name || "").trim().toLowerCase();
+          if (/^[a-z]{2}$/.test(key)) return key.toUpperCase();
+          return known[key] || "";
+        }
+        function saveLocationPreference(geo) {
+          try { localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(geo)); } catch (_) {}
+        }
+        function applyLocation(geo, persist) {
+          geo = geo || {};
+          var country = String(geo.country || "").trim();
+          var region = String(geo.region || "").trim();
+          var city = String(geo.city || "").trim();
+          var code = String(geo.countryCode || countryCodeForName(country)).trim().toUpperCase();
+          state.geo = (country || region || city) ? {country:country,region:region,city:city,countryCode:code} : null;
+          state.loc = state.geo ? (city || region || country) : "";
+          $("#locationCountry").value = country;
+          $("#locationState").value = region;
+          $("#locationCity").value = city;
+          if (persist) saveLocationPreference({country:country,region:region,city:city,countryCode:code});
+          $("#locLabelMain").textContent = state.geo ? [city,region,country].filter(Boolean).join(", ") : "All Africa";
+          $("#locLabelSide").textContent = $("#locLabelMain").textContent;
+          if (document.querySelector("#cLoc")) {
+            var select = $("#cLoc");
+            var custom = select.querySelector('option[data-geo-option]');
+            if (custom) custom.remove();
+            if (state.geo) {
+              var option = document.createElement("option");
+              option.value = [city,region,country].filter(Boolean).join(", ");
+              option.textContent = option.value;
+              option.dataset.geoOption = "true";
+              select.prepend(option);
+              select.value = option.value;
+            }
+          }
+          loadApprovedListings(1);
+        }
+        function locationMessage(msg) { $("#locationFeedback").textContent = msg; }
+        $("#detectLocation").addEventListener("click", function () {
+          if (!navigator.geolocation || !window.isSecureContext) {
+            locationMessage("Location requires HTTPS or localhost. Please enter your location manually."); return;
+          }
+          var btn = this;
+          btn.disabled = true;
+          btn.textContent = "Detecting your location…";
+          locationMessage("Your browser will ask for location permission.");
+          navigator.geolocation.getCurrentPosition(async function (position) {
+            try {
+              locationMessage("Finding your country, state and city…");
+              var url = "https://nominatim.openstreetmap.org/reverse?format=json&addressdetails=1&zoom=10&lat=" + encodeURIComponent(position.coords.latitude) + "&lon=" + encodeURIComponent(position.coords.longitude);
+              var response = await fetch(url, {headers:{"Accept":"application/json"}});
+              if (!response.ok) throw new Error("Location lookup is temporarily unavailable.");
+              var data = await response.json();
+              var a = data.address || {};
+              var geo = {country:a.country || "",region:a.state || a.province || a.region || a.county || "",city:a.city || a.town || a.village || a.municipality || a.suburb || "",countryCode:String(a.country_code || "").toUpperCase()};
+              if (!geo.country) throw new Error("Could not determine the country.");
+              applyLocation(geo, true);
+              locationMessage("Location updated. You can edit the fields below.");
+              closeDlg($("#dlg-loc"));
+            } catch (err) { locationMessage((err.message || "Location lookup failed.") + " Enter your country, state and city manually."); }
+            finally {btn.disabled=false;btn.textContent="📍 Use my current location";}
+          }, function (err) {
+            locationMessage(err.code === 1 ? "Location permission was denied. Enter your location manually." : "Could not detect your location. Enter it manually.");
+            btn.disabled=false;btn.textContent="📍 Use my current location";
+          }, {enableHighAccuracy:false,timeout:12000,maximumAge:300000});
+        });
+        $("#saveLocation").addEventListener("click", function () {
+          var country = $("#locationCountry").value.trim();
+          var region = $("#locationState").value.trim();
+          var city = $("#locationCity").value.trim();
+          if (!country) {locationMessage("Please enter a country, or select Browse all countries.");return;}
+          var oldGeo = state.geo;
+          var code = oldGeo && oldGeo.country.toLowerCase() === country.toLowerCase() ? oldGeo.countryCode : countryCodeForName(country);
+          applyLocation({country:country,region:region,city:city,countryCode:code},true);
+          closeDlg($("#dlg-loc"));
+        });
+        $("#browseEverywhere").addEventListener("click", function () {
+          applyLocation({country:"",region:"",city:"",countryCode:""},true);
+          closeDlg($("#dlg-loc"));
+        });
         /* ---------- Location ---------- */
         $("#locList").innerHTML = LOCS.map(function (l) {
           var sub =
@@ -2204,9 +2393,11 @@
           if (!b) return;
           var l = b.dataset.locpick;
           state.loc = l === "All Africa" ? "" : l;
+          state.geo = null;
+          saveLocationPreference(l === "All Africa" ? {country:"",region:"",city:"",countryCode:""} : {country:COUNTRY[l] || "",region:"",city:l,countryCode:""});
           state.view = "all";
           closeDlg($("#dlg-loc"));
-          update(true);
+          loadApprovedListings(1);
           if (SOON[l])
             toast(l + " is launching soon. Join to be first to know.");
         });
@@ -2291,11 +2482,21 @@
           var q = state.q.trim().toLowerCase(),
             loc = state.loc.toLowerCase();
           return listings.filter(function (l) {
+            if (state.minnesotaMode) {
+              // Current items data has city and country_code, but no state column.
+              // Restrict to known Minnesota city names rather than all US listings.
+              var mnCities = /^(minneapolis|saint paul|st\.? paul|bloomington|brooklyn park|brooklyn center|rochester|duluth|maplewood|richfield|eden prairie|burnsville|eagan|woodbury|plymouth|st\.? cloud|saint cloud|moorhead|mankato|edina|roseville|fridley|columbia heights|apple valley|lakeville|cottage grove|shakopee|blaine|coon rapids|new brighton|inver grove heights)$/i;
+              var city = String(l.city || (l.loc || "").split(",")[0]).trim();
+              var place = String(l.loc || "");
+              if (l.countryCode !== "US" || !(mnCities.test(city) || /\bMinnesota\b|,\s*MN\b/i.test(place))) return false;
+            }
             if (state.view === "saved" && !state.saved[l.id]) return false;
             if (state.view === "mine" && !l.mine) return false;
             if (state.cat && l.cat !== state.cat) return false;
             if (state.sub && l.sub !== state.sub) return false;
-            if (loc && l.loc.toLowerCase().indexOf(loc) < 0) return false;
+            if (!state.minnesotaMode && state.geo && state.geo.countryCode) {
+              if (l.countryCode !== state.geo.countryCode) return false;
+          } else if (!state.minnesotaMode && loc && l.loc.toLowerCase().indexOf(loc) < 0) return false;
             if (
               q &&
               (
@@ -2315,6 +2516,7 @@
           });
         }
 
+        // Minnesota view is independent of the visitor's saved geolocation.
         function update(scrollTop) {
           if (state.view === "inbox") { renderInbox(); return; }
           $("#directory").classList.remove("hidden");
@@ -2324,12 +2526,12 @@
           $("#empty").classList.toggle("hidden", out.length > 0);
           grid.classList.toggle("hidden", out.length === 0);
 
-          var title = "Today's picks";
-          if (state.view === "saved") title = "Saved items";
-          else if (state.view === "mine") title = "My listings";
-          else if (state.sub) title = state.sub;
-          else if (state.cat) title = catById(state.cat).label;
-          else if (state.q.trim())
+          var title = state.minnesotaMode ? "Minnesota Africa Market Place" : "Today's picks";
+          if (!state.minnesotaMode && state.view === "saved") title = "Saved items";
+          else if (!state.minnesotaMode && state.view === "mine") title = "My listings";
+          else if (!state.minnesotaMode && state.sub) title = state.sub;
+          else if (!state.minnesotaMode && state.cat) title = catById(state.cat).label;
+          else if (!state.minnesotaMode && state.q.trim())
             title = "Results for “" + state.q.trim() + "”";
           $("#mainTitle").textContent = title;
 
@@ -2339,7 +2541,7 @@
             parts.push("matching “" + state.q.trim() + "”");
           $("#filterStatus").textContent = parts.join(" · ");
 
-          var locName = state.loc || "All Africa";
+          var locName = state.minnesotaMode ? "Minnesota, USA" : state.geo ? [state.geo.city, state.geo.region, state.geo.country].filter(Boolean).join(", ") : (state.loc || "All Africa");
           $("#locLabelMain").textContent = locName;
           $("#locLabelSide").textContent = locName;
 
@@ -2369,7 +2571,7 @@
           $$("#navList .side-item[data-view]").forEach(function (b) {
             b.setAttribute(
               "aria-current",
-              String(b.dataset.view === state.view && !state.cat),
+              String(b.dataset.view === "minnesota" ? state.minnesotaMode : (!state.minnesotaMode && b.dataset.view === state.view && !state.cat)),
             );
           });
           $$("#sideCats > li").forEach(function (li) {
@@ -2500,6 +2702,7 @@
         $("#dirGrid").addEventListener("click", function (e) {
           var dbButton = e.target.closest("[data-dir-dbcat]");
           if (dbButton) {
+            state.minnesotaMode = false;
             state.view = "all";
             var name = dbButton.dataset.dirDbcat;
             var matchedCategory = CATS.find(function (c) { return c.label.toLowerCase() === name.toLowerCase() || c.id.toLowerCase() === name.toLowerCase(); });
@@ -2511,6 +2714,7 @@
           }
           var b = e.target.closest("[data-dircat]");
           if (!b) return;
+          state.minnesotaMode = false;
           state.view = "all";
           state.cat = b.dataset.dircat;
           state.sub = b.dataset.dirsub;
@@ -2813,26 +3017,26 @@
           try {
             var result;
             if (authMode === "signup") {
-              result = await ampPublicClient.auth.signUp({ email: email, password: password, options: { data: { full_name: name, role: $("#mRole").value } } });
+              result = await ampPublicClient.auth.signUp({ email: email, password: password, options: { data: { full_name: name, role: "visitor" } } });
               if (result.error) throw result.error;
               if (result.data && result.data.session) {
+                await saveNewVisitorProfile(result.data.user, name);
                 updateAuthHeader(result.data.user);
                 await saveMarketplaceVisitor(result.data.user, "signup");
-                closeDlg($("#dlg-member"));
-                toast("Account created successfully.");
+                goToVisitorDashboard();
               } else {
-                errBox.textContent = "Please check your email for the confirmation link, then log in.";
-                errBox.classList.remove("hidden");
                 setAuthMode("login");
                 $("#mEmail").value = email;
+                errBox.textContent = "Check your email for the confirmation link, then log in. Your visitor profile will be verified after confirmation.";
+                errBox.classList.remove("hidden");
               }
             } else {
               result = await ampPublicClient.auth.signInWithPassword({ email: email, password: password });
               if (result.error) throw result.error;
+              await requireVisitorRole(result.data.user);
               updateAuthHeader(result.data.user);
               await saveMarketplaceVisitor(result.data.user, "login");
-              closeDlg($("#dlg-member"));
-              toast("Welcome back. You are logged in.");
+              goToVisitorDashboard();
             }
           } catch (error) {
             var message = String(error && error.message || "");
@@ -2870,8 +3074,19 @@
           $("#sideQ").value = state.q;
         }
         if (params.get("loc")) state.loc = params.get("loc");
+        var storedLocation = null;
+        try { storedLocation = JSON.parse(localStorage.getItem(LOCATION_STORAGE_KEY)); } catch (_) {}
+        if (params.get("loc")) {
+          state.geo = null;
+          loadApprovedListings();
+        } else if (storedLocation) {
+          applyLocation(storedLocation, false);
+        } else {
+          loadApprovedListings();
+          // Ask once on the first visit; geolocation itself only runs after consent.
+          setTimeout(function () { openDlg("loc"); }, 500);
+        }
         refreshAuth();
-        loadApprovedListings();
       })();
     </script>
   </body>

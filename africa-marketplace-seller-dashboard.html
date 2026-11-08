@@ -6,6 +6,19 @@
     <title>Seller Dashboard | Africa Market Place</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="./block.js"></script>
+    <script>
+      /* Public browser configuration ONLY. Never put PayPal secret or Supabase service-role key here. */
+      window.AMP_CONFIG = {
+        paypalClientId: "REPLACE_WITH_PAYPAL_CLIENT_ID",
+        paypalPlans: {
+          20: "REPLACE_WITH_PAYPAL_AFRICA_ANNUAL_PLAN_ID",
+          60: "REPLACE_WITH_PAYPAL_MINNESOTA_ANNUAL_PLAN_ID",
+        },
+        // Deployed Supabase Edge Function endpoint (uses user's Supabase auth token).
+        verifyEndpoint:
+          "https://zbflylizwpvvpayepwgx.supabase.co/functions/v1/swift-function",
+      };
+    </script>
 
     <script>
       tailwind.config = {
@@ -676,7 +689,7 @@
           <span id="navListings" class="ml-auto text-xs">4</span>
         </button>
         <button class="side-link w-full" data-page="customers">
-          <span class="navicon">▣</span>Customer Inquiries
+          <span class="navicon">▣</span>Customer Enquiries
           <span
             id="inquiryNavCount"
             class="ml-auto rounded-full bg-brand-600 px-2 py-0.5 text-[10px] text-white"
@@ -685,6 +698,9 @@
         </button>
         <button class="side-link w-full" data-page="analytics">
           <span class="navicon">⌁</span>Analytics
+        </button>
+        <button class="side-link w-full" data-page="subscription">
+          <span class="navicon">★</span>My Subscription
         </button>
         <button class="side-link w-full" data-page="settings">
           <span class="navicon">⚙</span>Account Settings
@@ -1004,7 +1020,7 @@
         </section>
         <section id="page-customers" class="page hidden fade">
           <div class="mb-6">
-            <h2 class="display text-2xl font-extrabold">Customer inquiries</h2>
+            <h2 class="display text-2xl font-extrabold">Customer enquiries</h2>
             <p class="mt-1 text-sm text-gray-500">
               Review prospective buyers and their messages about your listings.
             </p>
@@ -1110,6 +1126,38 @@
               connected.
             </p>
           </div>
+        </section>
+        <section id="page-subscription" class="page hidden fade">
+          <h2 class="display text-2xl font-extrabold">My Subscription</h2>
+          <p class="mt-2 text-sm text-gray-500">
+            Manage your annual marketplace membership and PayPal billing.
+          </p>
+          <div class="card mt-5 p-6">
+            <div id="subscriptionDetails" class="text-sm text-gray-600">
+              Loading membership details…
+            </div>
+            <div class="mt-5 flex flex-wrap gap-3">
+              <button
+                type="button"
+                id="subscriptionChange"
+                class="rounded-xl bg-red-600 px-5 py-3 text-sm font-bold text-white"
+              >
+                View membership plans</button
+              ><button
+                type="button"
+                id="subscriptionRetry"
+                class="rounded-xl border border-gray-200 px-5 py-3 text-sm font-bold text-gray-800"
+              >
+                Check membership again
+              </button>
+            </div>
+          </div>
+          <p
+            id="subscriptionMessage"
+            role="status"
+            aria-live="polite"
+            class="mt-3 text-sm"
+          ></p>
         </section>
         <section id="page-settings" class="page hidden fade">
           <div class="mb-6">
@@ -1879,6 +1927,68 @@
         </div>
       </div>
     </dialog>
+    <dialog
+      id="subscriptionDialog"
+      class="app-modal"
+      aria-labelledby="subscriptionHeading"
+    >
+      <div class="p-6">
+        <div class="flex justify-between gap-3">
+          <div>
+            <h2 id="subscriptionHeading" class="display text-xl font-extrabold">
+              Choose your annual membership
+            </h2>
+            <p class="mt-2 text-sm text-gray-500">
+              Subscribe securely through PayPal.
+            </p>
+          </div>
+          <button
+            id="subscriptionClose"
+            type="button"
+            aria-label="Close subscription plans"
+            class="self-start rounded-lg border px-3 py-2"
+          >
+            ✕
+          </button>
+        </div>
+        <div
+          id="subscriptionPlanChoices"
+          class="mt-5 grid gap-3 sm:grid-cols-2"
+        >
+          <button
+            type="button"
+            data-sub-plan="20"
+            class="rounded-xl border-2 border-gray-200 p-4 text-left hover:border-red-500"
+          >
+            <strong class="block">Africa Market Place</strong
+            ><span class="mt-2 block text-2xl font-extrabold"
+              >$20/year</span
+            ></button
+          ><button
+            type="button"
+            data-sub-plan="60"
+            class="rounded-xl border-2 border-gray-200 p-4 text-left hover:border-red-500"
+          >
+            <strong class="block">Minnesota AMP</strong
+            ><span class="mt-2 block text-2xl font-extrabold">$60/year</span>
+          </button>
+        </div>
+        <p id="subscriptionPlanLabel" class="mt-4 text-sm font-semibold">
+          Select a plan to continue.
+        </p>
+        <div id="paypalSubscriptionButtons" class="mt-4"></div>
+        <p
+          id="subscriptionModalMessage"
+          class="mt-3 text-sm"
+          role="status"
+          aria-live="polite"
+        ></p>
+        <p class="mt-3 text-xs text-gray-500">
+          PayPal processes payment. Membership activates only after server
+          verification.
+        </p>
+      </div>
+    </dialog>
     <div
       id="toast"
       role="status"
@@ -1905,14 +2015,29 @@
             window.location.replace("index.html?login=required");
             return;
           }
-          ampCurrentUser = data.session.user;
+          const verifiedUser = data.session.user;
           const { data: profile, error: profileError } = await ampAuth
             .from("profiles")
             .select("*")
-            .eq("id", ampCurrentUser.id)
+            .eq("id", verifiedUser.id)
             .maybeSingle();
           if (profileError) throw profileError;
-          ampCurrentProfile = profile || {};
+          if (
+            !profile ||
+            String(profile.role || "")
+              .trim()
+              .toLowerCase() !== "seller"
+          ) {
+            document.getElementById("authGateText").textContent =
+              "Seller access only. This session belongs to a different account role.";
+            window.setTimeout(
+              () => window.location.replace("/marketplace"),
+              1200,
+            );
+            return;
+          }
+          ampCurrentUser = verifiedUser;
+          ampCurrentProfile = profile;
           const displayName =
             ampCurrentProfile.full_name ||
             ampCurrentUser.user_metadata?.full_name ||
@@ -1958,6 +2083,7 @@
             if (el) el.value = value;
           });
           gate.remove();
+          window.ampMembership?.init();
         } catch (e) {
           document.getElementById("authGateText").textContent =
             "Session check failed. Redirecting to login…";
@@ -2729,7 +2855,7 @@
             .includes(q),
         );
         $("#customerTable").innerHTML = rows.length
-          ? `<div class="table-wrap"><table class="w-full min-w-[760px] text-left"><thead class="bg-gray-50 text-[10px] uppercase tracking-wider text-gray-400"><tr><th class="px-5 py-3">Customer</th><th class="px-4 py-3">Listing / Product ID</th><th class="px-4 py-3">Message</th><th class="px-4 py-3">Received</th><th class="px-5 py-3 text-right">Conversation</th></tr></thead><tbody class="divide-y divide-gray-100">${rows.map((c) => `<tr class="hover:bg-gray-50"><td class="px-5 py-4"><div class="flex items-center gap-3"><span class="grid h-9 w-9 place-items-center rounded-full bg-blue-50 text-xs font-bold text-blue-700">${moneySafe(c.initials)}</span><div><p class="text-xs font-bold">${moneySafe(c.name)}</p><p class="mt-1 text-[10px] text-gray-400">${moneySafe(c.email || "No email provided")}</p></div></div></td><td class="px-4 py-4 text-xs"><p>${moneySafe(c.listing)}</p><p class="mt-1 break-all font-mono text-[10px] text-gray-400">Customer: ${moneySafe(c.raw?.customer_id || "Unavailable")}<br>Product: ${moneySafe(c.raw?.item_id || "Unavailable")}</p><button type="button" data-view-product="${moneySafe(c.raw?.item_id || "")}" class="mt-2 inline-flex items-center rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-[11px] font-bold text-red-700 hover:bg-red-100" ${c.raw?.item_id ? "" : "disabled"}>Show product</button></td><td class="max-w-xs px-4 py-4 text-xs leading-5 text-gray-500">${moneySafe(c.message)}</td><td class="px-4 py-4 text-xs text-gray-500">${moneySafe(c.time)}</td><td class="px-5 py-4 text-right"><button data-customer="${moneySafe(c.id)}" class="rounded-lg bg-brand-600 px-3 py-2 text-xs font-semibold text-white hover:bg-brand-700">View messages</button></td></tr>`).join("")}</tbody></table></div>`
+          ? `<div class="table-wrap"><table class="w-full min-w-[760px] text-left"><thead class="bg-gray-50 text-[10px] uppercase tracking-wider text-gray-400"><tr><th class="px-5 py-3">Customer</th><th class="px-4 py-3">Product they asked about</th><th class="px-4 py-3">Customer's question</th><th class="px-4 py-3">Received</th><th class="px-5 py-3 text-right">Details</th></tr></thead><tbody class="divide-y divide-gray-100">${rows.map((c) => `<tr class="hover:bg-gray-50"><td class="px-5 py-4"><div class="flex items-center gap-3"><span class="grid h-9 w-9 place-items-center rounded-full bg-blue-50 text-xs font-bold text-blue-700">${moneySafe(c.initials)}</span><div><p class="text-xs font-bold">${moneySafe(c.name)}</p><p class="mt-1 text-[10px] text-gray-400">${moneySafe(c.email || "No email provided")}</p></div></div></td><td class="px-4 py-4 text-xs"><p>${moneySafe(c.listing)}</p><p class="mt-1 text-[10px] text-gray-400">Enquiry #${moneySafe(String(c.id).slice(0, 8).toUpperCase())}</p><button type="button" data-view-product="${moneySafe(c.raw?.item_id || "")}" class="mt-2 inline-flex items-center rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-[11px] font-bold text-red-700 hover:bg-red-100" ${c.raw?.item_id ? "" : "disabled"}>Show product</button></td><td class="max-w-xs px-4 py-4 text-xs leading-5 text-gray-500">${moneySafe(c.message)}</td><td class="px-4 py-4 text-xs text-gray-500">${moneySafe(c.time)}</td><td class="px-5 py-4 text-right"><button data-customer="${moneySafe(c.id)}" class="rounded-lg bg-brand-600 px-3 py-2 text-xs font-semibold text-white hover:bg-brand-700">Open enquiry</button></td></tr>`).join("")}</tbody></table></div>`
           : '<div class="p-10 text-center text-sm text-gray-500">No customer inquiries found. New buyer inquiries will appear here.</div>';
         const badge = $("#inquiryNavCount");
         if (badge) badge.textContent = String(customers.length);
@@ -2821,6 +2947,7 @@
           customers: "Customer Inquiries",
           analytics: "Analytics",
           settings: "Account Settings",
+          subscription: "My Subscription",
         };
         $("#topTitle").textContent = titles[page] || "Dashboard";
         $("#crumb").textContent = titles[page] || "Dashboard";
@@ -2833,6 +2960,7 @@
             : "smooth",
         });
         if (page === "customers") loadCustomers();
+        if (page === "subscription") window.ampMembership?.refresh();
       }
       function openEdit(id) {
         const x = listings.find((a) => String(a.id) === String(id));
@@ -2920,9 +3048,9 @@
         )
           return;
         activeInquiry = c;
-        $("#customerHeading").textContent = "Buyer messages · " + c.name;
+        $("#customerHeading").textContent = "Enquiry from " + c.name;
         $("#customerDetail").innerHTML =
-          `<div class="rounded-xl bg-gray-50 p-4"><div class="flex flex-wrap items-start justify-between gap-3"><div><p class="text-sm font-bold text-gray-900">${moneySafe(c.name)}</p><p class="mt-1 text-xs text-gray-500">${moneySafe(c.email || "No email")} · ${moneySafe(c.phone || "No phone")}</p></div><span class="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold uppercase text-blue-700">Buyer inquiry</span></div><p class="mt-3 text-xs font-semibold text-gray-700">Listing: ${moneySafe(c.listing)}</p><p class="mt-1 break-all font-mono text-[10px] text-gray-400">Customer ID: ${moneySafe(c.raw?.customer_id || "Unavailable")}<br>Product ID: ${moneySafe(c.raw?.item_id || "Unavailable")}</p><p class="mt-1 text-[11px] text-gray-400">Received: ${moneySafe(c.time)}</p></div><div class="mt-5"><div class="mb-3 flex items-center justify-between"><h3 class="text-sm font-bold text-gray-900">Complete message history</h3><span class="text-[11px] text-gray-400">View only</span></div><div id="conversationThread" class="max-h-[55dvh] min-h-[180px] space-y-3 overflow-y-auto rounded-xl border border-gray-100 bg-gray-50 p-3"><div class="py-8 text-center text-xs text-gray-500">Loading messages…</div></div></div>`;
+          `<div class="rounded-xl bg-gray-50 p-4"><div class="flex flex-wrap items-start justify-between gap-3"><div><p class="text-sm font-bold text-gray-900">${moneySafe(c.name)}</p><p class="mt-1 text-xs text-gray-500">${moneySafe(c.email || "No email")} · ${moneySafe(c.phone || "No phone")}</p></div><span class="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold uppercase text-blue-700">Buyer inquiry</span></div><p class="mt-3 text-xs font-semibold text-gray-700">Listing: ${moneySafe(c.listing)}</p><p class="mt-1 text-[11px] text-gray-500">Enquiry reference: ${moneySafe(String(c.id).slice(0, 8).toUpperCase())}</p><p class="mt-1 text-[11px] text-gray-400">Received: ${moneySafe(c.time)}</p></div><div class="mt-5"><div class="mb-3 flex items-center justify-between"><h3 class="text-sm font-bold text-gray-900">Complete message history</h3><span class="text-[11px] text-gray-400">Messages about this product</span></div><div id="conversationThread" class="max-h-[55dvh] min-h-[180px] space-y-3 overflow-y-auto rounded-xl border border-gray-100 bg-gray-50 p-3"><div class="py-8 text-center text-xs text-gray-500">Loading messages…</div></div></div>`;
         $("#customerDialog").showModal();
         await loadConversation(c);
       }
@@ -3433,6 +3561,509 @@
           }
         };
         await waitForUser();
+      })();
+    </script>
+    <script>
+      /* AMP PayPal seller membership. All billing decisions are verified by Supabase Edge Function. */
+      (() => {
+        const el = (id) => document.getElementById(id);
+        const config = window.AMP_CONFIG || {};
+        const plans = {
+          20: { title: "Africa Market Place", amount: 20 },
+          60: { title: "Minnesota Africa Market Place", amount: 60 },
+        };
+        let current = null;
+        let paypalLoadPromise = null;
+        let initialized = false;
+        let lastError = "";
+        let checking = false;
+        let busyCheckout = false;
+        let lastSelected = null;
+        let membershipState = "unknown"; // unknown, active, inactive, error
+        const validDate = (value) =>
+          value && Number.isFinite(new Date(value).getTime());
+        const isActive = (row) =>
+          !!row &&
+          row.status === "active" &&
+          validDate(row.current_period_end) &&
+          new Date(row.current_period_end) > new Date();
+        const friendlyDate = (value) =>
+          validDate(value)
+            ? new Date(value).toLocaleDateString(undefined, {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })
+            : "Not available";
+        const user = () =>
+          (typeof ampCurrentUser !== "undefined" && ampCurrentUser) ||
+          window.ampCurrentUser ||
+          null;
+
+        function message(text, kind = "info") {
+          const colors = {
+            error: "#b91c1c",
+            success: "#166534",
+            info: "#374151",
+            warning: "#92400e",
+          };
+          for (const id of [
+            "subscriptionMessage",
+            "subscriptionModalMessage",
+          ]) {
+            const item = el(id);
+            if (!item) continue;
+            item.textContent = text;
+            item.style.color = colors[kind] || colors.info;
+            item.style.whiteSpace = "pre-line";
+            item.setAttribute("role", kind === "error" ? "alert" : "status");
+          }
+        }
+        function humanError(
+          error,
+          defaultText = "Something went wrong. Please try again.",
+        ) {
+          const raw = String(error?.message || error || "");
+          const lower = raw.toLowerCase();
+          if (
+            /failed to fetch|networkerror|load failed|cors|network request failed/.test(
+              lower,
+            )
+          )
+            return "Cannot connect to the PayPal verification function. Check that swift-function is deployed, ALLOWED_ORIGIN permits this website, and your internet connection is working.";
+          if (
+            /401|invalid or expired session|sign in required|unauthorized|jwt/.test(
+              lower,
+            )
+          )
+            return "Your login has expired. Sign in again, then return to My Subscription.";
+          if (
+            /403|belongs to another|permission denied|row.level security/.test(
+              lower,
+            )
+          )
+            return "Permission denied. This subscription may belong to another account or database access is blocked.";
+          if (
+            /404|function not found|requested function was not found/.test(
+              lower,
+            )
+          )
+            return "PayPal verification endpoint not found (404). Deploy the Edge Function as swift-function in your Supabase project.";
+          if (/missing server configuration|PAYPAL_|configuration/.test(lower))
+            return "The payment service is not fully configured. Ask the administrator to check PayPal secrets and plan IDs.";
+          if (
+            /subscription lookup failed|paypal authentication failed|paypal returned/.test(
+              lower,
+            )
+          )
+            return "PayPal could not verify the subscription. Check that Sandbox/Live mode and PayPal credentials match.";
+          if (
+            /schema cache|relation .*does not exist|could not find the table/.test(
+              lower,
+            )
+          )
+            return "The membership_subscriptions table is missing or unavailable in Supabase.";
+          return raw && raw.length < 350 ? raw : defaultText;
+        }
+        function showDialog() {
+          const d = el("subscriptionDialog");
+          if (!d || d.open) return;
+          try {
+            d.showModal();
+          } catch (_) {
+            d.setAttribute("open", "");
+          }
+        }
+        // Capture events before dashboard click/submit handlers. Closing the dialog does not unlock seller actions.
+        // The subscription checkout and sign-out remain accessible.
+        function guardSellerAction(event) {
+          if (!initialized || membershipState === "active") return;
+          const target = event.target;
+          if (!(target instanceof Element)) return;
+          if (
+            target.closest(
+              "#subscriptionDialog, #authGate, #dashboardActionLoader, #logoutButton",
+            )
+          )
+            return;
+          const interactive = target.closest(
+            'button, a, [role="button"], input, select, textarea, form, [tabindex]',
+          );
+          if (!interactive) return;
+          if (interactive.closest("#subscriptionDialog, #logoutButton")) return;
+          // Opening My Subscription is allowed; all other sidebar destinations are restricted.
+          if (
+            interactive.matches(
+              '[data-page="subscription"], [data-goto="subscription"], #subscriptionChange, #subscriptionRetry',
+            ) ||
+            interactive.closest(
+              '[data-page="subscription"], [data-goto="subscription"], #subscriptionChange, #subscriptionRetry',
+            )
+          )
+            return;
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          if (membershipState === "error") {
+            message(
+              "We could not verify your membership because the subscription check failed. Please retry the check before using seller features. " +
+                lastError,
+              "error",
+            );
+          } else if (membershipState === "unknown") {
+            message(
+              "Checking your membership. Seller features will unlock after an active subscription is confirmed.",
+              "info",
+            );
+          } else if (current?.status === "pending") {
+            message(
+              "Your membership is pending. Wait for PayPal verification before using seller features. Avoid making a second payment.",
+              "warning",
+            );
+          } else {
+            message(
+              "An active annual membership is required to access seller dashboard features. Choose the $20 or $60 plan below.",
+              "warning",
+            );
+          }
+          showDialog();
+        }
+        function guardSellerSubmit(event) {
+          if (!initialized || membershipState === "active") return;
+          if (event.target?.closest?.("#subscriptionDialog")) return;
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          showDialog();
+        }
+        function guardSellerKeys(event) {
+          if (
+            membershipState === "active" ||
+            !initialized ||
+            event.key !== "Enter"
+          )
+            return;
+          const target = event.target;
+          if (
+            !(target instanceof Element) ||
+            target.closest("#subscriptionDialog, #logoutButton")
+          )
+            return;
+          if (target.closest('a, button, [role="button"]'))
+            guardSellerAction(event);
+        }
+        function renderDetails(row, failed = false) {
+          const target = el("subscriptionDetails");
+          if (!target) return;
+          target.replaceChildren();
+          if (failed) {
+            target.textContent =
+              "Unable to load subscription details. Please retry.";
+            return;
+          }
+          const items = row
+            ? [
+                [
+                  "Membership",
+                  plans[row.subscription_name]?.title ||
+                    `Plan ${row.subscription_name || "unknown"}`,
+                ],
+                [
+                  "Price",
+                  `${row.amount ?? "—"} ${row.currency || "USD"} / year`,
+                ],
+                ["Status", String(row.status || "unknown").toUpperCase()],
+                ["Start date", friendlyDate(row.current_period_start)],
+                [
+                  "Next renewal / end date",
+                  friendlyDate(row.current_period_end),
+                ],
+                [
+                  "PayPal subscription ID",
+                  row.paypal_subscription_id || "Pending",
+                ],
+              ]
+            : [
+                ["Membership", "No subscription found"],
+                ["Status", "NOT SUBSCRIBED"],
+              ];
+          for (const [label, value] of items) {
+            const item = document.createElement("p");
+            item.className = "mb-2";
+            const strong = document.createElement("strong");
+            strong.textContent = label + ": ";
+            item.append(strong, document.createTextNode(String(value)));
+            target.append(item);
+          }
+        }
+        async function refresh(options = {}) {
+          if (checking) return;
+          const account = user();
+          if (!account || typeof ampAuth === "undefined") return;
+          checking = true;
+          const details = el("subscriptionDetails");
+          if (details) details.textContent = "Checking membership status…";
+          try {
+            const { data, error } = await ampAuth
+              .from("membership_subscriptions")
+              .select(
+                "subscription_name,amount,currency,status,current_period_start,current_period_end,paypal_subscription_id,created_at",
+              )
+              .eq("user_id", account.id)
+              .order("created_at", { ascending: false })
+              .limit(20);
+            if (error) throw error;
+            current = (data || []).find(isActive) || (data || [])[0] || null;
+            renderDetails(current);
+            membershipState = isActive(current) ? "active" : "inactive";
+            if (isActive(current)) {
+              message("Your annual membership is active.", "success");
+              if (el("subscriptionDialog")?.open)
+                el("subscriptionDialog").close();
+            } else if (current?.status === "pending") {
+              message(
+                "Your PayPal subscription is pending activation. If you approved payment, check back shortly or contact support with the PayPal subscription ID.",
+                "warning",
+              );
+              if (!options.silent && !busyCheckout) showDialog();
+            } else {
+              message(
+                current
+                  ? `Membership status: ${current.status || "inactive"}. Choose a plan to subscribe.`
+                  : "No membership found. Choose a $20 or $60 annual plan to subscribe.",
+                "warning",
+              );
+              if (!options.silent && !busyCheckout) showDialog();
+            }
+            lastError = "";
+          } catch (error) {
+            current = null;
+            membershipState = "error";
+            renderDetails(null, true);
+            lastError = humanError(error, "Could not check membership status.");
+            message("Subscription check failed: " + lastError, "error");
+            // Verification failure is not proof of nonpayment: keep actions locked and show error.
+            if (!options.silent && !busyCheckout) showDialog();
+          } finally {
+            checking = false;
+          }
+        }
+        function loadPaypal() {
+          if (window.paypal?.Buttons) return Promise.resolve();
+          if (paypalLoadPromise) return paypalLoadPromise;
+          if (
+            !config.paypalClientId ||
+            /^REPLACE_|^YOUR_/.test(config.paypalClientId)
+          )
+            return Promise.reject(
+              new Error(
+                "PayPal Client ID is missing. Set paypalClientId in the HTML AMP_CONFIG section.",
+              ),
+            );
+          paypalLoadPromise = new Promise((resolve, reject) => {
+            const sdk = document.createElement("script");
+            sdk.src =
+              "https://www.paypal.com/sdk/js?client-id=" +
+              encodeURIComponent(config.paypalClientId) +
+              "&vault=true&intent=subscription&currency=USD";
+            sdk.onload = () =>
+              window.paypal?.Buttons
+                ? resolve()
+                : reject(
+                    new Error(
+                      "PayPal loaded but subscription buttons are unavailable.",
+                    ),
+                  );
+            sdk.onerror = () =>
+              reject(
+                new Error(
+                  "Unable to load PayPal checkout. Check network, browser extensions, and your PayPal Client ID.",
+                ),
+              );
+            document.head.append(sdk);
+          }).catch((error) => {
+            paypalLoadPromise = null;
+            throw error;
+          });
+          return paypalLoadPromise;
+        }
+        async function verifyWithServer(subscriptionId) {
+          if (!/^I-[A-Za-z0-9]+$/.test(String(subscriptionId || "")))
+            throw new Error("PayPal did not provide a valid subscription ID.");
+          const endpoint = config.verifyEndpoint;
+          if (!endpoint || !endpoint.startsWith("https://"))
+            throw new Error("Missing secure Supabase Edge Function URL.");
+          const { data, error } = await ampAuth.auth.getSession();
+          if (error) throw error;
+          const token = data?.session?.access_token;
+          if (!token)
+            throw new Error("Sign in required. Your session has expired.");
+          let response;
+          try {
+            response = await fetch(endpoint, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+                apikey: AMP_SUPABASE_KEY,
+              },
+              body: JSON.stringify({ subscription_id: subscriptionId }),
+            });
+          } catch (err) {
+            throw new Error(
+              "Failed to fetch Edge Function (network or CORS error).",
+            );
+          }
+          const type = response.headers.get("content-type") || "";
+          let payload = {};
+          if (type.includes("application/json")) {
+            try {
+              payload = await response.json();
+            } catch (_) {
+              throw new Error("Verification service returned invalid JSON.");
+            }
+          } else {
+            const raw = await response.text().catch(() => "");
+            if (!response.ok)
+              throw new Error(
+                `HTTP ${response.status}: ${raw.slice(0, 140) || "Non-JSON server error"}`,
+              );
+            throw new Error(
+              "Verification service returned a non-JSON response.",
+            );
+          }
+          if (!response.ok) {
+            const detail =
+              payload.error ||
+              payload.message ||
+              payload.msg ||
+              `HTTP ${response.status}`;
+            throw new Error(`HTTP ${response.status}: ${detail}`);
+          }
+          if (!payload.status)
+            throw new Error(
+              "Verification service did not return a subscription status.",
+            );
+          return payload;
+        }
+        async function selectPlan(code) {
+          if (busyCheckout) return;
+          if (!Object.hasOwn(plans, code)) {
+            message("Unknown subscription plan.", "error");
+            return;
+          }
+          lastSelected = code;
+          document.querySelectorAll("[data-sub-plan]").forEach((button) => {
+            button.style.borderColor =
+              button.dataset.subPlan === code ? "#dc2626" : "#e5e7eb";
+            button.setAttribute(
+              "aria-pressed",
+              String(button.dataset.subPlan === code),
+            );
+          });
+          el("subscriptionPlanLabel").textContent =
+            `${plans[code].title} — $${plans[code].amount} USD per year`;
+          el("paypalSubscriptionButtons").replaceChildren();
+          message("Preparing secure PayPal checkout…", "info");
+          try {
+            if (!user()) throw new Error("Sign in again before subscribing.");
+            const planId = config.paypalPlans?.[code];
+            if (!planId || /^REPLACE_|^YOUR_/.test(planId))
+              throw new Error(
+                `PayPal $${code} subscription Plan ID is missing. Set paypalPlans['${code}'] in the HTML AMP_CONFIG section.`,
+              );
+            await loadPaypal();
+            message(
+              "Choose PayPal below to approve your annual membership.",
+              "info",
+            );
+            await window.paypal
+              .Buttons({
+                style: {
+                  layout: "vertical",
+                  shape: "rect",
+                  label: "subscribe",
+                },
+                createSubscription: (_data, actions) =>
+                  actions.subscription.create({
+                    plan_id: planId,
+                    custom_id: user().id,
+                  }),
+                onApprove: async (data) => {
+                  busyCheckout = true;
+                  message(
+                    "PayPal approval received. Verifying your subscription with our server…",
+                    "info",
+                  );
+                  try {
+                    const verified = await verifyWithServer(
+                      data.subscriptionID,
+                    );
+                    if (verified.status === "active") {
+                      message(
+                        "PayPal subscription verified successfully! Your annual membership is active.",
+                        "success",
+                      );
+                      await refresh({ silent: true });
+                    } else {
+                      message(
+                        `PayPal approval recorded. Current status: ${verified.status}. Activation is not yet confirmed. Your PayPal subscription ID: ${data.subscriptionID}.`,
+                        "warning",
+                      );
+                      await refresh({ silent: true });
+                    }
+                  } catch (error) {
+                    message(
+                      "PayPal approved the subscription, but the website could not confirm activation. " +
+                        humanError(error) +
+                        " Do not start another payment until you check your PayPal account or contact support. PayPal subscription ID: " +
+                        data.subscriptionID,
+                      "error",
+                    );
+                  } finally {
+                    busyCheckout = false;
+                  }
+                },
+                onCancel: () =>
+                  message(
+                    "PayPal checkout was cancelled. No new membership was confirmed.",
+                    "warning",
+                  ),
+                onError: (error) =>
+                  message(
+                    "PayPal checkout error: " +
+                      humanError(
+                        error,
+                        "Please try again or use another payment method.",
+                      ),
+                    "error",
+                  ),
+              })
+              .render("#paypalSubscriptionButtons");
+          } catch (error) {
+            message("Unable to start checkout: " + humanError(error), "error");
+          }
+        }
+        function init() {
+          if (initialized) return;
+          initialized = true;
+          document.addEventListener("click", guardSellerAction, true);
+          document.addEventListener("submit", guardSellerSubmit, true);
+          document.addEventListener("keydown", guardSellerKeys, true);
+          el("subscriptionChange")?.addEventListener("click", () => {
+            showDialog();
+            if (lastSelected) selectPlan(lastSelected);
+          });
+          el("subscriptionRetry")?.addEventListener("click", () => refresh());
+          el("subscriptionClose")?.addEventListener("click", () =>
+            el("subscriptionDialog")?.close(),
+          );
+          document
+            .querySelectorAll("[data-sub-plan]")
+            .forEach((b) =>
+              b.addEventListener("click", () => selectPlan(b.dataset.subPlan)),
+            );
+          refresh();
+        }
+        window.ampMembership = { init, refresh };
       })();
     </script>
   </body>

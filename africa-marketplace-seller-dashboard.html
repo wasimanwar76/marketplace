@@ -576,6 +576,64 @@
           border-radius: 20px;
         }
       }
+
+      /* Member activation celebration */
+      #memberWelcomeDialog {
+        width: min(92vw, 560px);
+        max-width: 560px;
+        border: 0;
+        border-radius: 26px;
+        padding: 0;
+        overflow: hidden;
+        box-shadow: 0 28px 90px rgba(17, 24, 39, 0.28);
+      }
+      #memberWelcomeDialog::backdrop {
+        background: rgba(15, 23, 42, 0.66);
+        backdrop-filter: blur(7px);
+      }
+      .welcome-hero {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #991b1b, #dc2626 55%, #ef4444);
+        color: white;
+        text-align: center;
+        padding: 34px 24px 28px;
+      }
+      .welcome-hero::before,
+      .welcome-hero::after {
+        content: "✦";
+        position: absolute;
+        font-size: 38px;
+        color: rgba(255, 255, 255, 0.34);
+      }
+      .welcome-hero::before {
+        top: 13px;
+        left: 24px;
+      }
+      .welcome-hero::after {
+        right: 20px;
+        bottom: 14px;
+      }
+      .welcome-medallion {
+        display: grid;
+        place-items: center;
+        margin: 0 auto 14px;
+        width: 74px;
+        height: 74px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        font-size: 37px;
+      }
+      .welcome-content {
+        padding: 25px 30px 30px;
+        text-align: center;
+      }
+      @media (max-width: 500px) {
+        .welcome-content {
+          padding: 22px 20px 25px;
+        }
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -2052,6 +2110,68 @@
           PayPal processes payment. Membership activates only after server
           verification.
         </p>
+      </div>
+    </dialog>
+
+    <dialog
+      id="memberWelcomeDialog"
+      aria-labelledby="memberWelcomeTitle"
+      aria-describedby="memberWelcomeMessage"
+    >
+      <div class="welcome-hero">
+        <div class="welcome-medallion" aria-hidden="true">🎉</div>
+        <div
+          class="text-xs font-extrabold tracking-[.2em] uppercase text-red-100"
+        >
+          Your membership is active
+        </div>
+        <h2
+          id="memberWelcomeTitle"
+          class="display mt-2 text-2xl sm:text-3xl font-extrabold"
+        >
+          Welcome to Africa Market Place!
+        </h2>
+        <p class="mt-2 text-sm text-red-100">
+          A new chapter for your business starts today.
+        </p>
+      </div>
+      <div class="welcome-content">
+        <p
+          class="text-xs font-extrabold uppercase tracking-[.16em] text-red-600"
+        >
+          A personal message from the CEO
+        </p>
+        <p
+          id="memberWelcomeMessage"
+          class="mt-4 text-[15px] leading-7 text-gray-700"
+        >
+          Thank you for choosing to grow with Africa Market Place. Your ambition
+          and trust are what make our community stronger. We built this platform
+          to help entrepreneurs connect, share opportunities, and reach new
+          customers. We are proud to have you here, and excited to see what you
+          build next.
+        </p>
+        <p class="mt-4 text-sm font-bold text-gray-900">
+          With gratitude and best wishes,
+        </p>
+        <p class="text-sm text-gray-600">
+          The CEO &amp; Africa Market Place Team
+        </p>
+        <div
+          class="mt-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-bold text-green-800"
+        >
+          ✓
+          <span id="memberWelcomePlan"
+            >Your annual membership is now active.</span
+          >
+        </div>
+        <button
+          id="memberWelcomeContinue"
+          type="button"
+          class="mt-5 w-full rounded-xl bg-red-600 px-5 py-3 text-sm font-extrabold text-white hover:bg-red-700"
+        >
+          Explore my seller dashboard →
+        </button>
       </div>
     </dialog>
     <div
@@ -3731,6 +3851,39 @@
             return "The membership_subscriptions table is missing or unavailable in Supabase.";
           return raw && raw.length < 350 ? raw : defaultText;
         }
+        // Celebrate each verified active PayPal subscription once per browser profile.
+        function showWelcomeForActive(row) {
+          if (!isActive(row) || !row.paypal_subscription_id) return;
+          const account = user();
+          if (!account) return;
+          const key = `amp_membership_welcome_v1_${account.id}_${row.paypal_subscription_id}`;
+          try {
+            if (localStorage.getItem(key) === "seen") return;
+          } catch (_) {}
+          const dialog = el("memberWelcomeDialog");
+          if (!dialog || dialog.open) return;
+          const membershipName =
+            plans[row.subscription_name]?.title || "Africa Market Place";
+          const plan = el("memberWelcomePlan");
+          if (plan)
+            plan.textContent = `${membershipName} — $${row.amount} USD/year. Your membership is active.`;
+          const subscriptionDialog = el("subscriptionDialog");
+          if (subscriptionDialog?.open) subscriptionDialog.close();
+          try {
+            dialog.showModal();
+          } catch (_) {
+            dialog.setAttribute("open", "");
+          }
+          // Save only after the welcome has actually been displayed.
+          try {
+            localStorage.setItem(key, "seen");
+          } catch (_) {}
+        }
+        function dismissWelcome() {
+          const dialog = el("memberWelcomeDialog");
+          if (dialog?.open) dialog.close();
+          else dialog?.removeAttribute("open");
+        }
         function showDialog() {
           const d = el("subscriptionDialog");
           if (!d || d.open) return;
@@ -3748,7 +3901,7 @@
           if (!(target instanceof Element)) return;
           if (
             target.closest(
-              "#subscriptionDialog, #authGate, #dashboardActionLoader, #logoutButton",
+              "#subscriptionDialog, #memberWelcomeDialog, #authGate, #dashboardActionLoader, #logoutButton",
             )
           )
             return;
@@ -3884,6 +4037,7 @@
               message("Your annual membership is active.", "success");
               if (el("subscriptionDialog")?.open)
                 el("subscriptionDialog").close();
+              showWelcomeForActive(current);
             } else if (current?.status === "pending") {
               message(
                 "Your PayPal subscription is pending activation. If you approved payment, check back shortly or contact support with the PayPal subscription ID.",
@@ -4393,6 +4547,11 @@
               "info",
             );
           });
+          el("memberWelcomeContinue")?.addEventListener(
+            "click",
+            dismissWelcome,
+          );
+          el("memberWelcomeDialog")?.addEventListener("cancel", dismissWelcome);
           el("subscriptionClose")?.addEventListener("click", () =>
             el("subscriptionDialog")?.close(),
           );

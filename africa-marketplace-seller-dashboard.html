@@ -1210,6 +1210,11 @@
             Manage your annual marketplace membership and PayPal billing.
           </p>
           <div class="card mt-5 p-6">
+            <p
+              id="membershipSummaryNote"
+              class="hidden mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800"
+              role="status"
+            ></p>
             <div id="subscriptionDetails" class="text-sm text-gray-600">
               Loading membership details…
             </div>
@@ -3907,8 +3912,24 @@
           const nav = document.querySelector('[data-page="subscription"]');
           const section = el("page-subscription");
           const pill = el("activeMembershipPill");
-          if (nav) nav.classList.toggle("hidden", active);
-          if (section) section.classList.toggle("hidden", active);
+          const change = el("subscriptionChange");
+          const statusNote = el("membershipSummaryNote");
+          // The subscription details page is ALWAYS available, including after refresh.
+          // Hide only the purchase action when the SERVER confirms active membership.
+          if (nav) nav.classList.remove("hidden");
+          if (
+            section &&
+            document.querySelector('[data-page="subscription"].active')
+          ) {
+            section.classList.remove("hidden");
+          }
+          if (change) change.classList.toggle("hidden", active);
+          if (statusNote) {
+            statusNote.classList.toggle("hidden", !active);
+            if (active)
+              statusNote.textContent =
+                "✓ Your annual membership is active. Subscription details remain available here whenever you sign in.";
+          }
           if (pill) {
             pill.classList.toggle("hidden", !active);
             pill.classList.toggle("inline-flex", active);
@@ -3917,19 +3938,6 @@
           }
           if (active) {
             if (dialog?.open) dialog.close();
-            if (
-              el("page-subscription") &&
-              !el("page-subscription").classList.contains("hidden")
-            ) {
-              el("page-subscription").classList.add("hidden");
-            }
-            const visibleSubscription = document.querySelector(
-              '[data-page="subscription"].active',
-            );
-            if (visibleSubscription) {
-              visibleSubscription.classList.remove("active");
-              document.querySelector('[data-page="overview"]')?.click();
-            }
             clearPendingApproval();
           }
         }
@@ -4063,6 +4071,52 @@
             target.append(item);
           }
         }
+        // Cache the last server-confirmed row ONLY for rendering while checking.
+        // Cache data never changes membershipState or unlocks any seller actions.
+        function membershipDisplayKey() {
+          const account = user();
+          return account ? `amp_membership_display_v1_${account.id}` : null;
+        }
+        function restoreDisplayedMembership() {
+          const key = membershipDisplayKey();
+          if (!key) return false;
+          try {
+            const value = JSON.parse(localStorage.getItem(key) || "null");
+            if (!value?.membership || !value?.verified_at) return false;
+            // Prevent very old data from being presented as current details.
+            if (
+              Date.now() - new Date(value.verified_at).getTime() >
+              7 * 86400000
+            )
+              return false;
+            renderDetails(value.membership);
+            const details = el("subscriptionDetails");
+            if (details) {
+              const caption = document.createElement("p");
+              caption.id = "membershipRecheckingNote";
+              caption.className = "mt-3 text-xs text-amber-700";
+              caption.textContent =
+                "Last verified membership details — checking current status securely…";
+              details.append(caption);
+            }
+            return true;
+          } catch (_) {
+            return false;
+          }
+        }
+        function storeDisplayedMembership(row) {
+          const key = membershipDisplayKey();
+          if (!key || !row) return;
+          try {
+            localStorage.setItem(
+              key,
+              JSON.stringify({
+                membership: row,
+                verified_at: new Date().toISOString(),
+              }),
+            );
+          } catch (_) {}
+        }
         // Get membership from the authenticated server, not browser-visible RLS rows.
         // This guarantees that the purchase panel is hidden for a server-confirmed active plan.
         async function refresh(options = {}) {
@@ -4071,7 +4125,8 @@
           if (!account || typeof ampAuth === "undefined") return;
           checking = true;
           const details = el("subscriptionDetails");
-          if (details) details.textContent = "Checking membership status…";
+          if (details && !restoreDisplayedMembership())
+            details.textContent = "Checking membership status…";
           try {
             const { data: sessionData, error: sessionError } =
               await ampAuth.auth.getSession();
@@ -4116,6 +4171,13 @@
             }
             current = payload.membership;
             renderDetails(current);
+            if (current) storeDisplayedMembership(current);
+            else {
+              const key = membershipDisplayKey();
+              try {
+                if (key) localStorage.removeItem(key);
+              } catch (_) {}
+            }
             membershipState =
               payload.active === true && isActive(current)
                 ? "active"
@@ -4156,7 +4218,7 @@
             current = null;
             membershipState = "error";
             updateMembershipUI(false);
-            renderDetails(null, true);
+            if (!restoreDisplayedMembership()) renderDetails(null, true);
             lastError = humanError(error, "Could not check membership status.");
             message("Subscription check failed: " + lastError, "error");
             if (!options.silent && !busyCheckout) showDialog();

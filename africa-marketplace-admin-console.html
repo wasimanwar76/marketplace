@@ -277,6 +277,61 @@
         line-height: 1.6;
         color: #9a3412;
       }
+
+      /* Admin session controls */
+      .amp-logout-button {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        border: 1px solid #fecaca;
+        border-radius: 14px;
+        background: #fff7f7;
+        color: #b91c1c;
+        padding: 12px 14px;
+        font-size: 13px;
+        font-weight: 750;
+        transition:
+          background 0.18s,
+          box-shadow 0.18s,
+          transform 0.18s;
+      }
+      .amp-logout-button:hover {
+        background: #fee2e2;
+        box-shadow: 0 5px 16px rgba(185, 28, 28, 0.09);
+        transform: translateY(-1px);
+      }
+      .amp-logout-button:focus-visible {
+        outline: 3px solid #f87171;
+        outline-offset: 2px;
+      }
+      .amp-logout-icon {
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        width: 37px;
+        height: 37px;
+        border-radius: 11px;
+        background: #fee2e2;
+      }
+      .amp-logout-modal {
+        width: min(440px, calc(100vw - 32px));
+        overflow: hidden;
+        border: 1px solid #f3f4f6;
+      }
+      .amp-logout-modal::backdrop {
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(5px);
+      }
+      .amp-logout-error {
+        color: #b91c1c;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .amp-logout-modal button:disabled {
+        opacity: 0.65;
+        cursor: wait;
+      }
     </style>
   </head>
   <body class="bg-[#f5f6f8]">
@@ -412,10 +467,7 @@
             >—</span
           >
         </button>
-        <button type="button" class="navlink" data-page="analytics">
-          <span class="navicon" aria-hidden="true">◫</span
-          ><span class="navtext">Analytics</span>
-        </button>
+      
         <button type="button" class="navlink" data-page="settings">
           <span class="navicon" aria-hidden="true">⚙</span
           ><span class="navtext">Settings</span>
@@ -436,16 +488,39 @@
             Super administrator
           </p>
         </div>
-        <button
-          id="adminSignOut"
-          type="button"
-          aria-label="Sign out"
-          title="Sign out"
-          class="text-gray-400 hover:text-red-600"
-        >
-          ⇥
-        </button>
       </div>
+      <button
+        id="adminSignOut"
+        type="button"
+        class="amp-logout-button mt-4"
+        aria-haspopup="dialog"
+        aria-controls="ampLogoutDialog"
+        title="Securely sign out of Admin Console"
+      >
+        <span class="amp-logout-icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            width="19"
+            height="19"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <path d="m16 17 5-5-5-5" />
+            <path d="M21 12H9" />
+          </svg>
+        </span>
+        <span class="flex-1 text-left"
+          >Log out
+          <small class="block font-normal text-[10px] opacity-70"
+            >End administrator session</small
+          ></span
+        >
+        <span aria-hidden="true" class="text-red-400">›</span>
+      </button>
     </aside>
     <div id="main" class="min-h-screen lg:ml-[260px]">
       <header
@@ -1329,6 +1404,69 @@ Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and 
           </button>
         </div>
       </form>
+    </dialog>
+
+    <dialog
+      id="ampLogoutDialog"
+      class="amp-logout-modal"
+      aria-labelledby="ampLogoutTitle"
+      aria-describedby="ampLogoutDescription"
+    >
+      <div class="p-6 sm:p-7">
+        <div
+          class="mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-red-50 text-red-600"
+          aria-hidden="true"
+        >
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <path d="m16 17 5-5-5-5" />
+            <path d="M21 12H9" />
+          </svg>
+        </div>
+        <h2
+          id="ampLogoutTitle"
+          class="display text-xl font-extrabold text-gray-900"
+        >
+          Log out of Admin Console?
+        </h2>
+        <p
+          id="ampLogoutDescription"
+          class="mt-2 text-sm leading-6 text-gray-500"
+        >
+          Your administrator session will be ended on this browser. Sign in
+          again to manage accounts, listings, and payments.
+        </p>
+        <p
+          id="ampLogoutError"
+          class="amp-logout-error mt-3 hidden"
+          role="alert"
+        ></p>
+        <div class="mt-7 grid grid-cols-2 gap-3">
+          <button
+            id="ampLogoutCancel"
+            type="button"
+            class="btn btn-gray py-3 text-sm"
+          >
+            Stay signed in
+          </button>
+          <button
+            id="ampLogoutConfirm"
+            type="button"
+            class="btn btn-red py-3 text-sm"
+          >
+            Log out securely
+          </button>
+        </div>
+      </div>
     </dialog>
     <div
       id="toast"
@@ -2585,7 +2723,11 @@ Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and 
         $("#detailsDialog").showModal();
       }
       async function ampAdminSignOut() {
-        const button = $("#adminSignOut");
+        const button = $("#ampLogoutConfirm");
+        const cancel = $("#ampLogoutCancel");
+        const errorBox = $("#ampLogoutError");
+        errorBox.classList.add("hidden");
+        cancel.disabled = true;
         ampAdminSetBusy(button, true, "Signing out…");
         try {
           const { error } = await ampAdminDb.auth.signOut();
@@ -2601,14 +2743,25 @@ Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and 
           $("#adminAuthGate").classList.remove("hidden");
           $("#adminPassword").value = "";
           $("#adminLoginError").classList.add("hidden");
+          $("#ampLogoutDialog").close();
           notify("You have been securely signed out.");
         } catch (e) {
-          notify("Sign out failed. Please try again.");
+          errorBox.textContent =
+            "We couldn't end your session. Check your connection and try again.";
+          errorBox.classList.remove("hidden");
         } finally {
-          ampAdminSetBusy(button, false, "Sign out");
+          ampAdminSetBusy(button, false, "Log out securely");
+          cancel.disabled = false;
         }
       }
-      $("#adminSignOut")?.addEventListener("click", ampAdminSignOut);
+      $("#adminSignOut")?.addEventListener("click", () => {
+        $("#ampLogoutError").classList.add("hidden");
+        $("#ampLogoutDialog").showModal();
+      });
+      $("#ampLogoutCancel")?.addEventListener("click", () =>
+        $("#ampLogoutDialog").close(),
+      );
+      $("#ampLogoutConfirm")?.addEventListener("click", ampAdminSignOut);
       $("#adminLoginForm").addEventListener("submit", async (e) => {
         e.preventDefault();
         const button = $("#adminLoginButton");

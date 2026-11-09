@@ -9,12 +9,11 @@
     <script>
       /* Public browser configuration ONLY. Never put PayPal secret or Supabase service-role key here. */
       window.AMP_CONFIG = {
-        paypalEnvironment: "sandbox", // Test payments only. Never use live credentials here.
-        paypalClientId:
-          "AY9cdAQujLmShCEW_eV8xgFr_1J1Qs5HOZgyjZXrPkdHUqP2pzQ7qwyjftebjhU7-Qc8lRY9XLzs8GsI",
+        paypalEnvironment: "live", // Production payments. Configure matching LIVE server credentials.
+        paypalClientId: "REPLACE_WITH_PAYPAL_LIVE_CLIENT_ID",
         paypalPlans: {
-          20: "P-8WF46530P7463744SNLYESZY",
-          60: "P-0J22047923874421GNLYETOY",
+          20: "REPLACE_WITH_LIVE_PLAN_20",
+          60: "REPLACE_WITH_LIVE_PLAN_60",
         },
         // Deployed Supabase Edge Function endpoint (uses user's Supabase auth token).
         verifyEndpoint:
@@ -678,6 +677,63 @@
         backdrop-filter: blur(5px);
       }
     </style>
+    <style id="amp-production-interactions">
+      @keyframes amp-action-rotate {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes amp-action-enter {
+        from {
+          opacity: 0.6;
+          transform: translateY(2px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      button.amp-is-processing {
+        position: relative;
+        cursor: progress !important;
+        transition:
+          opacity 0.18s ease,
+          box-shadow 0.18s ease;
+      }
+      button.amp-is-processing .amp-action-label {
+        opacity: 0.92;
+      }
+      .amp-action-spinner {
+        display: inline-block;
+        width: 17px;
+        height: 17px;
+        flex: none;
+        border: 2.4px solid currentColor;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: amp-action-rotate 0.68s linear infinite;
+        vertical-align: -3px;
+        margin-right: 9px;
+      }
+      .amp-action-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0;
+        justify-content: center;
+        animation: amp-action-enter 0.15s ease-out both;
+      }
+      button.amp-is-processing:disabled {
+        opacity: 0.84;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .amp-action-spinner {
+          animation-duration: 2s;
+        }
+        .amp-action-status {
+          animation: none;
+        }
+      }
+    </style>
   </head>
   <body class="bg-[#f5f6f8]">
     <div id="authGate" role="status" aria-live="polite">
@@ -860,16 +916,6 @@
         </div>
       </header>
       <main class="mx-auto max-w-[1450px] p-4 sm:p-6 lg:p-7">
-        <div
-          role="status"
-          class="mb-4 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900"
-        >
-          🧪 PayPal Sandbox test mode — no real payments. Use a separate Sandbox
-          Personal buyer account with an eligible test payment method. If PayPal
-          displays “Things don’t appear to be working” after login, the
-          subscription is not approved. Check the buyer and merchant Sandbox
-          account settings; do not retry repeatedly.
-        </div>
         <section id="page-overview" class="page fade">
           <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
             <div>
@@ -902,7 +948,7 @@
                   >◉</span
                 ><span
                   class="rounded-full bg-green-50 px-2 py-1 text-[10px] font-bold text-green-700"
-                  >↗ 12%</span
+                  >—</span
                 >
               </div>
               <p class="mt-4 text-xs text-gray-500">Total Listing Views</p>
@@ -921,7 +967,7 @@
                   >▣</span
                 ><span
                   class="rounded-full bg-green-50 px-2 py-1 text-[10px] font-bold text-green-700"
-                  >↗ 5%</span
+                  >—</span
                 >
               </div>
               <p class="mt-4 text-xs text-gray-500">New Inquiries</p>
@@ -955,7 +1001,7 @@
                   >★</span
                 ><span
                   class="rounded-full bg-purple-50 px-2 py-1 text-[10px] font-bold text-purple-700"
-                  >Top rated</span
+                  >Awaiting reviews</span
                 >
               </div>
               <p class="mt-4 text-xs text-gray-500">Seller Rating</p>
@@ -1278,7 +1324,7 @@
                   >Location</label
                 ><input
                   id="sellerLocation"
-                  value="Nairobi, Kenya"
+                  value=""
                   class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm"
                 />
               </div>
@@ -2021,8 +2067,8 @@
               Choose your annual membership
             </h2>
             <p class="mt-2 text-sm text-gray-500">
-              Continue securely to PayPal Sandbox to approve your annual
-              subscription.
+              Review your membership and continue to PayPal to securely
+              authorize your annual subscription.
             </p>
           </div>
           <button
@@ -2061,54 +2107,35 @@
         </p>
         <div id="paypalSubscriptionButtons" class="mt-4"></div>
         <div
-          class="mt-3 rounded-xl border border-blue-100 bg-blue-50 p-3 text-xs leading-5 text-blue-900"
-          id="paypalSandboxBuyerGuide"
+          id="paypalLiveBuyerGuide"
+          class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs leading-6 text-slate-700"
         >
-          <strong class="block text-sm">PayPal Sandbox checkout help</strong>
-          Use a separate <strong>Sandbox Personal buyer</strong> account, never
-          the Sandbox Business merchant account. If PayPal says “Things don’t
-          appear to be working” before login, try a private/incognito browser
-          window with a separate Personal buyer account. This checkout uses a
-          full-page PayPal approval redirect instead of a popup. Confirm the
-          Personal account has an eligible test payment method.
-          <div class="mt-2 flex flex-wrap gap-3">
-            <a
-              class="font-bold text-blue-700 underline"
-              href="https://developer.paypal.com/dashboard/accounts"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Manage Sandbox test accounts</a
-            >
+          <strong class="block text-sm text-slate-900"
+            >Secure subscription checkout</strong
+          >
+          You will continue to PayPal to review and authorize your annual
+          membership. Your membership is activated only after payment approval
+          is independently verified.
+          <div class="mt-3 flex flex-wrap gap-4">
             <button
               id="paypalResumeApproval"
               type="button"
-              class="hidden font-bold text-blue-700 underline"
+              class="hidden font-semibold text-red-700 underline"
             >
-              Reopen pending PayPal approval
+              Continue previous approval
             </button>
             <button
               id="paypalRetrySelected"
               type="button"
-              class="font-bold text-blue-700 underline"
+              class="font-semibold text-red-700 underline"
             >
-              Retry PayPal checkout
+              Start a new checkout
             </button>
           </div>
-          <p
-            id="paypalPendingNote"
-            class="mt-2 text-blue-800"
-            aria-live="polite"
-          ></p>
-          <p class="mt-2 text-blue-800">
-            If PayPal shows a generic error <strong>after buyer login</strong>,
-            the subscription is still pending. Check the Sandbox Personal
-            buyer's funding source and the Business merchant's subscription
-            eligibility. This is a PayPal-hosted approval failure, not evidence
-            of a JWT error in your dashboard.
-          </p>
+          <p id="paypalPendingNote" class="mt-2" aria-live="polite"></p>
           <p
             id="paypalDiagnosticHint"
-            class="mt-2 break-words text-blue-800"
+            class="mt-2 break-words"
             aria-live="polite"
           ></p>
         </div>
@@ -3863,7 +3890,7 @@
               lower,
             )
           )
-            return "PayPal could not verify the subscription. Check that Sandbox/Live mode and PayPal credentials match.";
+            return "PayPal could not verify the subscription. Check that production environment and PayPal credentials match.";
           if (
             /schema cache|relation .*does not exist|could not find the table/.test(
               lower,
@@ -4243,34 +4270,34 @@
             (raw.match(/debug[_ -]?id[=: ]+([a-z0-9-]+)/i) || [])[1] ||
             "";
           const hint = /seller|merchant|same.account|self.purchase/.test(lower)
-            ? "You cannot buy your own plan. Sign into PayPal with a DIFFERENT Sandbox Personal buyer account."
+            ? "You cannot buy your own plan. Sign into PayPal with a DIFFERENT PayPal buyer account."
             : /funding|instrument|payer|declin|eligib|payment method/.test(
                   lower,
                 )
-              ? "Try another Sandbox Personal buyer account with an eligible test funding method."
+              ? "Try another PayPal buyer account with an eligible test funding method."
               : /plan|resource_not_found|invalid_request|not_authorized/.test(
                     lower,
                   )
-                ? "Check the active Sandbox plan and that it belongs to the REST app used by your Client ID."
-                : "PayPal could not open the buyer approval page. Try a new Sandbox Personal buyer in a private window, allow PayPal popups/cookies, and inspect the first failed PayPal Network request for a debug_id. This may be a PayPal Sandbox-side failure.";
-          console.error(`[AMP PayPal Sandbox ${phase}]`, error);
+                ? "Check the active Live plan and that it belongs to the REST app used by your Client ID."
+                : "PayPal could not open the buyer approval page. Try a new PayPal buyer in a private window, allow PayPal popups/cookies, and inspect the first failed PayPal Network request for a debug_id. This may be a PayPal-side failure.";
+          console.error(`[AMP PayPal ${phase}]`, error);
           console.info("[AMP PayPal checkout context]", {
             phase,
             plan: lastCheckoutAttempt?.plan,
             planId: lastCheckoutAttempt?.planId,
             paypalSdkAvailable: Boolean(window.paypal?.Buttons),
-            sandbox: config.paypalEnvironment === "sandbox",
+            live: config.paypalEnvironment === "live",
             time: new Date().toISOString(),
           });
           const diagnostic = el("paypalDiagnosticHint");
           if (diagnostic)
             diagnostic.textContent = `Checkout phase: ${phase}. ${debugId ? "PayPal reference: " + debugId + ". " : ""}Open F12 → Network (Preserve log), retry checkout, and check the first failed PayPal request. Don't share cookies or authorization headers.`;
-          return `PayPal Sandbox ${phase} failed. ${hint}${debugId ? " Reference: " + debugId + "." : ""} No membership has been activated by this checkout.`;
+          return `PayPal ${phase} failed. ${hint}${debugId ? " Reference: " + debugId + "." : ""} No membership has been activated by this checkout.`;
         }
         function loadPaypal() {
-          if (config.paypalEnvironment !== "sandbox")
+          if (config.paypalEnvironment !== "live")
             return Promise.reject(
-              new Error("This test dashboard requires PayPal Sandbox mode."),
+              new Error("Secure checkout requires PayPal Live configuration."),
             );
           if (window.paypal?.Buttons) return Promise.resolve();
           if (paypalLoadPromise) return paypalLoadPromise;
@@ -4280,7 +4307,7 @@
           )
             return Promise.reject(
               new Error(
-                "PayPal Client ID is missing. Set paypalClientId in the HTML AMP_CONFIG section.",
+                "Secure checkout is temporarily unavailable. Please contact support.",
               ),
             );
           paypalLoadPromise = new Promise((resolve, reject) => {
@@ -4289,13 +4316,13 @@
             sdk.src =
               "https://www.paypal.com/sdk/js?components=buttons&client-id=" +
               encodeURIComponent(config.paypalClientId) +
-              "&vault=true&intent=subscription&currency=USD&debug=true";
+              "&vault=true&intent=subscription&currency=USD&debug=false";
             sdk.onload = () =>
               window.paypal?.Buttons
                 ? resolve()
                 : reject(
                     new Error(
-                      "PayPal loaded but subscription buttons are unavailable.",
+                      "The payment provider could not initialize checkout.",
                     ),
                   );
             sdk.onerror = () =>
@@ -4311,7 +4338,7 @@
           });
           return paypalLoadPromise;
         }
-        // Confirm the plan with PayPal's Sandbox REST API through the authenticated Edge Function
+        // Confirm the plan with PayPal's Live REST API through the authenticated Edge Function
         // before starting checkout. The browser never receives PayPal's Client Secret.
         async function checkPaypalPlan(code, planId) {
           const { data, error } = await ampAuth.auth.getSession();
@@ -4453,11 +4480,7 @@
             throw new Error("PayPal did not return a subscription ID.");
           const approval = new URL(payload.approve_url);
           if (
-            ![
-              "www.sandbox.paypal.com",
-              "www.paypal.com",
-              "sandbox.paypal.com",
-            ].includes(approval.hostname) ||
+            !["www.paypal.com"].includes(approval.hostname) ||
             approval.protocol !== "https:"
           )
             throw new Error("PayPal approval URL was not recognized.");
@@ -4480,7 +4503,7 @@
           );
           updatePendingApprovalUI();
           message(
-            "Redirecting to PayPal Sandbox to approve your annual subscription…",
+            "Redirecting to PayPal to approve your annual subscription…",
             "info",
           );
           window.location.assign(approval.href);
@@ -4497,7 +4520,7 @@
               !/^I-[A-Za-z0-9]+$/.test(id) ||
               !["20", "60"].includes(plan) ||
               url.protocol !== "https:" ||
-              url.hostname !== "www.sandbox.paypal.com" ||
+              url.hostname !== "www.paypal.com" ||
               !url.pathname.startsWith("/webapps/billing/subscriptions")
             )
               return null;
@@ -4554,7 +4577,7 @@
           button.type = "button";
           button.className =
             "w-full rounded-xl bg-[#0070ba] px-5 py-3 font-bold text-white hover:bg-[#005ea6] disabled:opacity-60";
-          button.textContent = `Continue to PayPal Sandbox — $${code}/year`;
+          button.textContent = `Continue to PayPal — $${code}/year`;
           container.append(button);
           const pending = readPendingApproval();
           if (pending && pending.plan === code) {
@@ -4564,24 +4587,37 @@
               "warning",
             );
           }
+          if (
+            config.paypalEnvironment !== "live" ||
+            !config.paypalClientId ||
+            config.paypalClientId.startsWith("REPLACE_")
+          ) {
+            button.disabled = true;
+            message(
+              "Membership checkout is temporarily unavailable while our secure payment service is being configured. Please contact support.",
+              "warning",
+            );
+            return;
+          }
           const planId = config.paypalPlans?.[code];
           if (!planId || !/^P-[A-Za-z0-9]+$/.test(planId)) {
             button.disabled = true;
             message(
-              `The $${code} PayPal plan ID is missing or invalid.`,
+              `This membership plan is temporarily unavailable. Please contact support.`,
               "error",
             );
             return;
           }
           message(
-            "Plan selected. Continue to PayPal Sandbox and sign in with a separate Personal test buyer account.",
+            "Your plan is selected. Continue to PayPal to review and authorize the subscription.",
             "info",
           );
           button.addEventListener("click", async () => {
             if (busyCheckout) return;
             busyCheckout = true;
             button.disabled = true;
-            button.textContent = "Connecting to PayPal Sandbox…";
+            button.innerHTML =
+              '<span class="amp-action-spinner" aria-hidden="true"></span>Connecting securely to PayPal…';
             try {
               if (!user()) throw new Error("Sign in again before subscribing.");
               const existingPending = readPendingApproval();
@@ -4590,25 +4626,22 @@
                 window.location.assign(existingPending.href);
                 return;
               }
-              message(
-                "Creating a secure PayPal Sandbox approval session…",
-                "info",
-              );
+              message("Creating a secure PayPal approval session…", "info");
               await startRedirectCheckout(code, planId);
             } catch (error) {
               console.error("[AMP PayPal redirect checkout]", error);
               message(
-                "Unable to start PayPal Sandbox checkout: " +
+                "Unable to start PayPal checkout: " +
                   humanError(error) +
                   " No membership has been activated.",
                 "error",
               );
               if (diagnostic)
                 diagnostic.textContent =
-                  "The Edge Function must include the create_checkout action. Inspect swift-function logs for the PayPal error reference.";
+                  "Checkout is temporarily unavailable. Please contact support if the problem continues.";
               busyCheckout = false;
               button.disabled = false;
-              button.textContent = `Retry PayPal Sandbox — $${code}/year`;
+              button.textContent = `Try checkout again — $${code}/year`;
             }
           });
         }
@@ -4644,7 +4677,7 @@
           showDialog();
           if (!subscriptionId || !/^I-[A-Za-z0-9]+$/.test(subscriptionId)) {
             message(
-              "Returned from PayPal, but the subscription ID is missing. Check your Sandbox account and contact support before retrying.",
+              "Returned from PayPal, but the subscription ID is missing. Check your PayPal account and contact support before retrying.",
               "error",
             );
             return;
@@ -4672,7 +4705,7 @@
               );
             } else {
               message(
-                `PayPal reports ${verified.status} for subscription ${subscriptionId}. Approval is not complete, so membership remains locked. If PayPal shows an error after login, check the Sandbox Personal buyer's funding method and the Business merchant's recurring-payment eligibility.`,
+                `PayPal reports ${verified.status} for subscription ${subscriptionId}. Approval is not complete, so membership remains locked. If PayPal shows an error after login, check the PayPal buyer's funding method and the Business merchant's recurring-payment eligibility.`,
                 "warning",
               );
             }
@@ -4720,7 +4753,7 @@
             clearPendingApproval();
             selectPlan(lastSelected);
             message(
-              "Previous checkout link cleared. Continue to PayPal to create a fresh Sandbox approval session.",
+              "Previous checkout link cleared. Continue to PayPal to create a fresh Live approval session.",
               "info",
             );
           });

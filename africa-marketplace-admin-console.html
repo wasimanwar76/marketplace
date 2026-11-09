@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Admin Console | Africa Market Place</title>
+    <title>Admin Console | Africa Market Place — RPC Account Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="./block.js"></script>
     <script>
@@ -212,6 +212,71 @@
           transform: rotate(360deg);
         }
       }
+
+      /* Consistent sidebar navigation: never join two destinations into one row. */
+      #sidebar {
+        width: 278px;
+      }
+      @media (min-width: 1024px) {
+        #main {
+          margin-left: 278px !important;
+        }
+      }
+      .amp-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .amp-nav .navlink {
+        display: flex;
+        width: 100%;
+        min-height: 46px;
+        gap: 11px;
+        padding: 9px 11px;
+        border: 1px solid transparent;
+        white-space: normal;
+        line-height: 1.35;
+      }
+      .amp-nav .navlink.active {
+        border-color: #fecaca;
+      }
+      .amp-nav .navtext {
+        min-width: 0;
+        flex: 1;
+        text-align: left;
+        overflow-wrap: anywhere;
+      }
+      .amp-nav .navicon {
+        width: 32px;
+        height: 32px;
+        flex: 0 0 32px;
+      }
+      .amp-nav .navcount {
+        min-width: 24px;
+        height: 24px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 0 6px;
+        flex-shrink: 0;
+      }
+      .btn:disabled {
+        cursor: wait;
+        opacity: 0.65;
+      }
+      #deleteUserDialog .delete-warning {
+        display: flex;
+        gap: 10px;
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        padding: 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        line-height: 1.6;
+        color: #9a3412;
+      }
     </style>
   </head>
   <body class="bg-[#f5f6f8]">
@@ -307,42 +372,53 @@
       >
         Administration
       </div>
-      <nav class="space-y-1" aria-label="Admin navigation">
-        <button class="navlink active" data-page="overview">
-          <span class="navicon">⌂</span>Overview
+      <nav class="amp-nav space-y-1" aria-label="Admin navigation">
+        <button type="button" class="navlink active" data-page="overview">
+          <span class="navicon" aria-hidden="true">⌂</span
+          ><span class="navtext">Overview</span>
         </button>
-        <button class="navlink" data-page="moderation">
-          <span class="navicon">✓</span>Listing approvals
-          <span
-            id="pendingBadge"
-            class="ml-auto rounded-full bg-red-100 px-2 py-0.5 text-[10px] text-red-700"
-            >—</span
-          >All listings
-        </button>
-        <button class="navlink" data-page="payments">
-          <span class="navicon">💳</span>Membership payments
-          <span
-            id="mmPendingBadge"
-            class="ml-auto rounded-full bg-amber-100 px-2 py-0.5 text-[10px] text-amber-800"
+        <button type="button" class="navlink" data-page="moderation">
+          <span class="navicon" aria-hidden="true">✓</span
+          ><span class="navtext">Listing approvals</span
+          ><span id="pendingBadge" class="navcount bg-red-100 text-red-700"
             >—</span
           >
         </button>
-        <button class="navlink" data-page="users">
-          <span class="navicon">♙</span>Users & sellers
+        <button type="button" class="navlink" data-page="listings">
+          <span class="navicon" aria-hidden="true">▤</span
+          ><span class="navtext">All listings</span>
         </button>
-        <button class="navlink" data-page="categories">
-          <span class="navicon">▦</span>Categories
-        </button>
-        <button class="navlink" data-page="reports">
-          <span class="navicon">⚑</span>Reports & moderation
-          <span
-            id="reportBadge"
-            class="ml-auto rounded-full bg-amber-100 px-2 py-0.5 text-[10px] text-amber-800"
+        <button type="button" class="navlink" data-page="payments">
+          <span class="navicon" aria-hidden="true">▣</span
+          ><span class="navtext">Membership payments</span
+          ><span
+            id="mmPendingBadge"
+            class="navcount bg-amber-100 text-amber-800"
             >—</span
-          >Analytics
+          >
         </button>
-        <button class="navlink" data-page="settings">
-          <span class="navicon">⚙</span>Settings
+        <button type="button" class="navlink" data-page="users">
+          <span class="navicon" aria-hidden="true">♙</span
+          ><span class="navtext">Sellers & visitors</span>
+        </button>
+        <button type="button" class="navlink" data-page="categories">
+          <span class="navicon" aria-hidden="true">▦</span
+          ><span class="navtext">Categories</span>
+        </button>
+        <button type="button" class="navlink" data-page="reports">
+          <span class="navicon" aria-hidden="true">⚑</span
+          ><span class="navtext">Reports & moderation</span
+          ><span id="reportBadge" class="navcount bg-amber-100 text-amber-800"
+            >—</span
+          >
+        </button>
+        <button type="button" class="navlink" data-page="analytics">
+          <span class="navicon" aria-hidden="true">◫</span
+          ><span class="navtext">Analytics</span>
+        </button>
+        <button type="button" class="navlink" data-page="settings">
+          <span class="navicon" aria-hidden="true">⚙</span
+          ><span class="navtext">Settings</span>
         </button>
       </nav>
 
@@ -818,29 +894,119 @@
           </div>
         </section>
         <section id="page-users" class="page hidden fade">
-          <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+          <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 class="display text-2xl font-extrabold">Users & sellers</h2>
-              <p class="mt-1 text-sm text-gray-500">
-                All registered profiles and tracked visitors. Accounts with at
-                least one listing are classified as sellers; others are
-                visitors. Administrator accounts are excluded.
+              <p
+                class="text-xs font-extrabold uppercase tracking-wider text-red-600"
+              >
+                Account management
+              </p>
+              <h2 class="display mt-1 text-2xl font-extrabold">
+                Sellers & visitors
+              </h2>
+              <p class="mt-2 max-w-2xl text-sm text-gray-500">
+                Seller and visitor tabs are based on public.profiles.role.
+                Tracking-only visits are shown separately. Admins can delete
+                registered accounts with one confirmation.
               </p>
             </div>
-            <button id="refreshUsers" class="btn btn-gray">
-              ↻ Refresh users
+            <button id="refreshUsers" type="button" class="btn btn-gray">
+              ↻ Refresh accounts
             </button>
           </div>
-          <div class="card p-4">
-            <input
-              id="userSearch"
-              class="field mb-4"
-              type="search"
-              placeholder="Search name, email, ID, role…"
-              aria-label="Search users"
-            />
-            <div id="usersTable"></div>
+          <div class="grid gap-3 sm:grid-cols-3 mb-5">
+            <div class="card p-4">
+              <p class="text-xs font-semibold text-gray-500">
+                Seller accounts
+                <span class="text-[10px] text-gray-400"
+                  >(profiles.role = seller)</span
+                >
+              </p>
+              <p
+                id="sellerAccountCount"
+                class="display mt-2 text-2xl font-extrabold"
+              >
+                —
+              </p>
+            </div>
+            <div class="card p-4">
+              <p class="text-xs font-semibold text-gray-500">
+                Registered visitors (profile role)
+              </p>
+              <p
+                id="registeredVisitorCount"
+                class="display mt-2 text-2xl font-extrabold"
+              >
+                —
+              </p>
+            </div>
+            <div class="card p-4">
+              <p class="text-xs font-semibold text-gray-500">
+                Tracked site visitors
+              </p>
+              <p
+                id="trackedVisitorCount"
+                class="display mt-2 text-2xl font-extrabold"
+              >
+                —
+              </p>
+            </div>
           </div>
+          <div class="card overflow-hidden">
+            <div
+              class="flex flex-wrap items-center gap-2 border-b border-gray-100 p-4"
+              role="group"
+              aria-label="Account category"
+            >
+              <button
+                type="button"
+                class="btn btn-red"
+                data-account-tab="sellers"
+                aria-pressed="true"
+              >
+                Seller accounts
+              </button>
+              <button
+                type="button"
+                class="btn btn-gray"
+                data-account-tab="registered"
+                aria-pressed="false"
+              >
+                Registered visitors
+              </button>
+              <button
+                type="button"
+                class="btn btn-gray"
+                data-account-tab="tracked"
+                aria-pressed="false"
+              >
+                Site visitors (tracking)
+              </button>
+            </div>
+            <div class="p-4">
+              <label class="sr-only" for="userSearch">Search accounts</label
+              ><input
+                id="userSearch"
+                class="field mb-4"
+                type="search"
+                placeholder="Search name, email or account ID…"
+              />
+              <div
+                class="mb-3 text-[11px] font-semibold text-emerald-700"
+                id="ampAccountBuild"
+                role="status"
+              >
+                Account management v2 · Secure Supabase RPC · No Edge Function
+                required
+              </div>
+              <div id="usersTable" aria-live="polite"></div>
+            </div>
+          </div>
+          <p id="accountListNote" class="mt-3 text-xs text-gray-500">
+            Seller and registered visitor accounts are categorized using the
+            authoritative public.profiles.role field. Tracking-only visitor
+            records are not Supabase Auth accounts.
+          </p>
         </section>
         <section id="page-categories" class="page hidden fade">
           <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
@@ -1121,12 +1287,12 @@ Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and 
               id="deleteUserTitle"
               class="display text-xl font-bold text-red-700"
             >
-              Delete user account?
+              Delete this account?
             </h2>
             <p class="mt-2 text-sm leading-6 text-gray-600">
-              This action is permanent. It must be completed by the secure
-              admin-delete-user Edge Function. The currently signed-in
-              administrator cannot be deleted here.
+              This permanently deletes the selected registered account. Check
+              the account details below before continuing. Administrator
+              accounts are protected.
             </p>
           </div>
           <button
@@ -1143,16 +1309,19 @@ Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and 
           class="mt-4 rounded-xl bg-gray-50 p-3 text-sm"
         ></div>
         <input id="deleteUserId" type="hidden" />
-        <label class="mt-4 flex items-start gap-2 text-sm"
-          ><input
-            id="deleteUserConfirm"
-            type="checkbox"
-            class="mt-1"
-            required
-          />
-          I understand this permanently deletes this user's account and
-          associated data according to the configured deletion function.</label
-        >
+        <div class="delete-warning mt-4" role="note">
+          <span aria-hidden="true">⚠</span
+          ><span
+            ><strong>This cannot be undone.</strong> Related account information
+            may also be removed. The database will reject deletion if protected
+            dependencies remain.</span
+          >
+        </div>
+        <p
+          id="deleteUserError"
+          class="mt-3 hidden text-xs font-semibold text-red-700"
+          role="alert"
+        ></p>
         <div class="mt-5 flex justify-end gap-2">
           <button type="button" data-close class="btn btn-gray">Cancel</button>
           <button id="deleteUserSubmit" type="submit" class="btn btn-red">
@@ -1347,15 +1516,44 @@ Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and 
       }
       let ampAdminUsers = [];
       let ampAdminUserLoading = false;
+      let ampAccountTab = "sellers";
+      const ampAuthIdPattern =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
       function renderUsers() {
         const q = ($("#userSearch")?.value || "").toLowerCase();
-        const rows = ampAdminUsers.filter((u) =>
-          JSON.stringify(u).toLowerCase().includes(q),
+        const group = {
+          sellers: "Seller",
+          registered: "Registered visitor",
+          tracked: "Tracked visitor",
+        }[ampAccountTab];
+        const rows = ampAdminUsers.filter(
+          (u) =>
+            u.role === group && JSON.stringify(u).toLowerCase().includes(q),
         );
+        const counts = {
+          sellers: ampAdminUsers.filter((u) => u.role === "Seller").length,
+          registered: ampAdminUsers.filter(
+            (u) => u.role === "Registered visitor",
+          ).length,
+          tracked: ampAdminUsers.filter((u) => u.role === "Tracked visitor")
+            .length,
+        };
+        if ($("#sellerAccountCount"))
+          $("#sellerAccountCount").textContent = counts.sellers;
+        if ($("#registeredVisitorCount"))
+          $("#registeredVisitorCount").textContent = counts.registered;
+        if ($("#trackedVisitorCount"))
+          $("#trackedVisitorCount").textContent = counts.tracked;
+        document.querySelectorAll("[data-account-tab]").forEach((btn) => {
+          const active = btn.dataset.accountTab === ampAccountTab;
+          btn.setAttribute("aria-pressed", String(active));
+          btn.classList.toggle("btn-red", active);
+          btn.classList.toggle("btn-gray", !active);
+        });
         $("#usersTable").innerHTML = table(
           [
-            "User / full fields",
-            "Account type",
+            "Account details",
+            "Type",
             "Joined",
             "Listings",
             "Status",
@@ -1363,29 +1561,31 @@ Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and 
           ],
           rows
             .map((u) => {
-              const fields = Object.entries(u.fields || {}).filter(
-                ([k, v]) =>
-                  v !== null && v !== "" && !/password|token|secret/i.test(k),
-              );
-              const fieldBlock = fields
+              const safeId = ampAuthIdPattern.test(String(u.id || ""));
+              const registered =
+                u.role !== "Tracked visitor" &&
+                safeId &&
+                u.id !== ampAdminUser?.id;
+              const extras = Object.entries(u.fields || {})
+                .filter(
+                  ([k, v]) =>
+                    v !== null && v !== "" && !/password|token|secret/i.test(k),
+                )
                 .map(
                   ([k, v]) =>
-                    `<div class="break-words"><span class="font-semibold text-gray-500">${esc(k)}:</span> ${esc(typeof v === "object" ? JSON.stringify(v) : String(v))}</div>`,
+                    `<div class="break-words"><b>${esc(k)}:</b> ${esc(typeof v === "object" ? JSON.stringify(v) : String(v))}</div>`,
                 )
                 .join("");
               return `<tr class="align-top hover:bg-gray-50/70">
-              <td class="px-4 py-4"><p class="text-xs font-bold">${esc(u.name || "Unnamed user")}</p><p class="mt-1 break-all text-[10px] text-gray-500">${esc(u.email || "No email recorded")}</p><p class="mt-1 break-all text-[10px] text-gray-400">ID: ${esc(u.id || "—")}</p><details class="mt-2 max-w-sm text-[11px]"><summary class="cursor-pointer font-bold text-red-700">Show all available fields</summary><div class="mt-2 space-y-1 rounded-lg bg-gray-50 p-2">${fieldBlock || "No additional profile or visitor fields returned."}</div></details></td>
-              <td class="px-4 py-4 text-xs">${pill(u.role)}</td>
-              <td class="px-4 py-4 text-xs text-gray-500">${esc(u.joined || "—")}</td>
-              <td class="px-4 py-4 text-xs">${Number(u.listings || 0)}</td>
-              <td class="px-4 py-4">${pill(u.status || "Active")}</td>
-              <td class="px-4 py-4">${u.id && u.id !== ampAdminUser?.id ? `<button class="btn btn-red" data-delete-user="${esc(u.id)}" data-delete-email="${esc(u.email || "")}" data-delete-name="${esc(u.name || "")}">Delete account</button>` : `<span class="text-xs text-gray-400">Current admin</span>`}</td>
-            </tr>`;
+              <td class="px-4 py-4"><p class="text-xs font-bold">${esc(u.name || "Unnamed account")}</p><p class="mt-1 break-all text-xs text-gray-500">${esc(u.email || "No email")}</p><p class="mt-1 break-all text-[10px] text-gray-400">${esc(u.id || "—")}</p><details class="mt-2 text-xs"><summary class="cursor-pointer font-bold text-red-700">View fields</summary><div class="mt-2 space-y-1 rounded-lg bg-gray-50 p-3">${extras || "No additional details"}</div></details></td>
+              <td class="px-4 py-4 text-xs">${esc(u.role)}</td><td class="px-4 py-4 text-xs">${esc(u.joined || "—")}</td>
+              <td class="px-4 py-4 text-xs">${Number(u.listings || 0)}</td><td class="px-4 py-4">${pill(u.status || "Active")}</td>
+              <td class="px-4 py-4">${registered ? `<button type="button" class="btn btn-red" data-delete-user="${esc(u.id)}" data-delete-email="${esc(u.email || "")}" data-delete-name="${esc(u.name || "")}">Delete account</button>` : `<span class="text-xs text-gray-500">${u.role === "Tracked visitor" ? "Tracking record only" : "Protected account"}</span>`}</td></tr>`;
             })
             .join(""),
           ampAdminUserLoading
-            ? "Loading users and visitors…"
-            : "No user or visitor records found.",
+            ? "Loading accounts…"
+            : "No matching records in this category.",
         );
       }
       async function ampAdminLoadUsers() {
@@ -1416,121 +1616,163 @@ Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and 
           const adminIds = new Set(
             (adminsRes.data || []).map((a) => a.user_id),
           );
-          const listingCounts = new Map();
+          const counts = new Map();
           (itemsRes.data || []).forEach((x) => {
             if (x.user_id)
-              listingCounts.set(
-                x.user_id,
-                (listingCounts.get(x.user_id) || 0) + 1,
+              counts.set(
+                String(x.user_id),
+                (counts.get(String(x.user_id)) || 0) + 1,
               );
           });
+          // The database's explicit profile role is authoritative. Listing count
+          // and payment history are informational, not identity classification.
           const byId = new Map();
           (profilesRes.data || []).forEach((p) => {
             const id = p.id || p.user_id;
             if (!id || adminIds.has(id)) return;
-            const count = listingCounts.get(id) || 0;
-            byId.set(id, {
-              id,
+            const n = counts.get(id) || 0;
+            byId.set(String(id), {
+              id: String(id),
               name:
                 p.full_name ||
                 p.name ||
                 p.display_name ||
                 p.email ||
-                "Unnamed user",
+                "Unnamed account",
               email: p.email || "",
-              role: count > 0 ? "Seller" : "Visitor",
+              role:
+                String(p.role || "visitor")
+                  .trim()
+                  .toLowerCase() === "seller"
+                  ? "Seller"
+                  : "Registered visitor",
               joined: p.created_at ? ampAdminDate(p.created_at) : "—",
-              listings: count,
-              status: p.status || p.account_status || "Active",
+              listings: n,
+              status: p.account_status || p.status || "active",
               fields: {
                 ...p,
-                account_type: count > 0 ? "Seller" : "Visitor",
-                listing_count: count,
+                listing_count: n,
+                profile_role: p.role || "visitor",
               },
             });
           });
           (visitorsRes.data || []).forEach((v) => {
-            const id =
-              v.user_id ||
-              (v.email
-                ? "email:" + String(v.email).toLowerCase()
-                : "visitor:" + String(v.id));
-            if (!id || adminIds.has(id)) return;
-            if (byId.has(id)) {
-              const existing = byId.get(id);
-              existing.fields.visitor_records =
-                (existing.fields.visitor_records || 0) + 1;
+            const accountId = v.user_id ? String(v.user_id) : "";
+            if (accountId && byId.has(accountId)) {
+              const entry = byId.get(accountId);
+              entry.fields.visitor_records =
+                (entry.fields.visitor_records || 0) + 1;
               return;
             }
-            byId.set(id, {
-              id,
-              name: v.visitor_name || "Visitor",
+            // A tracking entry is NOT a registered account, even if its user_id is UUID-like.
+            const trackId = `visit:${v.id || v.email || byId.size}`;
+            if (adminIds.has(accountId)) return;
+            if (byId.has(trackId)) return;
+            byId.set(trackId, {
+              id: trackId,
+              name: v.visitor_name || "Site visitor",
               email: v.email || "",
-              role: "Visitor",
+              role: "Tracked visitor",
               joined: v.visited_at ? ampAdminDate(v.visited_at) : "—",
               listings: 0,
               status: "Visitor",
-              fields: { ...v, account_type: "Visitor", visitor_records: 1 },
+              fields: { ...v, record_type: "Tracking only" },
             });
           });
           ampAdminUsers = [...byId.values()].sort((a, b) =>
             String(a.name).localeCompare(String(b.name)),
           );
         } catch (err) {
-          notify("Could not load users: " + ampAdminErrorText(err));
+          notify("Could not load accounts: " + ampAdminErrorText(err));
           ampAdminUsers = [];
         } finally {
           ampAdminUserLoading = false;
           renderUsers();
           const countEl = $("#statRegisteredUsers");
           if (countEl)
-            countEl.textContent = ampAdminUsers.length.toLocaleString();
-          const statusEl = $("#overviewRefreshStatus");
-          if (statusEl)
-            statusEl.textContent =
-              "Live database · Updated " +
-              new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              });
+            countEl.textContent = ampAdminUsers
+              .filter((u) => u.role !== "Tracked visitor")
+              .length.toLocaleString();
         }
       }
       function openDeleteUserDialog(id, name, email) {
-        if (!id || id === ampAdminUser?.id)
+        const account = ampAdminUsers.find((u) => u.id === id);
+        if (
+          !ampAuthIdPattern.test(String(id || "")) ||
+          !account ||
+          account.role === "Tracked visitor"
+        )
           return notify(
-            "You cannot delete the currently signed-in administrator.",
+            "This visitor activity is not a registered Auth account and cannot be deleted here.",
           );
+        if (id === ampAdminUser?.id)
+          return notify("You cannot delete your own administrator account.");
         $("#deleteUserId").value = id;
-        $("#deleteUserConfirm").checked = false;
+        const errBox = $("#deleteUserError");
+        if (errBox) {
+          errBox.textContent = "";
+          errBox.classList.add("hidden");
+        }
         $("#deleteUserSummary").textContent =
-          `${name || "User"} · ${email || id} · ID: ${id}`;
+          `${name || "Account"} · ${email || id} · ID: ${id}`;
         $("#deleteUserDialog").showModal();
       }
       $("#deleteUserForm")?.addEventListener("submit", async (e) => {
         e.preventDefault();
         const id = $("#deleteUserId").value;
-        if (!id || id === ampAdminUser?.id)
-          return notify(
-            "You cannot delete the currently signed-in administrator.",
-          );
+        if (!ampAuthIdPattern.test(id) || id === ampAdminUser?.id)
+          return notify("Invalid or protected account.");
         const button = $("#deleteUserSubmit");
         ampAdminSetBusy(button, true, "Deleting account…");
         try {
-          const { data, error } = await ampAdminDb.functions.invoke(
-            "admin-delete-user",
-            { body: { user_id: id } },
+          const { data, error } = await ampAdminDb.rpc(
+            "admin_delete_registered_account",
+            { p_user_id: id, p_confirm: "DELETE" },
           );
           if (error) throw error;
-          if (data?.error) throw new Error(data.error);
+          if (!data?.ok)
+            throw new Error(
+              data?.message ||
+                data?.error ||
+                "Account deletion was not confirmed.",
+            );
           $("#deleteUserDialog").close();
-          notify("User account deleted successfully.");
+          notify("Registered account deleted successfully.");
           await ampAdminLoadUsers();
         } catch (err) {
-          notify(
-            "Account was not deleted: " +
-              ampAdminErrorText(err) +
-              ". Deploy the protected admin-delete-user Edge Function and verify its authorization checks.",
+          const msg = String(
+            err?.message || ampAdminErrorText(err) || "Unknown error",
           );
+          const code = String(err?.code || "");
+          let help = "Account deletion failed. " + msg;
+          if (
+            code === "PGRST202" ||
+            /could not find the function|schema cache|does not exist/i.test(msg)
+          ) {
+            help =
+              "Deletion database function not installed: run AMP-admin-profiles-delete-RPC.sql in the correct Supabase project, then refresh the page.";
+          } else if (
+            code === "42501" ||
+            /permission denied|administrator access|not authorized/i.test(msg)
+          ) {
+            help =
+              "Permission denied. Sign in using an active administrator account and check public.admins.";
+          } else if (
+            code === "23503" ||
+            /foreign key|violates.*constraint|dependency/i.test(msg)
+          ) {
+            help =
+              "Cannot delete this account because related records or storage objects still reference it. Review those dependencies before retrying.";
+          } else if (/failed to fetch|networkerror/i.test(msg)) {
+            help =
+              "Cannot reach Supabase. Check your internet connection and the configured Supabase URL.";
+          }
+          const errBox = $("#deleteUserError");
+          if (errBox) {
+            errBox.textContent = help;
+            errBox.classList.remove("hidden");
+          }
+          notify(help);
         } finally {
           ampAdminSetBusy(button, false, "Delete account");
         }
@@ -1548,6 +1790,12 @@ Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and 
           );
         },
         true,
+      );
+      document.querySelectorAll("[data-account-tab]").forEach((btn) =>
+        btn.addEventListener("click", () => {
+          ampAccountTab = btn.dataset.accountTab;
+          renderUsers();
+        }),
       );
       $("#userSearch")?.addEventListener("input", renderUsers);
       $("#refreshUsers")?.addEventListener("click", ampAdminLoadUsers);
@@ -1650,7 +1898,7 @@ Reject prohibited goods, deceptive offers, duplicate spam, abusive content, and 
           overview: "Admin overview",
           moderation: "Listing approvals",
           listings: "All listings",
-          users: "Users & sellers",
+          users: "Sellers & visitors",
           payments: "Membership payments",
           categories: "Categories",
           reports: "Reports & moderation",

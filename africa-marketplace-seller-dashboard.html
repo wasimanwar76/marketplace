@@ -1253,7 +1253,8 @@
         <section id="page-subscription" class="page hidden fade">
           <h2 class="display text-2xl font-extrabold">My Subscription</h2>
           <p class="mt-2 text-sm text-gray-500">
-            Manage your annual marketplace membership and PayPal billing.
+            Manage your annual marketplace membership, PayPal billing and Mobile
+            Money payments.
           </p>
           <div class="card mt-5 p-6">
             <p
@@ -1270,7 +1271,7 @@
                 id="subscriptionChange"
                 class="rounded-xl bg-red-600 px-5 py-3 text-sm font-bold text-white"
               >
-                View membership plans</button
+                PayPal membership plans</button
               ><button
                 type="button"
                 id="subscriptionRetry"
@@ -1286,6 +1287,257 @@
             aria-live="polite"
             class="mt-3 text-sm"
           ></p>
+
+          <!-- PayPal is an additional payment choice; the existing PayPal checkout remains unchanged. -->
+          <section
+            id="paypalPaymentOption"
+            class="mt-6 overflow-hidden rounded-[24px] border border-blue-100 bg-white shadow-sm"
+          >
+            <div
+              class="flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-7"
+            >
+              <div class="flex items-start gap-4">
+                <div
+                  class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-50 text-xl font-black text-blue-700"
+                  aria-hidden="true"
+                >
+                  P
+                </div>
+                <div>
+                  <p
+                    class="text-[11px] font-extrabold uppercase tracking-[.15em] text-blue-700"
+                  >
+                    Secure online payment
+                  </p>
+                  <h3 class="display mt-1 text-xl font-extrabold text-gray-900">
+                    Pay with PayPal
+                  </h3>
+                  <p class="mt-2 max-w-xl text-sm leading-6 text-gray-600">
+                    Choose Africa Market Place for $20/year or Minnesota AMP for
+                    $60/year. Complete your subscription securely through
+                    PayPal.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                id="paypalOptionButton"
+                class="shrink-0 rounded-xl bg-[#0070ba] px-6 py-3.5 text-sm font-extrabold text-white shadow-sm transition hover:bg-[#005ea6] focus-visible:outline-offset-2"
+              >
+                Choose PayPal plan
+              </button>
+            </div>
+          </section>
+          <section
+            id="mobileMoneyPanel"
+            class="mt-6 overflow-hidden rounded-[24px] border border-red-100 bg-white shadow-sm"
+          >
+            <div
+              class="bg-gradient-to-r from-red-700 via-red-600 to-orange-500 px-5 py-6 text-white sm:px-7"
+            >
+              <span
+                class="text-[11px] font-extrabold uppercase tracking-[.2em] text-red-100"
+                >More ways to subscribe</span
+              >
+              <h3 class="display mt-2 text-xl font-extrabold">
+                Pay with Mobile Money
+              </h3>
+              <p class="mt-1 text-sm text-red-50">
+                Choose TMoney or Moov Money, then submit your transfer details
+                for verification. PayPal remains available separately.
+              </p>
+            </div>
+            <div class="p-5 sm:p-7">
+              <div class="grid gap-3 sm:grid-cols-2">
+                <button
+                  type="button"
+                  data-mm-method="tmoney"
+                  class="mm-method rounded-2xl border-2 border-gray-200 bg-white p-5 text-left transition hover:border-red-400"
+                  aria-pressed="true"
+                >
+                  <span class="text-2xl">📱</span
+                  ><strong class="mt-2 block text-base">TMoney</strong
+                  ><span class="mt-1 block text-xs text-gray-500"
+                    >Mobile money transfer</span
+                  >
+                </button>
+                <button
+                  type="button"
+                  data-mm-method="moov_money"
+                  class="mm-method rounded-2xl border-2 border-gray-200 bg-white p-5 text-left transition hover:border-red-400"
+                  aria-pressed="false"
+                >
+                  <span class="text-2xl">💸</span
+                  ><strong class="mt-2 block text-base">Moov Money</strong
+                  ><span class="mt-1 block text-xs text-gray-500"
+                    >Mobile money transfer</span
+                  >
+                </button>
+              </div>
+              <div
+                id="mmPaymentInstructions"
+                class="mt-4 hidden rounded-2xl border border-red-200 bg-red-50 p-4 sm:p-5"
+              >
+                <p
+                  class="text-xs font-bold uppercase tracking-widest text-red-700"
+                >
+                  Official transfer details
+                </p>
+                <div
+                  class="mt-2 flex flex-wrap items-center justify-between gap-3"
+                >
+                  <div>
+                    <p
+                      id="mmSelectedMethod"
+                      class="font-extrabold text-gray-900"
+                    ></p>
+                    <p
+                      id="mmSelectedNumber"
+                      class="mt-1 text-2xl font-extrabold tracking-tight text-red-700"
+                    ></p>
+                  </div>
+                  <button
+                    type="button"
+                    id="mmCopyNumber"
+                    class="rounded-xl bg-white px-4 py-2 text-xs font-bold text-red-700 shadow-sm"
+                  >
+                    Copy number
+                  </button>
+                </div>
+                <p class="mt-2 text-xs text-red-800">
+                  <span id="mmTransferAmount">Send 10,000 FCFA</span> to the
+                  selected official number. Complete the transaction details
+                  form below and optionally upload your receipt. Verification is
+                  manual; submission does not activate membership.
+                </p>
+              </div>
+              <form id="mobileMoneyForm" class="mt-5 space-y-4">
+                <div class="grid gap-4 sm:grid-cols-2">
+                  <label class="block text-sm font-semibold text-gray-800"
+                    >Annual membership<select
+                      id="mmPlan"
+                      required
+                      class="mt-2 w-full rounded-xl border border-gray-200 bg-white px-4 py-3"
+                    >
+                      <option value="20">
+                        Africa Market Place · $20 USD / 10,000 FCFA per year
+                      </option>
+                      <option value="60">
+                        Minnesota AMP · $60 USD per year
+                      </option>
+                    </select></label
+                  >
+                  <label class="block text-sm font-semibold text-gray-800"
+                    >Payer full name<input
+                      id="mmName"
+                      required
+                      maxlength="120"
+                      autocomplete="name"
+                      placeholder="Name used for payment"
+                      class="mt-2 w-full rounded-xl border border-gray-200 px-4 py-3"
+                  /></label>
+                  <label class="block text-sm font-semibold text-gray-800"
+                    >Mobile money phone<input
+                      id="mmPhone"
+                      required
+                      type="tel"
+                      maxlength="24"
+                      placeholder="e.g. +228 90 00 00 00"
+                      class="mt-2 w-full rounded-xl border border-gray-200 px-4 py-3"
+                  /></label>
+                  <label class="block text-sm font-semibold text-gray-800"
+                    >Transaction reference<input
+                      id="mmReference"
+                      required
+                      maxlength="100"
+                      placeholder="Reference from your transfer"
+                      class="mt-2 w-full rounded-xl border border-gray-200 px-4 py-3"
+                  /></label>
+                </div>
+                <div class="grid gap-4 sm:grid-cols-2">
+                  <label class="block text-sm font-semibold text-gray-800"
+                    >Payment amount / currency<select
+                      id="mmCurrency"
+                      class="mt-2 w-full rounded-xl border border-gray-200 bg-white px-4 py-3"
+                    >
+                      <option value="XOF">10,000 FCFA (XOF)</option>
+                      <option value="USD">$20 USD</option>
+                    </select></label
+                  ><label class="block text-sm font-semibold text-gray-800"
+                    >Payment date<input
+                      id="mmDate"
+                      type="date"
+                      required
+                      class="mt-2 w-full rounded-xl border border-gray-200 bg-white px-4 py-3"
+                  /></label>
+                </div>
+                <label class="block text-sm font-semibold text-gray-800"
+                  >Transaction proof (optional)<input
+                    id="mmProof"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,application/pdf"
+                    class="mt-2 block w-full rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-3 text-sm" /><span
+                    class="mt-1 block text-xs font-normal text-gray-500"
+                    >Upload a payment screenshot or PDF (max 5 MB). Private and
+                    visible only to you and authorized reviewers.</span
+                  ><span id="mmProofPreview" class="mt-2 block"></span
+                ></label>
+                <label class="block text-sm font-semibold text-gray-800"
+                  >Additional information (optional)<textarea
+                    id="mmNotes"
+                    maxlength="500"
+                    rows="2"
+                    placeholder="Payment date, sender information or other helpful details"
+                    class="mt-2 w-full rounded-xl border border-gray-200 px-4 py-3"
+                  ></textarea>
+                </label>
+                <div
+                  class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-900"
+                >
+                  <strong>Important:</strong> Only transfer to official payment
+                  details provided by Africa Market Place. Submitting this form
+                  does not transfer money or activate your membership. An
+                  administrator must verify your payment.
+                </div>
+                <button
+                  id="mmSubmit"
+                  type="submit"
+                  class="w-full rounded-xl bg-red-600 px-5 py-3.5 text-sm font-extrabold text-white hover:bg-red-700"
+                >
+                  Submit payment for verification
+                </button>
+                <p
+                  id="mmFeedback"
+                  role="status"
+                  aria-live="polite"
+                  class="text-sm"
+                ></p>
+              </form>
+            </div>
+          </section>
+          <section class="card mt-5 p-5 sm:p-6">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 class="display text-lg font-extrabold">
+                  My Mobile Money submissions
+                </h3>
+                <p class="mt-1 text-xs text-gray-500">
+                  Only transactions linked to your signed-in account appear
+                  here.
+                </p>
+              </div>
+              <button
+                type="button"
+                id="mmReload"
+                class="rounded-xl border border-gray-200 px-4 py-2 text-xs font-bold"
+              >
+                Refresh records
+              </button>
+            </div>
+            <div id="mmRecords" class="mt-4 text-sm text-gray-500">
+              Loading your submissions…
+            </div>
+          </section>
         </section>
         <section id="page-settings" class="page hidden fade">
           <div class="mb-6">
@@ -2102,6 +2354,22 @@
             ><span class="mt-2 block text-2xl font-extrabold">$60/year</span>
           </button>
         </div>
+        <div class="mt-5 rounded-2xl border border-red-100 bg-red-50 p-4">
+          <strong class="block text-sm text-red-900"
+            >Prefer Mobile Money?</strong
+          >
+          <p class="mt-1 text-xs leading-5 text-red-800">
+            TMoney and Moov Money are available as additional payment submission
+            options.
+          </p>
+          <button
+            type="button"
+            id="mmOpenFromCheckout"
+            class="mt-3 rounded-lg bg-red-600 px-4 py-2.5 text-xs font-extrabold text-white"
+          >
+            Use TMoney / Moov Money
+          </button>
+        </div>
         <p id="subscriptionPlanLabel" class="mt-4 text-sm font-semibold">
           Select a plan to continue.
         </p>
@@ -2211,6 +2479,58 @@
         >
           Explore my seller dashboard →
         </button>
+      </div>
+    </dialog>
+    <dialog
+      id="mmPaymentDialog"
+      class="max-w-md overflow-hidden rounded-[24px] p-0"
+    >
+      <div class="bg-gradient-to-r from-red-700 to-orange-500 p-6 text-white">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-red-100">
+          Secure transfer instructions
+        </p>
+        <h3 id="mmPaymentDialogName" class="mt-2 text-2xl font-extrabold"></h3>
+        <p class="mt-1 text-sm text-red-50">
+          Annual Africa Market Place membership
+        </p>
+      </div>
+      <div class="p-6">
+        <p class="text-sm text-gray-600">
+          Send your payment to the official number below:
+        </p>
+        <div
+          class="mt-3 rounded-2xl border border-red-100 bg-red-50 p-5 text-center"
+        >
+          <p
+            id="mmPaymentDialogNumber"
+            class="break-all text-2xl font-extrabold text-red-700"
+          ></p>
+          <p class="mt-2 text-sm font-bold text-gray-800">
+            10,000 FCFA / $20 USD
+          </p>
+        </div>
+        <div class="mt-4 flex gap-2">
+          <button
+            type="button"
+            id="mmDialogCopy"
+            class="flex-1 rounded-xl border border-gray-200 px-4 py-3 text-sm font-bold"
+          >
+            Copy number</button
+          ><button
+            type="button"
+            onclick="
+              document.getElementById('mmPaymentDialog').close();
+              document.getElementById('mmName').focus();
+            "
+            class="flex-1 rounded-xl bg-red-600 px-4 py-3 text-sm font-bold text-white"
+          >
+            I've paid · Continue
+          </button>
+        </div>
+        <p class="mt-3 text-xs leading-5 text-gray-500">
+          After transferring, provide your reference, date and optional proof
+          screenshot. Submissions remain pending until administrator approval.
+        </p>
       </div>
     </dialog>
     <div
@@ -3184,7 +3504,13 @@
             : "smooth",
         });
         if (page === "customers") loadCustomers();
-        if (page === "subscription") window.ampMembership?.refresh();
+        if (page === "subscription") {
+          // Subscription page is informational. It never launches PayPal checkout automatically.
+          const purchaseDialog = document.getElementById("subscriptionDialog");
+          if (purchaseDialog?.open) purchaseDialog.close();
+          window.ampMembership?.refresh({ silent: true });
+          window.ampMobileMoney?.load?.();
+        }
       }
       function openEdit(id) {
         const x = listings.find((a) => String(a.id) === String(id));
@@ -3790,6 +4116,396 @@
         await waitForUser();
       })();
     </script>
+    <script id="amp-mobile-money-module">
+      (() => {
+        const $ = (id) => document.getElementById(id);
+        const esc = (v) =>
+          String(v ?? "").replace(
+            /[&<>"']/g,
+            (c) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              })[c],
+          );
+        const methods = {
+          tmoney: { name: "TMoney", number: "+22890017246" },
+          moov_money: { name: "Moov Money (Flooz)", number: "+22896165727" },
+        };
+        let method = null;
+        const client = () => (typeof ampAuth !== "undefined" ? ampAuth : null);
+        const user = () =>
+          (typeof ampCurrentUser !== "undefined" && ampCurrentUser) ||
+          window.ampCurrentUser ||
+          null;
+        const feedback = (message, bad = false) => {
+          const el = $("mmFeedback");
+          if (el) {
+            el.textContent = message;
+            el.className =
+              "text-sm " + (bad ? "text-red-700" : "text-emerald-700");
+          }
+        };
+        const fmtDate = (value) => {
+          try {
+            return value ? new Date(value).toLocaleString() : "—";
+          } catch {
+            return "—";
+          }
+        };
+        const setBusy = (busy, label) => {
+          const b = $("mmSubmit");
+          if (!b) return;
+          b.disabled = busy;
+          b.innerHTML = busy
+            ? '<span class="amp-action-spinner" aria-hidden="true"></span>' +
+              esc(label || "Submitting securely…")
+            : "Submit payment for verification";
+        };
+        function updateMobilePlan() {
+          const plan = $("mmPlan")?.value || "20";
+          const currency = $("mmCurrency");
+          if (!currency) return;
+          if (plan === "60") {
+            currency.innerHTML = '<option value="USD">$60 USD</option>';
+            currency.value = "USD";
+          } else {
+            const previous = currency.value;
+            currency.innerHTML =
+              '<option value="XOF">10,000 FCFA (XOF)</option><option value="USD">$20 USD</option>';
+            currency.value = previous === "USD" ? "USD" : "XOF";
+          }
+          const amount = $("mmTransferAmount");
+          if (amount)
+            amount.textContent =
+              "Send " +
+              (plan === "60"
+                ? "$60 USD"
+                : currency.value === "XOF"
+                  ? "10,000 FCFA"
+                  : "$20 USD");
+        }
+        function selectMethod(next) {
+          if (!methods[next]) return;
+          method = next;
+          document.querySelectorAll("[data-mm-method]").forEach((b) => {
+            const active = b.dataset.mmMethod === next;
+            b.setAttribute("aria-pressed", String(active));
+            b.classList.toggle("border-red-600", active);
+            b.classList.toggle("bg-red-50", active);
+            b.classList.toggle("border-gray-200", !active);
+          });
+          $("mmSelectedMethod").textContent = methods[next].name;
+          $("mmSelectedNumber").textContent = methods[next].number;
+          $("mmPaymentInstructions").classList.remove("hidden");
+          $("mmPaymentDialogName").textContent = methods[next].name;
+          $("mmPaymentDialogNumber").textContent = methods[next].number;
+          // The transaction form stays visible inline: no subscription purchase popup.
+          $("mmPaymentDialog")?.close();
+          $("mobileMoneyForm")?.classList.remove("hidden");
+          $("mmPaymentInstructions")?.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+          });
+        }
+        function proofPreview() {
+          const f = $("mmProof")?.files?.[0],
+            target = $("mmProofPreview");
+          if (!target) return;
+          target.replaceChildren();
+          if (!f) return;
+          if (
+            ![
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "application/pdf",
+            ].includes(f.type) ||
+            f.size > 5 * 1024 * 1024
+          ) {
+            $("mmProof").value = "";
+            feedback("Proof must be JPG, PNG, WebP or PDF, up to 5 MB.", true);
+            return;
+          }
+          const span = document.createElement("span");
+          span.className = "text-xs font-semibold text-gray-600";
+          span.textContent =
+            f.name + " · " + (f.size / 1024 / 1024).toFixed(2) + " MB";
+          target.append(span);
+          if (f.type.startsWith("image/")) {
+            const img = document.createElement("img");
+            img.className =
+              "mt-3 max-h-52 w-full rounded-xl border object-contain";
+            img.alt = "Selected transaction proof preview";
+            const url = URL.createObjectURL(f);
+            img.src = url;
+            img.onload = () => URL.revokeObjectURL(url);
+            target.append(img);
+          }
+        }
+        // The approved state is read from the authenticated user's Supabase row.
+        // This only controls presentation; the server retains authority over seller access.
+        function verifiedMobileRow(row) {
+          return (
+            !!row &&
+            ["tmoney", "moov_money"].includes(row.payment_provider) &&
+            row.review_status === "approved" &&
+            row.status === "active" &&
+            !!row.current_period_end &&
+            Number.isFinite(new Date(row.current_period_end).getTime()) &&
+            new Date(row.current_period_end).getTime() > Date.now()
+          );
+        }
+        function applyApprovedMembershipDisplay() {
+          const approved = window.ampMobileMoneyApproved;
+          const mobileActive = verifiedMobileRow(approved);
+          const panel = $("mobileMoneyPanel");
+          if (panel) panel.classList.toggle("hidden", mobileActive);
+          // Membership details remain visible; only the PayPal-specific purchase CTA is hidden.
+          const change = $("subscriptionChange");
+          if (change && mobileActive) change.classList.add("hidden");
+          if (mobileActive) $("paypalPaymentOption")?.classList.add("hidden");
+          const note = $("membershipSummaryNote");
+          if (note && mobileActive) {
+            note.classList.remove("hidden");
+            note.textContent =
+              "✓ Your " +
+              (methods[approved.payment_provider]?.name || "Mobile Money") +
+              " payment has been approved. Your annual membership is valid until " +
+              new Date(approved.current_period_end).toLocaleDateString() +
+              ".";
+          }
+        }
+        window.ampMobileMoneyIsVerified = verifiedMobileRow;
+        window.ampApplyApprovedMembershipDisplay =
+          applyApprovedMembershipDisplay;
+        async function load() {
+          const target = $("mmRecords"),
+            account = user(),
+            db = client();
+          if (!target || !account || !db) return;
+          target.textContent = "Loading your payment history…";
+          const { data, error } = await db
+            .from("membership_subscriptions")
+            .select(
+              "id,subscription_name,amount,currency,payment_provider,status,review_status,payer_name,payer_phone,transaction_reference,payment_date,payment_proof_path,review_note,rejection_reason,created_at,current_period_start,current_period_end",
+            )
+            .eq("user_id", account.id)
+            .in("payment_provider", ["tmoney", "moov_money"])
+            .order("created_at", { ascending: false })
+            .limit(30);
+          if (error) {
+            target.textContent =
+              "Unable to load your subscriptions: " + error.message;
+            return;
+          }
+          // A missing or expired approval must not suppress renewal options.
+          const approved =
+            (data || [])
+              .filter(verifiedMobileRow)
+              .sort(
+                (a, b) =>
+                  new Date(b.current_period_end) -
+                  new Date(a.current_period_end),
+              )[0] || null;
+          window.ampMobileMoneyApproved = approved;
+          applyApprovedMembershipDisplay();
+          // Keep the seller membership gate aligned with the authenticated
+          // database-approved Mobile Money membership, not just the summary.
+          window.ampSyncMobileMembershipAccess?.();
+          // The PayPal membership checker is separate; update the visible details only.
+          window.ampRepaintSubscriptionDetails?.();
+          if (!data?.length) {
+            target.innerHTML =
+              '<div class="rounded-xl border border-dashed border-gray-200 bg-gray-50 p-6 text-center">No Mobile Money payments submitted yet.</div>';
+            return;
+          }
+          target.innerHTML =
+            '<div class="space-y-3">' +
+            data
+              .map((r) => {
+                const state = r.review_status || "pending",
+                  color =
+                    state === "approved"
+                      ? "bg-emerald-100 text-emerald-800"
+                      : state === "rejected"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-amber-100 text-amber-800";
+                const amount =
+                  r.currency === "XOF"
+                    ? Number(r.amount).toLocaleString() + " FCFA"
+                    : "$" + Number(r.amount).toFixed(2) + " USD";
+                return `<article class="rounded-2xl border border-gray-200 bg-white p-4 sm:p-5"><div class="flex flex-wrap items-center justify-between gap-2"><strong class="text-gray-900">${esc(methods[r.payment_provider]?.name || r.payment_provider)} · ${esc(amount)}</strong><span class="rounded-full px-3 py-1 text-[11px] font-extrabold uppercase ${color}">${esc(state)}</span></div><div class="mt-3 grid gap-2 text-xs text-gray-600 sm:grid-cols-2"><p><b>Membership:</b> Africa Market Place · annual</p><p><b>Membership status:</b> ${esc(r.status)}</p><p><b>Payer:</b> ${esc(r.payer_name)}</p><p><b>Phone:</b> ${esc(r.payer_phone)}</p><p><b>Transaction reference:</b> ${esc(r.transaction_reference)}</p><p><b>Payment date:</b> ${esc(fmtDate(r.payment_date))}</p><p><b>Submitted:</b> ${esc(fmtDate(r.created_at))}</p><p><b>Valid until:</b> ${esc(fmtDate(r.current_period_end))}</p></div>${r.payment_proof_path ? `<button type="button" class="mm-view-proof mt-3 rounded-lg border border-gray-200 px-3 py-2 text-xs font-bold text-red-700" data-proof="${esc(r.payment_proof_path)}">View uploaded proof</button>` : ""}${r.review_note ? `<p class="mt-3 rounded-lg bg-gray-50 p-3 text-xs"><b>Administrator note:</b> ${esc(r.review_note)}</p>` : ""}${r.rejection_reason ? `<p class="mt-3 rounded-lg bg-red-50 p-3 text-xs text-red-800"><b>Reason:</b> ${esc(r.rejection_reason)}</p>` : ""}</article>`;
+              })
+              .join("") +
+            "</div>";
+        }
+        async function submit(event) {
+          event.preventDefault();
+          const account = user(),
+            db = client();
+          if (!account || !db)
+            return feedback(
+              "Sign in before submitting payment information.",
+              true,
+            );
+          if (!method)
+            return feedback("Choose TMoney or Moov Money first.", true);
+          const name = $("mmName").value.trim(),
+            phone = $("mmPhone").value.trim(),
+            ref = $("mmReference").value.trim(),
+            date = $("mmDate").value;
+          if (name.length < 2 || phone.length < 8 || ref.length < 4 || !date)
+            return feedback(
+              "Complete your name, phone, transaction reference and payment date.",
+              true,
+            );
+          const file = $("mmProof").files?.[0];
+          if (
+            file &&
+            (![
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "application/pdf",
+            ].includes(file.type) ||
+              file.size > 5 * 1024 * 1024)
+          )
+            return feedback("Choose a JPG, PNG, WebP or PDF under 5 MB.", true);
+          setBusy(true, "Submitting payment…");
+          let proofPath = null;
+          try {
+            if (file) {
+              setBusy(true, "Uploading transaction proof…");
+              const ext = {
+                "image/jpeg": "jpg",
+                "image/png": "png",
+                "image/webp": "webp",
+                "application/pdf": "pdf",
+              }[file.type];
+              proofPath = account.id + "/" + crypto.randomUUID() + "." + ext;
+              const { error } = await db.storage
+                .from("membership-payment-proofs")
+                .upload(proofPath, file, {
+                  contentType: file.type,
+                  upsert: false,
+                });
+              if (error) throw error;
+            }
+            setBusy(true, "Saving confirmation…");
+            const { error } = await db.rpc("submit_mobile_money_membership", {
+              p_payment_provider: method,
+              p_payer_name: name,
+              p_payer_phone: phone,
+              p_transaction_reference: ref,
+              p_payment_date: new Date(date + "T12:00:00").toISOString(),
+              p_currency: $("mmCurrency").value,
+              p_payment_proof_path: proofPath,
+              p_subscription_name: $("mmPlan").value,
+            });
+            if (error) throw error;
+            feedback(
+              "Payment confirmation received. Your membership is pending administrator verification.",
+            );
+            $("mmReference").value = "";
+            $("mmProof").value = "";
+            $("mmProofPreview").replaceChildren();
+            $("mmNotes").value = "";
+            await load();
+          } catch (e) {
+            if (proofPath)
+              await db.storage
+                .from("membership-payment-proofs")
+                .remove([proofPath])
+                .catch(() => {});
+            feedback(
+              "Unable to submit: " +
+                (e.message || String(e)) +
+                ". Please check the database migration and Storage policies.",
+              true,
+            );
+          } finally {
+            setBusy(false);
+          }
+        }
+        async function viewProof(path) {
+          const account = user();
+          if (!account || !path.startsWith(account.id + "/")) return;
+          const { data, error } = await client()
+            .storage.from("membership-payment-proofs")
+            .createSignedUrl(path, 60);
+          if (error) {
+            feedback("Unable to open proof: " + error.message, true);
+            return;
+          }
+          window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+        }
+        function init() {
+          document
+            .querySelectorAll("[data-mm-method]")
+            .forEach((b) =>
+              b.addEventListener("click", () =>
+                selectMethod(b.dataset.mmMethod),
+              ),
+            );
+          $("mmCopyNumber")?.addEventListener("click", () => {
+            if (method)
+              navigator.clipboard
+                .writeText(methods[method].number)
+                .then(() => {
+                  $("mmCopyNumber").textContent = "Copied ✓";
+                  setTimeout(() => {
+                    $("mmCopyNumber").textContent = "Copy number";
+                  }, 1600);
+                })
+                .catch(() => {});
+          });
+          $("mmDialogCopy")?.addEventListener("click", () => {
+            if (method)
+              navigator.clipboard
+                .writeText(methods[method].number)
+                .catch(() => {});
+          });
+          $("mmPlan")?.addEventListener("change", updateMobilePlan);
+          $("mmCurrency")?.addEventListener("change", updateMobilePlan);
+          updateMobilePlan();
+          $("mmProof")?.addEventListener("change", proofPreview);
+          $("mobileMoneyForm")?.addEventListener("submit", submit);
+          $("mmReload")?.addEventListener("click", load);
+          $("mmRecords")?.addEventListener("click", (e) => {
+            const b = e.target.closest(".mm-view-proof");
+            if (b) viewProof(b.dataset.proof);
+          });
+          $("mmOpenFromCheckout")?.addEventListener("click", () => {
+            $("subscriptionDialog")?.close();
+            document.querySelector('[data-page="subscription"]')?.click();
+            $("mobileMoneyPanel")?.scrollIntoView({ behavior: "smooth" });
+          });
+          document
+            .querySelector('[data-page="subscription"]')
+            ?.addEventListener("click", () => setTimeout(load, 50));
+          const d = $("mmDate");
+          if (d) {
+            d.max = new Date().toISOString().slice(0, 10);
+            d.value = new Date().toISOString().slice(0, 10);
+          }
+          let tries = 0;
+          const timer = setInterval(() => {
+            if (user()) {
+              clearInterval(timer);
+              load();
+            } else if (++tries > 40) clearInterval(timer);
+          }, 250);
+        }
+        window.ampMobileMoney = { load, selectMethod };
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", init);
+        else init();
+      })();
+    </script>
     <script>
       /* AMP PayPal seller membership. All billing decisions are verified by Supabase Edge Function. */
       (() => {
@@ -3813,14 +4529,56 @@
         // The PayPal API may return ACTIVE before next_billing_time is populated.
         // Treat only a server-written ACTIVE record with a matching plan and PayPal
         // subscription ID as active; if an end date exists, it must be in the future.
-        const isActive = (row) =>
-          !!row &&
-          row.status === "active" &&
-          ["20", "60"].includes(String(row.subscription_name)) &&
-          /^I-[A-Za-z0-9]+$/.test(String(row.paypal_subscription_id || "")) &&
-          (!row.current_period_end ||
-            (validDate(row.current_period_end) &&
-              new Date(row.current_period_end) > new Date()));
+        const isActive = (row) => {
+          if (
+            !row ||
+            row.status !== "active" ||
+            !["20", "60"].includes(String(row.subscription_name))
+          )
+            return false;
+          if (["tmoney", "moov_money"].includes(row.payment_provider))
+            return (
+              row.review_status === "approved" &&
+              validDate(row.current_period_start) &&
+              new Date(row.current_period_start) <= new Date() &&
+              validDate(row.current_period_end) &&
+              new Date(row.current_period_end) > new Date()
+            );
+          return (
+            (row.payment_provider === "paypal" || !row.payment_provider) &&
+            /^I-[A-Za-z0-9]+$/.test(String(row.paypal_subscription_id || "")) &&
+            (!row.current_period_end ||
+              (validDate(row.current_period_end) &&
+                new Date(row.current_period_end) > new Date()))
+          );
+        };
+        // Mobile Money approval comes from the signed-in user's Supabase row.
+        // Users must not be able to write status/review_status under RLS.
+        const approvedMobile = () => {
+          const row = window.ampMobileMoneyApproved;
+          return window.ampMobileMoneyIsVerified?.(row) ? row : null;
+        };
+        const activeMembership = () =>
+          isActive(current) ? current : approvedMobile();
+        // The PayPal verifier does not yet know about Mobile Money approval.
+        // Synchronize the client gate after each authenticated Mobile Money fetch.
+        window.ampSyncMobileMembershipAccess = () => {
+          if (!initialized) return;
+          const mobile = approvedMobile();
+          if (mobile) {
+            membershipState = "active";
+            updateMembershipUI(true, mobile);
+            renderDetails(mobile);
+            message(
+              "Your verified Mobile Money membership is active. Seller features are available.",
+              "success",
+            );
+          } else if (membershipState === "active" && !isActive(current)) {
+            // No longer claim an active membership if it expires or is revoked.
+            membershipState = "inactive";
+            updateMembershipUI(false, current);
+          }
+        };
         const friendlyDate = (value) =>
           validDate(value)
             ? new Date(value).toLocaleDateString(undefined, {
@@ -3901,7 +4659,13 @@
         }
         // Celebrate each verified active PayPal subscription once per browser profile.
         function showWelcomeForActive(row) {
-          if (!isActive(row) || !row.paypal_subscription_id) return;
+          if (
+            !isActive(row) ||
+            row.payment_provider === "tmoney" ||
+            row.payment_provider === "moov_money" ||
+            !row.paypal_subscription_id
+          )
+            return;
           const account = user();
           if (!account) return;
           const key = `amp_membership_welcome_v1_${account.id}_${row.paypal_subscription_id}`;
@@ -3951,6 +4715,8 @@
             section.classList.remove("hidden");
           }
           if (change) change.classList.toggle("hidden", active);
+          const paypalOption = el("paypalPaymentOption");
+          if (paypalOption) paypalOption.classList.toggle("hidden", active);
           if (statusNote) {
             statusNote.classList.toggle("hidden", !active);
             if (active)
@@ -3967,9 +4733,20 @@
             if (dialog?.open) dialog.close();
             clearPendingApproval();
           }
+          window.ampApplyApprovedMembershipDisplay?.();
         }
-        function showDialog() {
-          if (membershipState === "active") return;
+        function showDialog(explicitPurchase = false) {
+          // Background membership checks never interrupt My Subscription.
+          // A deliberate click on Choose PayPal plan may open the modal here.
+          if (
+            !explicitPurchase &&
+            !document
+              .getElementById("page-subscription")
+              ?.classList.contains("hidden")
+          )
+            return;
+          // Never offer another purchase to a currently verified member.
+          if (membershipState === "active" || activeMembership()) return;
           const d = el("subscriptionDialog");
           if (!d || d.open) return;
           try {
@@ -3986,7 +4763,7 @@
           if (!(target instanceof Element)) return;
           if (
             target.closest(
-              "#subscriptionDialog, #memberWelcomeDialog, #authGate, #dashboardActionLoader, #logoutButton",
+              "#subscriptionDialog, #memberWelcomeDialog, #mobileMoneyPanel, #mmPaymentDialog, #mmReload, #mmRecords, #authGate, #dashboardActionLoader, #logoutButton",
             )
           )
             return;
@@ -4025,7 +4802,7 @@
             );
           } else {
             message(
-              "An active annual membership is required to access seller dashboard features. Choose the $20 or $60 plan below.",
+              "An active annual membership is required for seller features. Open My Subscription to review PayPal or Mobile Money payment options.",
               "warning",
             );
           }
@@ -4033,7 +4810,8 @@
         }
         function guardSellerSubmit(event) {
           if (!initialized || membershipState === "active") return;
-          if (event.target?.closest?.("#subscriptionDialog")) return;
+          if (event.target?.closest?.("#subscriptionDialog, #mobileMoneyPanel"))
+            return;
           event.preventDefault();
           event.stopImmediatePropagation();
           showDialog();
@@ -4048,13 +4826,22 @@
           const target = event.target;
           if (
             !(target instanceof Element) ||
-            target.closest("#subscriptionDialog, #logoutButton")
+            target.closest(
+              "#subscriptionDialog, #mobileMoneyPanel, #mmPaymentDialog, #mmReload, #mmRecords, #logoutButton",
+            )
           )
             return;
           if (target.closest('a, button, [role="button"]'))
             guardSellerAction(event);
         }
         function renderDetails(row, failed = false) {
+          const mobile = window.ampMobileMoneyApproved;
+          // Display a database-approved, unexpired mobile membership when PayPal
+          // does not already have an active server-confirmed membership.
+          if (window.ampMobileMoneyIsVerified?.(mobile) && !isActive(row)) {
+            row = mobile;
+            failed = false;
+          }
           const target = el("subscriptionDetails");
           if (!target) return;
           target.replaceChildren();
@@ -4072,7 +4859,9 @@
                 ],
                 [
                   "Price",
-                  `${row.amount ?? "—"} ${row.currency || "USD"} / year`,
+                  row.currency === "XOF"
+                    ? `${Number(row.amount).toLocaleString()} FCFA / year`
+                    : `$${Number(row.amount).toFixed(2)} USD / year`,
                 ],
                 ["Status", String(row.status || "unknown").toUpperCase()],
                 ["Start date", friendlyDate(row.current_period_start)],
@@ -4080,10 +4869,33 @@
                   "Next renewal / end date",
                   friendlyDate(row.current_period_end),
                 ],
-                [
-                  "PayPal subscription ID",
-                  row.paypal_subscription_id || "Pending",
-                ],
+                ...(row.payment_provider === "paypal" || !row.payment_provider
+                  ? [
+                      ["Payment method", "PayPal"],
+                      [
+                        "PayPal subscription ID",
+                        row.paypal_subscription_id || "Pending",
+                      ],
+                    ]
+                  : [
+                      [
+                        "Payment method",
+                        row.payment_provider === "tmoney"
+                          ? "TMoney"
+                          : "Moov Money (Flooz)",
+                      ],
+                      [
+                        "Payment verification",
+                        String(row.review_status || "pending").toUpperCase(),
+                      ],
+                      [
+                        "Transaction reference",
+                        row.transaction_reference || "—",
+                      ],
+                      ["Payer", row.payer_name || "—"],
+                      ["Payment phone", row.payer_phone || "—"],
+                      ["Payment date", friendlyDate(row.payment_date)],
+                    ]),
               ]
             : [
                 ["Membership", "No subscription found"],
@@ -4098,6 +4910,14 @@
             target.append(item);
           }
         }
+        window.ampRepaintSubscriptionDetails = () => {
+          if (
+            window.ampMobileMoneyIsVerified?.(window.ampMobileMoneyApproved)
+          ) {
+            renderDetails(current);
+            window.ampApplyApprovedMembershipDisplay?.();
+          }
+        };
         // Cache the last server-confirmed row ONLY for rendering while checking.
         // Cache data never changes membershipState or unlocks any seller actions.
         function membershipDisplayKey() {
@@ -4205,17 +5025,20 @@
                 if (key) localStorage.removeItem(key);
               } catch (_) {}
             }
-            membershipState =
-              payload.active === true && isActive(current)
-                ? "active"
-                : "inactive";
-            updateMembershipUI(membershipState === "active", current);
+            const activeServer = payload.active === true && isActive(current);
+            const mobile = approvedMobile();
+            membershipState = activeServer || mobile ? "active" : "inactive";
+            updateMembershipUI(
+              membershipState === "active",
+              activeServer ? current : mobile,
+            );
+            if (mobile && !activeServer) renderDetails(mobile);
             if (membershipState === "active") {
               message(
                 "Your annual membership is active. Welcome to your seller dashboard!",
                 "success",
               );
-              if (current.paypal_subscription_id) {
+              if (activeServer && current?.paypal_subscription_id) {
                 try {
                   localStorage.setItem(
                     `amp_last_paypal_subscription_${account.id}`,
@@ -4223,13 +5046,14 @@
                   );
                 } catch (_) {}
               }
-              showWelcomeForActive(current);
+              if (activeServer && current?.paypal_subscription_id)
+                showWelcomeForActive(current);
             } else if (current?.status === "pending") {
               message(
                 "PayPal approval or membership activation is still pending. Check membership again if you have just completed checkout.",
                 "warning",
               );
-              if (!options.silent && !busyCheckout) showDialog();
+              // Membership refresh is informational; the seller chooses when to open PayPal plans.
             } else {
               message(
                 current
@@ -4237,18 +5061,31 @@
                   : "No active membership found. Choose a $20 or $60 annual plan to subscribe.",
                 "warning",
               );
-              if (!options.silent && !busyCheckout) showDialog();
+              // Membership refresh is informational; the seller chooses when to open PayPal plans.
             }
             lastError = "";
           } catch (error) {
             // Never unlock dashboard based on localStorage or the PayPal return URL.
             current = null;
-            membershipState = "error";
-            updateMembershipUI(false);
-            if (!restoreDisplayedMembership()) renderDetails(null, true);
             lastError = humanError(error, "Could not check membership status.");
-            message("Subscription check failed: " + lastError, "error");
-            if (!options.silent && !busyCheckout) showDialog();
+            const mobile = approvedMobile();
+            if (mobile) {
+              // PayPal endpoint failure must not override an approved Mobile
+              // Money membership already read from Supabase under RLS.
+              membershipState = "active";
+              updateMembershipUI(true, mobile);
+              renderDetails(mobile);
+              message(
+                "Your approved Mobile Money membership is active.",
+                "success",
+              );
+            } else {
+              membershipState = "error";
+              updateMembershipUI(false);
+              if (!restoreDisplayedMembership()) renderDetails(null, true);
+              message("Subscription check failed: " + lastError, "error");
+            }
+            // Membership refresh is informational; the seller chooses when to open PayPal plans.
           } finally {
             checking = false;
           }
@@ -4727,9 +5564,14 @@
           document.addEventListener("click", guardSellerAction, true);
           document.addEventListener("submit", guardSellerSubmit, true);
           document.addEventListener("keydown", guardSellerKeys, true);
+          el("paypalOptionButton")?.addEventListener("click", () => {
+            if (membershipState === "active" || activeMembership()) return;
+            showDialog(true);
+            if (lastSelected) selectPlan(lastSelected);
+          });
           el("subscriptionChange")?.addEventListener("click", () => {
-            if (membershipState === "active") return;
-            showDialog();
+            if (membershipState === "active" || activeMembership()) return;
+            showDialog(true);
             if (lastSelected) selectPlan(lastSelected);
           });
           el("subscriptionRetry")?.addEventListener("click", () => refresh());
